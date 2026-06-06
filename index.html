@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Studojo Email Flows</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&display=swap');
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Satoshi', sans-serif;
+      background-color: #f5f4f0;
+      color: #19191a;
+      margin: 0;
+    }
+
+    h1, h2, h3, h4, .clash {
+      font-family: 'Clash Display', sans-serif;
+    }
+
+    /* Sidebar */
+    #sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 300px;
+      height: 100vh;
+      background: #ffffff;
+      border-right: 2px solid #19191a;
+      overflow-y: auto;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #main {
+      margin-left: 300px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Nav item */
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      cursor: pointer;
+      border-radius: 12px;
+      margin: 2px 8px;
+      transition: background 0.1s;
+      font-size: 14px;
+      font-weight: 500;
+      color: #444;
+      border: 2px solid transparent;
+    }
+    .nav-item:hover {
+      background: #f3f0ff;
+      color: #7c3aed;
+      border-color: #7c3aed;
+    }
+    .nav-item.active {
+      background: #7c3aed;
+      color: #ffffff;
+      border-color: #19191a;
+      box-shadow: 2px 2px 0px 0px rgba(25,26,35,1);
+      font-weight: 700;
+    }
+    .nav-item.active:hover {
+      transform: translate(1px, 1px);
+      box-shadow: 1px 1px 0px 0px rgba(25,26,35,1);
+    }
+
+    .nav-section-label {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #999;
+      padding: 16px 16px 6px;
+    }
+
+    .nav-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 100px;
+      border: 1.5px solid currentColor;
+      opacity: 0.8;
+      white-space: nowrap;
+    }
+
+    /* Card */
+    .card {
+      background: #ffffff;
+      border: 2px solid #19191a;
+      border-radius: 24px;
+      box-shadow: 4px 4px 0px 0px rgba(25,26,35,1);
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .card:hover {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px 0px rgba(25,26,35,1);
+    }
+
+    /* Tag pill */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 100px;
+      border: 2px solid #19191a;
+    }
+
+    /* Preview iframe */
+    #preview-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #f5f4f0;
+    }
+
+    #preview-pane {
+      flex: 1;
+      display: none;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    #welcome-pane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 40px;
+    }
+
+    /* Button */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 10px 20px;
+      border-radius: 12px;
+      border: 2px solid #19191a;
+      box-shadow: 3px 3px 0px 0px rgba(25,26,35,1);
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s;
+      text-decoration: none;
+    }
+    .btn:hover {
+      transform: translate(1px, 1px);
+      box-shadow: 2px 2px 0px 0px rgba(25,26,35,1);
+    }
+    .btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px 0px rgba(25,26,35,1);
+    }
+    .btn-primary { background: #7c3aed; color: #ffffff; }
+    .btn-ghost { background: #ffffff; color: #19191a; }
+
+    /* Flow map cards */
+    .flow-step-card {
+      background: #ffffff;
+      border: 2px solid #19191a;
+      border-radius: 16px;
+      padding: 14px 18px;
+      box-shadow: 3px 3px 0px 0px rgba(25,26,35,1);
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .flow-step-card:hover {
+      transform: translate(1px, 1px);
+      box-shadow: 2px 2px 0px 0px rgba(25,26,35,1);
+      border-color: #7c3aed;
+    }
+    .flow-step-card.highlight {
+      border-color: #7c3aed;
+      background: #f3f0ff;
+    }
+
+    .flow-connector {
+      width: 2px;
+      min-height: 24px;
+      background: #19191a;
+      margin: 0 auto;
+    }
+    .flow-connector.dashed {
+      background: repeating-linear-gradient(to bottom, #19191a 0, #19191a 4px, transparent 4px, transparent 10px);
+    }
+    .flow-connector.branch {
+      background: #7c3aed;
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid #19191a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Clash Display', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      background: #19191a;
+      color: #fff;
+    }
+    .step-num.purple { background: #7c3aed; border-color: #7c3aed; }
+    .step-num.outline { background: #fff; color: #19191a; }
+
+    /* Tooltip / delay badge */
+    .delay-badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: #777;
+      background: #f5f4f0;
+      border: 1.5px solid #ddd;
+      border-radius: 100px;
+      padding: 2px 10px;
+      display: inline-block;
+    }
+
+    /* Scrollbar */
+    #sidebar::-webkit-scrollbar { width: 4px; }
+    #sidebar::-webkit-scrollbar-track { background: transparent; }
+    #sidebar::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
+
+    /* Plain text preview */
+    .txt-preview {
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.8;
+      color: #333;
+      background: #fff;
+      border: 2px solid #19191a;
+      border-radius: 16px;
+      padding: 32px;
+      white-space: pre-wrap;
+      box-shadow: 4px 4px 0px 0px rgba(25,26,35,1);
+    }
+
+    .preview-toolbar {
+      background: #ffffff;
+      border-bottom: 2px solid #19191a;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .preview-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 32px;
+      background: #f5f4f0;
+    }
+
+    .preview-body.iframe-mode {
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════ SIDEBAR ═══════════════════════ -->
+<div id="sidebar">
+
+  <!-- Logo -->
+  <div style="padding: 20px 20px 12px; border-bottom: 2px solid #19191a; flex-shrink:0;">
+    <div style="font-family:'Clash Display',sans-serif; font-size:22px; font-weight:800; color:#19191a; letter-spacing:-0.5px;">
+      Studojo
+    </div>
+    <div style="font-size:12px; color:#888; margin-top:2px; font-weight:500;">Email Flows — Blueprint</div>
+  </div>
+
+  <!-- Nav -->
+  <div style="flex:1; padding-bottom:16px;">
+
+    <div class="nav-section-label">Overview</div>
+    <div class="nav-item active" onclick="showWelcome(this)">
+      <span>🗺️</span> Flow Map
+    </div>
+
+    <div class="nav-section-label">Universal</div>
+    <div class="nav-item" onclick="loadTemplate(this, 'templates/welcome-new-user.html', 'Welcome — New User', 'welcome', 'Within 1 min of signup', 'Pranav')">
+      <span>👋</span>
+      <span style="flex:1;">Welcome — New User</span>
+      <span class="nav-badge" style="background:#f3f0ff; color:#7c3aed; border-color:#7c3aed;">HTML</span>
+    </div>
+
+    <div class="nav-section-label">Outreach — Not Used</div>
+    <div class="nav-item" onclick="loadTemplate(this, 'templates/outreach/not-used/outreach-nudge-d1.html', 'Nudge D1 — Did you try it?', 'outreach-not-used', '7 hrs after welcome', 'Pranav')">
+      <span>1️⃣</span>
+      <span style="flex:1;">Nudge D1</span>
+      <span class="nav-badge" style="color:#888; border-color:#ccc; background:#f5f4f0;">7 hrs</span>
+    </div>
+    <div class="nav-item" onclick="loadTemplate(this, 'templates/outreach/not-used/outreach-nudge-d2.html', 'Nudge D2 — Testimonial', 'outreach-not-used', '+24 hrs after D1', 'Pranav')">
+      <span>2️⃣</span>
+      <span style="flex:1;">Nudge D2</span>
+      <span class="nav-badge" style="color:#888; border-color:#ccc; background:#f5f4f0;">+24 hrs</span>
+    </div>
+    <div class="nav-item" onclick="loadTemplate(this, 'templates/outreach/not-used/outreach-nudge-d3.html', 'Nudge D3 — How to start', 'outreach-not-used', '+32 hrs after D2', 'Pranav')">
+      <span>3️⃣</span>
+      <span style="flex:1;">Nudge D3</span>
+      <span class="nav-badge" style="color:#888; border-color:#ccc; background:#f5f4f0;">+32 hrs</span>
+    </div>
+    <div class="nav-item" onclick="loadTemplate(this, 'templates/outreach/not-used/outreach-nudge-d4.html', 'Nudge D4 — End metric', 'outreach-not-used', 'Day 4', 'Pranav')">
+      <span>4️⃣</span>
+      <span style="flex:1;">Nudge D4</span>
+      <span class="nav-badge" style="color:#888; border-color:#ccc; background:#f5f4f0;">Day 4</span>
+    </div>
+
+    <div class="nav-section-label">Outreach — Used (High Intent)</div>
+    <div class="nav-item" onclick="loadTemplate(this, 'templates/outreach/used/outreach-used-push1.html', 'Push 1 — Momentum', 'outreach-used', '~4 hrs after tool use', 'Jeremy')">
+      <span>🚀</span>
+      <span style="flex:1;">Push 1</span>
+      <span class="nav-badge" style="color:#7c3aed; border-color:#7c3aed; background:#f3f0ff;">~4 hrs</span>
+    </div>
+    <div class="nav-item" onclick="loadTemplate(this, 'templates/outreach/used/outreach-used-push2.html', 'Push 2 — Social Proof', 'outreach-used', '~24 hrs after Push 1', 'Jeremy')">
+      <span>⭐</span>
+      <span style="flex:1;">Push 2</span>
+      <span class="nav-badge" style="color:#7c3aed; border-color:#7c3aed; background:#f3f0ff;">~24 hrs</span>
+    </div>
+    <div class="nav-item" onclick="loadTemplate(this, 'templates/outreach/used/outreach-used-push3.html', 'Push 3 — Last Nudge', 'outreach-used', '~50 hrs', 'Jeremy')">
+      <span>⚡</span>
+      <span style="flex:1;">Push 3</span>
+      <span class="nav-badge" style="color:#7c3aed; border-color:#7c3aed; background:#f3f0ff;">~50 hrs</span>
+    </div>
+    <div class="nav-item" onclick="loadTemplate(this, 'templates/outreach/used/outreach-used-convert1.html', 'Convert 1 — Objection Handling', 'outreach-used', '~60 hrs', 'Jeremy')">
+      <span>💡</span>
+      <span style="flex:1;">Convert 1</span>
+      <span class="nav-badge" style="color:#7c3aed; border-color:#7c3aed; background:#f3f0ff;">~60 hrs</span>
+    </div>
+    <div class="nav-item" onclick="loadTemplate(this, 'templates/outreach/used/outreach-used-convert2.html', 'Convert 2 — Post-pay Walkthrough', 'outreach-used', '~75 hrs', 'Jeremy')">
+      <span>🗓️</span>
+      <span style="flex:1;">Convert 2</span>
+      <span class="nav-badge" style="color:#7c3aed; border-color:#7c3aed; background:#f3f0ff;">~75 hrs</span>
+    </div>
+
+    <div class="nav-section-label">Outreach — Payment Page</div>
+    <div class="nav-item" onclick="loadTemplate(this, 'templates/outreach/used/outreach-payment-page.html', 'Payment Page — You were right there', 'outreach-payment', 'Triggered on payment page visit', 'Jeremy')">
+      <span>💳</span>
+      <span style="flex:1;">Payment Page</span>
+      <span class="nav-badge" style="color:#f59e0b; border-color:#f59e0b; background:#fffbeb;">Trigger</span>
+    </div>
+    <div class="nav-item" onclick="loadTemplate(this, 'templates/outreach/used/outreach-used-coupon.txt', 'Coupon — Founder Code', 'outreach-payment', 'A few hrs after Payment Page email', 'Jeremy', true)">
+      <span>🎟️</span>
+      <span style="flex:1;">Coupon Code</span>
+      <span class="nav-badge" style="color:#10b981; border-color:#10b981; background:#f0fdf4;">TXT</span>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div style="border-top:2px solid #19191a; padding:14px 16px; font-size:12px; color:#888; flex-shrink:0;">
+    <div style="font-weight:700; color:#19191a; font-size:13px; margin-bottom:2px;">13 templates</div>
+    Outreach Dojo flow · Blueprint only
+  </div>
+
+</div>
+
+<!-- ═══════════════════════ MAIN ═══════════════════════ -->
+<div id="main">
+
+  <!-- WELCOME / FLOW MAP PANE -->
+  <div id="welcome-pane">
+    <div style="max-width:760px; width:100%;">
+
+      <!-- Header -->
+      <div style="margin-bottom:40px;">
+        <div class="tag" style="background:#f3f0ff; border-color:#7c3aed; color:#7c3aed; margin-bottom:16px;">Blueprint — Not Wired Up</div>
+        <h1 class="clash" style="font-size:40px; font-weight:800; margin:0 0 10px; line-height:1.1;">Outreach Dojo<br>Email Flow Map</h1>
+        <p style="font-size:16px; color:#666; margin:0;">Click any card to preview the template. Select from the sidebar to browse.</p>
+      </div>
+
+      <!-- Flow diagram -->
+      <div style="display:flex; flex-direction:column; align-items:center; gap:0;">
+
+        <!-- Universal welcome -->
+        <div class="flow-step-card" style="width:100%;" onclick="document.querySelector('.nav-item:nth-child(3)').click(); document.querySelectorAll('.nav-item')[2].click()">
+          <div class="step-num purple">✦</div>
+          <div style="flex:1;">
+            <div style="font-family:'Clash Display',sans-serif; font-weight:700; font-size:15px; margin-bottom:2px;">Welcome — New User</div>
+            <div style="font-size:13px; color:#666;">Universal · triggers within 1 min of signup · signed by Pranav</div>
+          </div>
+          <span class="delay-badge">t=0</span>
+        </div>
+
+        <div class="flow-connector" style="height:20px;"></div>
+
+        <!-- Branch point -->
+        <div style="background:#19191a; color:#fff; font-family:'Clash Display',sans-serif; font-size:12px; font-weight:700; padding:6px 18px; border-radius:100px; letter-spacing:0.5px;">
+          BRANCH on signup source
+        </div>
+
+        <div style="display:flex; gap:32px; width:100%; margin-top:20px;">
+
+          <!-- Branch A -->
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:0;">
+            <div style="background:#f5f4f0; border:2px solid #19191a; border-radius:12px; padding:8px 16px; font-family:'Clash Display',sans-serif; font-size:12px; font-weight:700; margin-bottom:12px; text-align:center;">
+              Branch A — Did NOT use tool
+            </div>
+
+            <div class="flow-step-card" style="width:100%;" onclick="clickNav(3)">
+              <div class="step-num outline">1</div>
+              <div style="flex:1;">
+                <div style="font-size:14px; font-weight:700;">Nudge D1</div>
+                <div style="font-size:12px; color:#666;">Did you try it?</div>
+              </div>
+              <span class="delay-badge">7 hrs</span>
+            </div>
+            <div class="flow-connector" style="height:12px;"></div>
+            <div class="flow-step-card" style="width:100%;" onclick="clickNav(4)">
+              <div class="step-num outline">2</div>
+              <div style="flex:1;">
+                <div style="font-size:14px; font-weight:700;">Nudge D2</div>
+                <div style="font-size:12px; color:#666;">Student testimonial</div>
+              </div>
+              <span class="delay-badge">+24 hrs</span>
+            </div>
+            <div class="flow-connector" style="height:12px;"></div>
+            <div class="flow-step-card" style="width:100%;" onclick="clickNav(5)">
+              <div class="step-num outline">3</div>
+              <div style="flex:1;">
+                <div style="font-size:14px; font-weight:700;">Nudge D3</div>
+                <div style="font-size:12px; color:#666;">3-step walkthrough</div>
+              </div>
+              <span class="delay-badge">+32 hrs</span>
+            </div>
+            <div class="flow-connector" style="height:12px;"></div>
+            <div class="flow-step-card" style="width:100%;" onclick="clickNav(6)">
+              <div class="step-num outline">4</div>
+              <div style="flex:1;">
+                <div style="font-size:14px; font-weight:700;">Nudge D4</div>
+                <div style="font-size:12px; color:#666;">Reply rate data, final push</div>
+              </div>
+              <span class="delay-badge">Day 4</span>
+            </div>
+            <div class="flow-connector dashed" style="height:16px;"></div>
+            <div style="background:#fff; border:2px dashed #19191a; border-radius:12px; padding:10px 14px; text-align:center; width:100%;">
+              <div style="font-size:12px; font-weight:700; color:#888;">→ Career Coach Flow</div>
+              <div style="font-size:11px; color:#aaa;">Parked — build later</div>
+            </div>
+          </div>
+
+          <!-- Branch B -->
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:0;">
+            <div style="background:#7c3aed; border:2px solid #19191a; border-radius:12px; padding:8px 16px; font-family:'Clash Display',sans-serif; font-size:12px; font-weight:700; color:#fff; margin-bottom:12px; text-align:center;">
+              Branch B — DID use tool
+            </div>
+
+            <!-- Phase 1 label -->
+            <div style="font-size:10px; font-weight:700; color:#7c3aed; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px;">Phase 1 — Push (0–50 hrs)</div>
+
+            <div class="flow-step-card highlight" style="width:100%;" onclick="clickNav(7)">
+              <div class="step-num purple">1</div>
+              <div style="flex:1;">
+                <div style="font-size:14px; font-weight:700;">Push 1</div>
+                <div style="font-size:12px; color:#666;">Momentum</div>
+              </div>
+              <span class="delay-badge">~4 hrs</span>
+            </div>
+            <div class="flow-connector branch" style="height:12px;"></div>
+            <div class="flow-step-card highlight" style="width:100%;" onclick="clickNav(8)">
+              <div class="step-num purple">2</div>
+              <div style="flex:1;">
+                <div style="font-size:14px; font-weight:700;">Push 2</div>
+                <div style="font-size:12px; color:#666;">Social proof</div>
+              </div>
+              <span class="delay-badge">~24 hrs</span>
+            </div>
+            <div class="flow-connector branch" style="height:12px;"></div>
+            <div class="flow-step-card highlight" style="width:100%;" onclick="clickNav(9)">
+              <div class="step-num purple">3</div>
+              <div style="flex:1;">
+                <div style="font-size:14px; font-weight:700;">Push 3</div>
+                <div style="font-size:12px; color:#666;">Last nudge</div>
+              </div>
+              <span class="delay-badge">~50 hrs</span>
+            </div>
+
+            <div class="flow-connector branch" style="height:12px;"></div>
+
+            <!-- Phase 2 label -->
+            <div style="font-size:10px; font-weight:700; color:#7c3aed; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px;">Phase 2 — Convert (50–100 hrs)</div>
+
+            <div class="flow-step-card highlight" style="width:100%;" onclick="clickNav(10)">
+              <div class="step-num purple">4</div>
+              <div style="flex:1;">
+                <div style="font-size:14px; font-weight:700;">Convert 1</div>
+                <div style="font-size:12px; color:#666;">Objection handling</div>
+              </div>
+              <span class="delay-badge">~60 hrs</span>
+            </div>
+            <div class="flow-connector branch" style="height:12px;"></div>
+            <div class="flow-step-card highlight" style="width:100%;" onclick="clickNav(11)">
+              <div class="step-num purple">5</div>
+              <div style="flex:1;">
+                <div style="font-size:14px; font-weight:700;">Convert 2</div>
+                <div style="font-size:12px; color:#666;">Post-pay walkthrough</div>
+              </div>
+              <span class="delay-badge">~75 hrs</span>
+            </div>
+
+            <div class="flow-connector" style="height:12px;"></div>
+
+            <!-- Phase 3 -->
+            <div style="font-size:10px; font-weight:700; color:#f59e0b; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px;">Phase 3 — Payment Page Trigger</div>
+
+            <div class="flow-step-card" style="width:100%; border-color:#f59e0b; background:#fffbeb;" onclick="clickNav(12)">
+              <div class="step-num" style="background:#f59e0b; border-color:#f59e0b;">💳</div>
+              <div style="flex:1;">
+                <div style="font-size:14px; font-weight:700;">Payment Page</div>
+                <div style="font-size:12px; color:#92400e;">Fires on payment_page_viewed</div>
+              </div>
+              <span class="delay-badge" style="color:#92400e; border-color:#f59e0b;">Trigger</span>
+            </div>
+            <div class="flow-connector" style="height:12px; background:#f59e0b;"></div>
+            <div class="flow-step-card" style="width:100%; border-color:#10b981; background:#f0fdf4;" onclick="clickNav(13)">
+              <div class="step-num" style="background:#10b981; border-color:#10b981;">🎟️</div>
+              <div style="flex:1;">
+                <div style="font-size:14px; font-weight:700;">Coupon Code</div>
+                <div style="font-size:12px; color:#065f46;">Plain text · founder email</div>
+              </div>
+              <span class="delay-badge" style="color:#065f46; border-color:#10b981;">+few hrs</span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- PREVIEW PANE -->
+  <div id="preview-pane">
+    <div class="preview-toolbar">
+      <button class="btn btn-ghost" onclick="showWelcome(null)" style="font-size:13px; padding:8px 14px;">
+        ← Back
+      </button>
+      <div style="flex:1; min-width:0;">
+        <div id="preview-title" class="clash" style="font-size:16px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></div>
+        <div id="preview-meta" style="font-size:12px; color:#888; margin-top:1px;"></div>
+      </div>
+      <div id="preview-tags" style="display:flex; gap:8px; flex-shrink:0;"></div>
+    </div>
+    <div id="preview-body" class="preview-body iframe-mode">
+      <iframe id="preview-frame" src=""></iframe>
+    </div>
+    <div id="preview-txt-body" class="preview-body" style="display:none;"></div>
+  </div>
+
+</div>
+
+<script>
+  const navItems = document.querySelectorAll('.nav-item');
+
+  function clearActiveNav() {
+    navItems.forEach(n => n.classList.remove('active'));
+  }
+
+  function showWelcome(el) {
+    clearActiveNav();
+    if (el) el.classList.add('active');
+    document.getElementById('welcome-pane').style.display = 'flex';
+    document.getElementById('preview-pane').style.display = 'none';
+  }
+
+  function clickNav(index) {
+    const items = document.querySelectorAll('.nav-item');
+    if (items[index]) items[index].click();
+  }
+
+  function loadTemplate(el, path, title, flow, delay, sender, isText = false) {
+    clearActiveNav();
+    el.classList.add('active');
+
+    document.getElementById('welcome-pane').style.display = 'none';
+    document.getElementById('preview-pane').style.display = 'flex';
+    document.getElementById('preview-title').textContent = title;
+
+    // Meta
+    const meta = [];
+    if (delay) meta.push('⏱ ' + delay);
+    if (sender) meta.push('✍️ ' + sender);
+    document.getElementById('preview-meta').textContent = meta.join('  ·  ');
+
+    // Tags
+    const tagEl = document.getElementById('preview-tags');
+    const flowLabels = {
+      'welcome': { label: 'Universal', color: '#7c3aed', bg: '#f3f0ff' },
+      'outreach-not-used': { label: 'Not Used', color: '#555', bg: '#f5f4f0' },
+      'outreach-used': { label: 'High Intent', color: '#7c3aed', bg: '#f3f0ff' },
+      'outreach-payment': { label: 'Payment', color: '#92400e', bg: '#fffbeb' },
+    };
+    const f = flowLabels[flow] || {};
+    tagEl.innerHTML = `
+      <span class="tag" style="color:${f.color}; background:${f.bg}; border-color:${f.color}; font-size:10px;">
+        ${f.label || flow}
+      </span>
+      <span class="tag" style="color:#555; background:#f5f4f0; border-color:#ccc; font-size:10px;">
+        ${isText ? 'Plain Text' : 'HTML'}
+      </span>
+    `;
+
+    if (isText) {
+      document.getElementById('preview-body').style.display = 'none';
+      const txtBody = document.getElementById('preview-txt-body');
+      txtBody.style.display = 'block';
+      fetch(path)
+        .then(r => r.text())
+        .then(content => {
+          txtBody.innerHTML = `<div class="txt-preview">${escapeHtml(content)}</div>`;
+        })
+        .catch(() => {
+          txtBody.innerHTML = `<div class="txt-preview" style="color:#ef4444;">Could not load template. Open the file directly from the repo.</div>`;
+        });
+    } else {
+      document.getElementById('preview-txt-body').style.display = 'none';
+      const body = document.getElementById('preview-body');
+      body.style.display = 'flex';
+      document.getElementById('preview-frame').src = path;
+    }
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+</script>
+
+</body>
+</html>
