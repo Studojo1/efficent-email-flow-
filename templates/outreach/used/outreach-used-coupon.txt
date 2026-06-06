@@ -4,15 +4,17 @@ Hey {{first_name}},
 
 You got to the payment page and didn't finish. I noticed.
 
-I'm not going to send you another marketing email about why Outreach Dojo works. You already know. You were right there.
+I'm not going to explain Outreach Dojo to you again. You already went through it. You know what it does.
 
-So here's something from me personally:
+So I'll just make it easier.
+
+Here's a code from me personally:
 
 {{COUPON_CODE}}
 
-Use it at checkout. No expiry, no strings.
+Use it at checkout. No expiry, no catch.
 
-We built Studojo for students who are serious about where they end up. You've shown that. This is just me making it a little easier.
+We built this for students who are serious. You clearly are — you don't make it to the payment page by accident.
 
 — Jeremy
 Co-founder, Studojo

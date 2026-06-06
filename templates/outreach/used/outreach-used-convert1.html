@@ -10,64 +10,70 @@
     .header { background-color: #7c3aed; padding: 28px 40px; }
     .header-logo { font-size: 26px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; }
     .body { padding: 40px 40px 32px; }
-    .body-text { font-size: 16px; color: #444444; line-height: 1.7; margin: 0 0 16px; }
-    .deliverables-wrapper { border: 2px solid #e5e5e5; border-radius: 12px; padding: 8px 24px; margin: 24px 0; }
-    .deliverable-row { display: flex; align-items: flex-start; padding: 16px 0; border-bottom: 1px solid #f0f0f0; }
+    .body-text { font-size: 16px; color: #444444; line-height: 1.8; margin: 0 0 18px; }
+    .deliverable-row { display: flex; gap: 16px; padding: 18px 0; border-bottom: 1px solid #eeeeee; align-items: flex-start; }
     .deliverable-row:last-child { border-bottom: none; }
-    .deliverable-icon { flex-shrink: 0; font-size: 20px; margin-right: 16px; margin-top: 2px; }
-    .deliverable-title { font-size: 15px; font-weight: 700; color: #111111; margin: 0 0 4px; }
-    .deliverable-desc { font-size: 14px; color: #555555; line-height: 1.6; margin: 0; }
-    .objection-block { background-color: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 24px 0; }
-    .objection-text { font-size: 15px; color: #444; line-height: 1.7; margin: 0; }
+    .deliverable-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+    .deliverable-title { font-size: 15px; font-weight: 800; color: #111; margin: 0 0 5px; }
+    .deliverable-desc { font-size: 14px; color: #555; line-height: 1.7; margin: 0; }
+    .deliverables-wrapper { border: 2px solid #e5e5e5; border-radius: 14px; padding: 4px 24px 4px; margin: 24px 0; }
+    .objection-block { background-color: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 0 12px 12px 0; padding: 20px 24px; margin: 24px 0; font-size: 15px; color: #444; line-height: 1.8; }
     .cta-button { display: inline-block; background-color: #7c3aed; color: #ffffff; font-size: 15px; font-weight: 700; padding: 14px 28px; border-radius: 8px; text-decoration: none; margin: 8px 0 24px; }
     .divider { border: none; border-top: 1px solid #eeeeee; margin: 32px 0; }
-    .sign-off { font-size: 15px; color: #333333; line-height: 1.7; }
+    .sign-off { font-size: 15px; color: #333333; line-height: 1.8; }
     .sign-off-name { font-weight: 700; }
     .footer { background-color: #fafafa; border-top: 1px solid #eeeeee; padding: 24px 40px; text-align: center; }
-    .footer-text { font-size: 12px; color: #999999; line-height: 1.6; }
+    .footer-text { font-size: 12px; color: #aaaaaa; line-height: 1.7; }
   </style>
 </head>
 <body>
   <div class="wrapper">
     <div class="header"><div class="header-logo">Studojo</div></div>
     <div class="body">
+
       <p class="body-text">Hey {{first_name}},</p>
-      <p class="body-text">I want to be concrete about what you actually get when you use Outreach Dojo.</p>
-      <p class="body-text">Because "we help you with outreach" is vague and I don't think vague is useful to you right now.</p>
+
+      <p class="body-text">I want to be specific about what Outreach Dojo actually delivers — because I think "we help you with outreach" is too vague to be useful.</p>
+
+      <p class="body-text">Here's what you're getting:</p>
+
       <div class="deliverables-wrapper">
         <div class="deliverable-row">
           <div class="deliverable-icon">🎯</div>
           <div>
-            <div class="deliverable-title">Targeted hiring manager list</div>
-            <div class="deliverable-desc">We find the actual people at your target companies who make or influence hiring decisions — not HR inboxes, not generic emails.</div>
+            <div class="deliverable-title">A list of real hiring managers at your target companies</div>
+            <div class="deliverable-desc">Not HR departments. Not generic contact pages. The actual engineering leads, product managers, founders, or team heads who have the authority to say "bring this person in." We find them on LinkedIn.</div>
           </div>
         </div>
         <div class="deliverable-row">
           <div class="deliverable-icon">✍️</div>
           <div>
-            <div class="deliverable-title">Personalised outreach messages</div>
-            <div class="deliverable-desc">Each message is written specifically for that person — referencing their company, their role, the team they lead. It reads like it came from you, not a bot.</div>
+            <div class="deliverable-title">A personalised message for each one</div>
+            <div class="deliverable-desc">Written specifically for that person — their company, their team's current focus, what makes your background relevant to them. It reads like you spent an hour on it. Because we do the research, so you don't have to.</div>
+          </div>
+        </div>
+        <div class="deliverable-row">
+          <div class="deliverable-icon">👁️</div>
+          <div>
+            <div class="deliverable-title">Your review before anything goes out</div>
+            <div class="deliverable-desc">You see every message. You approve every message. Nothing is sent without your sign-off. If something doesn't feel right, you change it.</div>
           </div>
         </div>
         <div class="deliverable-row">
           <div class="deliverable-icon">📬</div>
           <div>
-            <div class="deliverable-title">Messages that get opened</div>
-            <div class="deliverable-desc">Short, direct, no filler. Written to sound like a student who did their research — because that's what hiring managers actually respond to.</div>
-          </div>
-        </div>
-        <div class="deliverable-row">
-          <div class="deliverable-icon">📈</div>
-          <div>
-            <div class="deliverable-title">Real reply rates</div>
-            <div class="deliverable-desc">Students using direct personalised outreach see reply rates 10x higher than portal applications. The math just works differently.</div>
+            <div class="deliverable-title">Replies from people who can open doors</div>
+            <div class="deliverable-desc">Not automated rejections. Not "we'll keep your CV on file." Actual replies from hiring managers who read your message, found it specific and human, and want to continue the conversation.</div>
           </div>
         </div>
       </div>
+
       <div class="objection-block">
-        <p class="objection-text">If you're thinking "but my profile isn't strong enough yet" — that's exactly why direct outreach works. A hiring manager who responds to your message already knows who you are before they look at your resume. The conversation is warmer from the start.</p>
+        If you're worried your profile isn't strong enough — that's exactly when this matters most. A hiring manager who replies to your outreach already has a reason to be interested in you before they look at your resume. The conversation starts differently. The bar to impress is lower, because you already showed you're not like every other applicant.
       </div>
-      <a class="cta-button" href="https://studojo.com/outreach">See it for yourself &rarr;</a>
+
+      <a class="cta-button" href="https://studojo.com/outreach">Complete your outreach &rarr;</a>
+
       <hr class="divider" />
       <div class="sign-off">
         <p>Talk soon,<br /><span class="sign-off-name">Jeremy</span><br />Co-founder, Studojo</p>
