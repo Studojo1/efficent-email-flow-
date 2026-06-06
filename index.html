@@ -126,9 +126,10 @@
     /* Preview iframe */
     #preview-frame {
       width: 100%;
-      height: 100%;
+      min-height: 600px;
       border: none;
-      background: #f5f4f0;
+      background: #ffffff;
+      display: block;
     }
 
     #preview-pane {
@@ -136,6 +137,7 @@
       display: none;
       flex-direction: column;
       height: 100vh;
+      overflow: hidden;
     }
 
     #welcome-pane {
@@ -272,14 +274,24 @@
     .preview-body {
       flex: 1;
       overflow-y: auto;
-      padding: 32px;
+      padding: 40px;
       background: #f5f4f0;
     }
 
     .preview-body.iframe-mode {
-      padding: 0;
-      display: flex;
-      flex-direction: column;
+      padding: 32px;
+      background: #f5f4f0;
+      overflow-y: auto;
+    }
+
+    .iframe-wrapper {
+      max-width: 680px;
+      margin: 0 auto;
+      background: #ffffff;
+      border: 2px solid #19191a;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 4px 4px 0px 0px rgba(25,26,35,1);
     }
   </style>
 </head>
@@ -568,7 +580,9 @@
       <div id="preview-tags" style="display:flex; gap:8px; flex-shrink:0;"></div>
     </div>
     <div id="preview-body" class="preview-body iframe-mode">
-      <iframe id="preview-frame" src=""></iframe>
+      <div class="iframe-wrapper">
+        <iframe id="preview-frame" src="" onload="resizeIframe(this)"></iframe>
+      </div>
     </div>
     <div id="preview-txt-body" class="preview-body" style="display:none;"></div>
   </div>
@@ -577,6 +591,15 @@
 
 <script>
   const navItems = document.querySelectorAll('.nav-item');
+
+  function resizeIframe(iframe) {
+    try {
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      iframe.style.height = doc.documentElement.scrollHeight + 'px';
+    } catch(e) {
+      iframe.style.height = '800px';
+    }
+  }
 
   function clearActiveNav() {
     navItems.forEach(n => n.classList.remove('active'));
