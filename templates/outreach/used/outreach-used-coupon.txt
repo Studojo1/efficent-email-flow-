@@ -1,4 +1,4 @@
-Subject: Something from me — Jeremy
+Subject: Something from me, Jeremy
 
 Hey {{first_name}},
 
@@ -14,7 +14,7 @@ Here's a code from me personally:
 
 Use it at checkout. No expiry, no catch.
 
-We built this for students who are serious. You clearly are — you don't make it to the payment page by accident.
+We built this for students who are serious. You clearly are. You don't make it to the payment page by accident.
 
 — Jeremy
 Co-founder, Studojo
