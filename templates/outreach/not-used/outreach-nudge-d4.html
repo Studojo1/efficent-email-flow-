@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The number that changes everything</title>
+  <style>
+    body { margin: 0; padding: 0; background-color: #f5f5f5; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+    .wrapper { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+    .header { background-color: #7c3aed; padding: 28px 40px; }
+    .header-logo { font-size: 26px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; }
+    .body { padding: 40px 40px 32px; }
+    .body-text { font-size: 16px; color: #444444; line-height: 1.7; margin: 0 0 16px; }
+    .stat-block { background-color: #7c3aed; border-radius: 12px; padding: 32px 28px; margin: 24px 0; text-align: center; }
+    .stat-number { font-size: 56px; font-weight: 800; color: #ffffff; line-height: 1; margin: 0 0 8px; }
+    .stat-label { font-size: 15px; color: #e0d4ff; margin: 0; }
+    .comparison-row { display: flex; gap: 16px; margin: 24px 0; }
+    .comparison-card { flex: 1; border: 2px solid #eeeeee; border-radius: 10px; padding: 18px; text-align: center; }
+    .comparison-card.bad { border-color: #fee2e2; background-color: #fff8f8; }
+    .comparison-card.good { border-color: #d1fae5; background-color: #f0fdf4; }
+    .comparison-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 8px; }
+    .comparison-card.bad .comparison-label { color: #ef4444; }
+    .comparison-card.good .comparison-label { color: #10b981; }
+    .comparison-value { font-size: 22px; font-weight: 800; color: #111111; margin: 0 0 6px; }
+    .comparison-desc { font-size: 12px; color: #777777; margin: 0; }
+    .cta-button { display: inline-block; background-color: #7c3aed; color: #ffffff; font-size: 15px; font-weight: 700; padding: 14px 28px; border-radius: 8px; text-decoration: none; margin: 8px 0 24px; }
+    .divider { border: none; border-top: 1px solid #eeeeee; margin: 32px 0; }
+    .sign-off { font-size: 15px; color: #333333; line-height: 1.7; }
+    .sign-off-name { font-weight: 700; }
+    .footer { background-color: #fafafa; border-top: 1px solid #eeeeee; padding: 24px 40px; text-align: center; }
+    .footer-text { font-size: 12px; color: #999999; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header"><div class="header-logo">Studojo</div></div>
+    <div class="body">
+      <p class="body-text">Hey {{first_name}},</p>
+      <p class="body-text">I want to show you a number.</p>
+      <div class="stat-block">
+        <div class="stat-number">~2%</div>
+        <div class="stat-label">Average reply rate when applying through job portals</div>
+      </div>
+      <p class="body-text">Two percent. That means for every 100 applications you submit through Naukri, LinkedIn, or any other portal — you can expect about 2 replies. And most of those are rejections.</p>
+      <p class="body-text">Direct outreach to hiring managers flips that completely. When a real person receives a personalised note that references their team and shows you actually understand their work — they respond.</p>
+      <div class="comparison-row">
+        <div class="comparison-card bad">
+          <div class="comparison-label">Portal Apply</div>
+          <div class="comparison-value">~2%</div>
+          <div class="comparison-desc">Reply rate. Competing with hundreds of identical applications.</div>
+        </div>
+        <div class="comparison-card good">
+          <div class="comparison-label">Direct Outreach</div>
+          <div class="comparison-value">~25%</div>
+          <div class="comparison-desc">Reply rate. Reaching the person who actually makes the call.</div>
+        </div>
+      </div>
+      <p class="body-text">That's the difference Outreach Dojo makes. And you're already signed up — you just haven't started yet.</p>
+      <a class="cta-button" href="https://studojo.com/outreach">Start your first outreach &rarr;</a>
+      <hr class="divider" />
+      <div class="sign-off">
+        <p>Talk soon,<br /><span class="sign-off-name">Pranav</span><br />Co-founder, Studojo</p>
+      </div>
+    </div>
+    <div class="footer"><p class="footer-text">Studojo &mdash; studojo.com</p></div>
+  </div>
+</body>
+</html>

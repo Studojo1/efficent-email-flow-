@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Here's what you actually get</title>
+  <style>
+    body { margin: 0; padding: 0; background-color: #f5f5f5; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+    .wrapper { max-width: 600px; margin: 0 auto; background-color: #ffffff; }
+    .header { background-color: #7c3aed; padding: 28px 40px; }
+    .header-logo { font-size: 26px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; }
+    .body { padding: 40px 40px 32px; }
+    .body-text { font-size: 16px; color: #444444; line-height: 1.7; margin: 0 0 16px; }
+    .deliverables-wrapper { border: 2px solid #e5e5e5; border-radius: 12px; padding: 8px 24px; margin: 24px 0; }
+    .deliverable-row { display: flex; align-items: flex-start; padding: 16px 0; border-bottom: 1px solid #f0f0f0; }
+    .deliverable-row:last-child { border-bottom: none; }
+    .deliverable-icon { flex-shrink: 0; font-size: 20px; margin-right: 16px; margin-top: 2px; }
+    .deliverable-title { font-size: 15px; font-weight: 700; color: #111111; margin: 0 0 4px; }
+    .deliverable-desc { font-size: 14px; color: #555555; line-height: 1.6; margin: 0; }
+    .objection-block { background-color: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 24px 0; }
+    .objection-text { font-size: 15px; color: #444; line-height: 1.7; margin: 0; }
+    .cta-button { display: inline-block; background-color: #7c3aed; color: #ffffff; font-size: 15px; font-weight: 700; padding: 14px 28px; border-radius: 8px; text-decoration: none; margin: 8px 0 24px; }
+    .divider { border: none; border-top: 1px solid #eeeeee; margin: 32px 0; }
+    .sign-off { font-size: 15px; color: #333333; line-height: 1.7; }
+    .sign-off-name { font-weight: 700; }
+    .footer { background-color: #fafafa; border-top: 1px solid #eeeeee; padding: 24px 40px; text-align: center; }
+    .footer-text { font-size: 12px; color: #999999; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header"><div class="header-logo">Studojo</div></div>
+    <div class="body">
+      <p class="body-text">Hey {{first_name}},</p>
+      <p class="body-text">I want to be concrete about what you actually get when you use Outreach Dojo.</p>
+      <p class="body-text">Because "we help you with outreach" is vague and I don't think vague is useful to you right now.</p>
+      <div class="deliverables-wrapper">
+        <div class="deliverable-row">
+          <div class="deliverable-icon">🎯</div>
+          <div>
+            <div class="deliverable-title">Targeted hiring manager list</div>
+            <div class="deliverable-desc">We find the actual people at your target companies who make or influence hiring decisions — not HR inboxes, not generic emails.</div>
+          </div>
+        </div>
+        <div class="deliverable-row">
+          <div class="deliverable-icon">✍️</div>
+          <div>
+            <div class="deliverable-title">Personalised outreach messages</div>
+            <div class="deliverable-desc">Each message is written specifically for that person — referencing their company, their role, the team they lead. It reads like it came from you, not a bot.</div>
+          </div>
+        </div>
+        <div class="deliverable-row">
+          <div class="deliverable-icon">📬</div>
+          <div>
+            <div class="deliverable-title">Messages that get opened</div>
+            <div class="deliverable-desc">Short, direct, no filler. Written to sound like a student who did their research — because that's what hiring managers actually respond to.</div>
+          </div>
+        </div>
+        <div class="deliverable-row">
+          <div class="deliverable-icon">📈</div>
+          <div>
+            <div class="deliverable-title">Real reply rates</div>
+            <div class="deliverable-desc">Students using direct personalised outreach see reply rates 10x higher than portal applications. The math just works differently.</div>
+          </div>
+        </div>
+      </div>
+      <div class="objection-block">
+        <p class="objection-text">If you're thinking "but my profile isn't strong enough yet" — that's exactly why direct outreach works. A hiring manager who responds to your message already knows who you are before they look at your resume. The conversation is warmer from the start.</p>
+      </div>
+      <a class="cta-button" href="https://studojo.com/outreach">See it for yourself &rarr;</a>
+      <hr class="divider" />
+      <div class="sign-off">
+        <p>Talk soon,<br /><span class="sign-off-name">Jeremy</span><br />Co-founder, Studojo</p>
+      </div>
+    </div>
+    <div class="footer"><p class="footer-text">Studojo &mdash; studojo.com</p></div>
+  </div>
+</body>
+</html>

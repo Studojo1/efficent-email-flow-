@@ -1,0 +1,19 @@
+Subject: Something from me — Jeremy
+
+Hey {{first_name}},
+
+You got to the payment page and didn't finish. I noticed.
+
+I'm not going to send you another marketing email about why Outreach Dojo works. You already know. You were right there.
+
+So here's something from me personally:
+
+{{COUPON_CODE}}
+
+Use it at checkout. No expiry, no strings.
+
+We built Studojo for students who are serious about where they end up. You've shown that. This is just me making it a little easier.
+
+— Jeremy
+Co-founder, Studojo
+studojo.com
