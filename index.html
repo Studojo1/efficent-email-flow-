@@ -47,16 +47,47 @@
     .sidebar-scroll::-webkit-scrollbar { width: 3px; }
     .sidebar-scroll::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 2px; }
 
+    /* Accordion group button */
+    .nav-group-btn {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 14px; margin: 6px 8px 2px;
+      border-radius: 12px; cursor: pointer;
+      font-family: 'Clash Display', sans-serif;
+      font-size: 13px; font-weight: 700; color: #19191a;
+      border: 2px solid #19191a;
+      background: #fff;
+      box-shadow: 3px 3px 0 rgba(25,26,35,1);
+      transition: transform 0.1s, box-shadow 0.1s;
+      user-select: none;
+    }
+    .nav-group-btn:hover { transform: translate(1px,1px); box-shadow: 2px 2px 0 rgba(25,26,35,1); }
+    .nav-group-btn.open { background: #19191a; color: #fff; }
+    .nav-group-btn.open:hover { transform: translate(1px,1px); box-shadow: 2px 2px 0 rgba(25,26,35,1); }
+    .nav-group-btn .group-label { flex: 1; }
+    .nav-group-btn .group-count {
+      font-size: 10px; font-weight: 700; padding: 2px 8px;
+      border-radius: 100px; background: #f5f4f0; color: #888;
+      border: 1.5px solid #ddd;
+    }
+    .nav-group-btn.open .group-count { background: rgba(255,255,255,0.15); color: #fff; border-color: rgba(255,255,255,0.3); }
+    .nav-group-btn .chevron { font-size: 10px; opacity: 0.6; transition: transform 0.2s; }
+    .nav-group-btn.open .chevron { transform: rotate(180deg); }
+
+    /* Accordion body */
+    .nav-group-body { overflow: hidden; max-height: 0; transition: max-height 0.25s ease; }
+    .nav-group-body.open { max-height: 2000px; }
+
+    /* Sub-section label inside accordion */
     .nav-section {
       font-family: 'Clash Display', sans-serif;
       font-size: 9px; font-weight: 700; letter-spacing: 2px;
       text-transform: uppercase; color: #bbb;
-      padding: 16px 16px 5px;
+      padding: 12px 16px 4px;
     }
 
     .nav-item {
       display: flex; align-items: center; gap: 10px;
-      padding: 9px 12px; margin: 1px 8px;
+      padding: 8px 12px; margin: 1px 8px;
       border-radius: 10px; cursor: pointer;
       font-size: 13px; font-weight: 500; color: #555;
       border: 2px solid transparent;
@@ -303,183 +334,203 @@
 <div id="sidebar">
   <div class="sidebar-logo">
     <div class="sidebar-logo-name clash">Studojo</div>
-    <div class="sidebar-logo-sub">Email Flows: Outreach Dojo</div>
+    <div class="sidebar-logo-sub">Email Flows · Blueprint</div>
   </div>
 
   <div class="sidebar-scroll">
 
-    <div class="nav-section">Overview</div>
-    <div class="nav-item active" id="nav-outreach-flow" onclick="showFlow('outreach', this)">
-      <div class="nav-dot purple"></div>
-      <span class="nav-label">Outreach Dojo Flow</span>
+    <!-- ── OUTREACH DOJO GROUP ── -->
+    <div class="nav-group-btn open" id="btn-outreach" onclick="toggleGroup('outreach')">
+      <div class="nav-dot purple" style="background:#7c3aed;"></div>
+      <span class="group-label">Outreach Dojo</span>
+      <span class="group-count">13</span>
+      <span class="chevron">▼</span>
     </div>
-    <div class="nav-item" id="nav-cc-flow" onclick="showFlow('cc', this)">
+    <div class="nav-group-body open" id="body-outreach">
+
+      <div class="nav-item" id="nav-outreach-flow" onclick="showFlow('outreach', this)">
+        <div class="nav-dot purple"></div>
+        <span class="nav-label">Flow Map</span>
+      </div>
+
+      <div class="nav-section">Universal</div>
+      <div class="nav-item" onclick="load(this,'templates/welcome-new-user.html','Welcome: New User','welcome','Within 1 min of signup','Pranav','You\'re in the top 3%. Here\'s how we know.')">
+        <div class="nav-dot purple"></div>
+        <span class="nav-label">Welcome</span>
+        <span class="nav-chip" style="color:#7c3aed;">HTML</span>
+      </div>
+
+      <div class="nav-section">Not Used</div>
+      <div class="nav-item" onclick="load(this,'templates/outreach/not-used/outreach-nudge-d1.html','Nudge D1: Did you try it?','not-used','7 hrs after welcome','Pranav','Did you get a chance to try Outreach Dojo?')">
+        <div class="nav-num">1</div>
+        <span class="nav-label">Nudge D1</span>
+        <span class="nav-chip" style="color:#888;">7 hrs</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/outreach/not-used/outreach-nudge-d2.html','Nudge D2: Testimonial','not-used','+24 hrs after D1','Pranav','What one student got after using Outreach Dojo')">
+        <div class="nav-num">2</div>
+        <span class="nav-label">Nudge D2</span>
+        <span class="nav-chip" style="color:#888;">+24 hrs</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/outreach/not-used/outreach-nudge-d3.html','Nudge D3: How to start','not-used','+32 hrs after D2','Pranav','Here\'s exactly how to get started')">
+        <div class="nav-num">3</div>
+        <span class="nav-label">Nudge D3</span>
+        <span class="nav-chip" style="color:#888;">+32 hrs</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/outreach/not-used/outreach-nudge-d4.html','Nudge D4: End metric','not-used','Day 4','Pranav','The number that changes everything')">
+        <div class="nav-num">4</div>
+        <span class="nav-label">Nudge D4</span>
+        <span class="nav-chip" style="color:#888;">Day 4</span>
+      </div>
+
+      <div class="nav-section">High Intent</div>
+      <div class="nav-item" onclick="load(this,'templates/outreach/used/outreach-used-push1.html','Push 1: Momentum','used','~4 hrs after tool use','Jeremy','You started. Here\'s what happens next')">
+        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">1</div>
+        <span class="nav-label">Push 1</span>
+        <span class="nav-chip" style="color:#7c3aed;">~4 hrs</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/outreach/used/outreach-used-push2.html','Push 2: Social Proof','used','~24 hrs','Jeremy','Students who finished this got real replies')">
+        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">2</div>
+        <span class="nav-label">Push 2</span>
+        <span class="nav-chip" style="color:#7c3aed;">~24 hrs</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/outreach/used/outreach-used-push3.html','Push 3: Final','used','~50 hrs','Jeremy','You are one step from being on the right side of that')">
+        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">3</div>
+        <span class="nav-label">Push 3</span>
+        <span class="nav-chip" style="color:#7c3aed;">~50 hrs</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/outreach/used/outreach-used-convert1.html','Convert 1: Objection Handling','used','~60 hrs','Jeremy','Here\'s what you actually get')">
+        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">4</div>
+        <span class="nav-label">Convert 1</span>
+        <span class="nav-chip" style="color:#7c3aed;">~60 hrs</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/outreach/used/outreach-used-convert2.html','Convert 2: Post-purchase','used','~75 hrs','Jeremy','After you sign up. Here\'s exactly what happens')">
+        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">5</div>
+        <span class="nav-label">Convert 2</span>
+        <span class="nav-chip" style="color:#7c3aed;">~75 hrs</span>
+      </div>
+
+      <div class="nav-section">Payment</div>
+      <div class="nav-item" onclick="load(this,'templates/outreach/used/outreach-payment-page.html','Payment Page: Abandoned checkout','payment','On payment_page_viewed event','Jeremy','You were right there')">
+        <div class="nav-dot amber"></div>
+        <span class="nav-label">Payment Page</span>
+        <span class="nav-chip" style="color:#f59e0b;">Trigger</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/outreach/used/outreach-used-coupon.txt','Coupon: Founder Note','payment','A few hrs after payment page','Jeremy','Something from me, Jeremy',true)">
+        <div class="nav-dot green"></div>
+        <span class="nav-label">Coupon Code</span>
+        <span class="nav-chip" style="color:#10b981;">Plain text</span>
+      </div>
+
+    </div>
+
+    <!-- ── CAREER COACH GROUP ── -->
+    <div class="nav-group-btn" id="btn-cc" onclick="toggleGroup('cc')">
       <div class="nav-dot" style="background:#10b981;"></div>
-      <span class="nav-label">Career Coach Flow</span>
+      <span class="group-label">Career Coach</span>
+      <span class="group-count">19</span>
+      <span class="chevron">▼</span>
     </div>
+    <div class="nav-group-body" id="body-cc">
 
-    <div class="nav-section">Universal</div>
-    <div class="nav-item" onclick="load(this,'templates/welcome-new-user.html','Welcome: New User','welcome','Within 1 min of signup','Pranav','You\'re in the top 3%. Here\'s how we know.')">
-      <div class="nav-dot purple"></div>
-      <span class="nav-label">Welcome: New User</span>
-      <span class="nav-chip" style="color:#7c3aed;">HTML</span>
-    </div>
+      <div class="nav-item" id="nav-cc-flow" onclick="showFlow('cc', this)">
+        <div class="nav-dot" style="background:#10b981;"></div>
+        <span class="nav-label">Flow Map</span>
+      </div>
 
-    <div class="nav-section">Outreach: Not Used</div>
-    <div class="nav-item" onclick="load(this,'templates/outreach/not-used/outreach-nudge-d1.html','Nudge D1: Did you try it?','not-used','7 hrs after welcome','Pranav','Did you get a chance to try Outreach Dojo?')">
-      <div class="nav-num">1</div>
-      <span class="nav-label">Nudge D1</span>
-      <span class="nav-chip" style="color:#888;">7 hrs</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/outreach/not-used/outreach-nudge-d2.html','Nudge D2: Testimonial','not-used','+24 hrs after D1','Pranav','What one student got after using Outreach Dojo')">
-      <div class="nav-num">2</div>
-      <span class="nav-label">Nudge D2</span>
-      <span class="nav-chip" style="color:#888;">+24 hrs</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/outreach/not-used/outreach-nudge-d3.html','Nudge D3: How to start','not-used','+32 hrs after D2','Pranav','Here\'s exactly how to get started')">
-      <div class="nav-num">3</div>
-      <span class="nav-label">Nudge D3</span>
-      <span class="nav-chip" style="color:#888;">+32 hrs</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/outreach/not-used/outreach-nudge-d4.html','Nudge D4: End metric','not-used','Day 4','Pranav','The number that changes everything')">
-      <div class="nav-num">4</div>
-      <span class="nav-label">Nudge D4</span>
-      <span class="nav-chip" style="color:#888;">Day 4</span>
-    </div>
+      <div class="nav-section">Welcome</div>
+      <div class="nav-item" onclick="load(this,'templates/career-coach/cc-welcome.html','CC: Welcome','cc-welcome','Within 1 min of CC signup','Pranav','You asked for an honest look. Good.')">
+        <div class="nav-dot purple"></div>
+        <span class="nav-label">CC Welcome</span>
+        <span class="nav-chip" style="color:#7c3aed;">HTML</span>
+      </div>
 
-    <div class="nav-section">Outreach: High Intent</div>
-    <div class="nav-item" onclick="load(this,'templates/outreach/used/outreach-used-push1.html','Push 1: Momentum','used','~4 hrs after tool use','Jeremy','You started. Here\'s what happens next')">
-      <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">1</div>
-      <span class="nav-label">Push 1</span>
-      <span class="nav-chip" style="color:#7c3aed;">~4 hrs</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/outreach/used/outreach-used-push2.html','Push 2: Social Proof','used','~24 hrs','Jeremy','Students who finished this got real replies')">
-      <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">2</div>
-      <span class="nav-label">Push 2</span>
-      <span class="nav-chip" style="color:#7c3aed;">~24 hrs</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/outreach/used/outreach-used-push3.html','Push 3: Last Nudge','used','~50 hrs','Jeremy','This is my last nudge')">
-      <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">3</div>
-      <span class="nav-label">Push 3</span>
-      <span class="nav-chip" style="color:#7c3aed;">~50 hrs</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/outreach/used/outreach-used-convert1.html','Convert 1: Objection Handling','used','~60 hrs','Jeremy','Here\'s what you actually get')">
-      <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">4</div>
-      <span class="nav-label">Convert 1</span>
-      <span class="nav-chip" style="color:#7c3aed;">~60 hrs</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/outreach/used/outreach-used-convert2.html','Convert 2: Post-purchase','used','~75 hrs','Jeremy','After you sign up. Here\'s exactly what happens')">
-      <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">5</div>
-      <span class="nav-label">Convert 2</span>
-      <span class="nav-chip" style="color:#7c3aed;">~75 hrs</span>
-    </div>
+      <div class="nav-section">Not Started</div>
+      <div class="nav-item" onclick="load(this,'templates/career-coach/not-started/cc-nudge-1.html','CC Nudge 1: First conversation','cc-not-started','8 hrs after welcome','Pranav','Did you get started?')">
+        <div class="nav-num">1</div>
+        <span class="nav-label">Nudge 1</span>
+        <span class="nav-chip" style="color:#888;">8 hrs</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/career-coach/not-started/cc-nudge-2.html','CC Nudge 2: What the coach tells you','cc-not-started','+24 hrs','Pranav','What the coach actually tells you')">
+        <div class="nav-num">2</div>
+        <span class="nav-label">Nudge 2</span>
+        <span class="nav-chip" style="color:#888;">+24 hrs</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/career-coach/not-started/cc-nudge-3.html','CC Nudge 3: Testimonial','cc-not-started','+48 hrs','Pranav','What changed when she finally started')">
+        <div class="nav-num">3</div>
+        <span class="nav-label">Nudge 3</span>
+        <span class="nav-chip" style="color:#888;">+48 hrs</span>
+      </div>
 
-    <div class="nav-section">Payment Page</div>
-    <div class="nav-item" onclick="load(this,'templates/outreach/used/outreach-payment-page.html','Payment Page: Abandoned checkout','payment','On payment_page_viewed event','Jeremy','You were right there')">
-      <div class="nav-dot amber"></div>
-      <span class="nav-label">Payment Page</span>
-      <span class="nav-chip" style="color:#f59e0b;">Trigger</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/outreach/used/outreach-used-coupon.txt','Coupon: Founder Note','payment','A few hrs after payment page','Jeremy','Something from me, Jeremy',true)">
-      <div class="nav-dot green"></div>
-      <span class="nav-label">Coupon Code</span>
-      <span class="nav-chip" style="color:#10b981;">Plain text</span>
-    </div>
+      <div class="nav-section">In Progress</div>
+      <div class="nav-item" onclick="load(this,'templates/career-coach/in-progress/cc-profiling-idle-1.html','CC Profiling Idle 1','cc-in-progress','3 days idle in profiling','Pranav','You started. Pick up where you left off.')">
+        <div class="nav-num">1</div>
+        <span class="nav-label">Profiling Idle 1</span>
+        <span class="nav-chip" style="color:#888;">3 days</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/career-coach/in-progress/cc-profiling-idle-2.html','CC Profiling Idle 2','cc-in-progress','+3 days','Pranav','You\'re closer than you think')">
+        <div class="nav-num">2</div>
+        <span class="nav-label">Profiling Idle 2</span>
+        <span class="nav-chip" style="color:#888;">+3 days</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/career-coach/in-progress/cc-profiling-idle-3.html','CC Profiling Idle 3: Testimonial','cc-in-progress','+4 days','Pranav','What Vikram found when he finished')">
+        <div class="nav-num">3</div>
+        <span class="nav-label">Profiling Idle 3</span>
+        <span class="nav-chip" style="color:#888;">+4 days</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/career-coach/in-progress/cc-dna-ready.html','CC: Career Analysis Ready','cc-in-progress','On DNA generation','Pranav','Your career analysis is ready')">
+        <div class="nav-dot green"></div>
+        <span class="nav-label">DNA Ready</span>
+        <span class="nav-chip" style="color:#10b981;">Trigger</span>
+      </div>
 
-    <div class="nav-section">Career Coach: Welcome</div>
-    <div class="nav-item" onclick="load(this,'templates/career-coach/cc-welcome.html','CC: Welcome','cc-welcome','Within 1 min of CC signup','Pranav','You asked for an honest look. Good.')">
-      <div class="nav-dot purple"></div>
-      <span class="nav-label">CC Welcome</span>
-      <span class="nav-chip" style="color:#7c3aed;">HTML</span>
-    </div>
+      <div class="nav-section">Post DNA</div>
+      <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-dna-confirm-nudge.html','CC: Confirm Your Analysis','cc-post-dna','2 days after DNA, no confirm','Pranav','Your analysis needs your confirmation')">
+        <div class="nav-dot amber"></div>
+        <span class="nav-label">Confirm Nudge</span>
+        <span class="nav-chip" style="color:#f59e0b;">2 days</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-roadmap-delivered.html','CC: Roadmap Delivered','cc-post-dna','On ROADMAP state','Jeremy','You have your roadmap. Here is how to use it.')">
+        <div class="nav-dot purple"></div>
+        <span class="nav-label">Roadmap Delivered</span>
+        <span class="nav-chip" style="color:#7c3aed;">Trigger</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-checkin-1.html','CC Check-in 1: One action','cc-post-dna','Day 3','Pranav','One action. This week.')">
+        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">1</div>
+        <span class="nav-label">Check-in 1</span>
+        <span class="nav-chip" style="color:#7c3aed;">Day 3</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-checkin-2.html','CC Check-in 2: Behavioural insight','cc-post-dna','Day 7','Pranav','What students who act do differently')">
+        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">2</div>
+        <span class="nav-label">Check-in 2</span>
+        <span class="nav-chip" style="color:#7c3aed;">Day 7</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-checkin-3.html','CC Check-in 3: Log progress','cc-post-dna','Day 10','Pranav','Have you marked anything complete yet?')">
+        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">3</div>
+        <span class="nav-label">Check-in 3</span>
+        <span class="nav-chip" style="color:#7c3aed;">Day 10</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-upskill-nudge.html','CC: Upskill Nudge','cc-post-dna','Day 7 after roadmap','Pranav','The coach gets sharper every time you use it')">
+        <div class="nav-dot purple"></div>
+        <span class="nav-label">Upskill Nudge</span>
+        <span class="nav-chip" style="color:#7c3aed;">Day 7</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-coupon-unlock.html','CC: Coupon Unlock','cc-post-dna','Day 9 after roadmap','Jeremy','Log your progress and unlock something')">
+        <div class="nav-dot amber"></div>
+        <span class="nav-label">Coupon Unlock</span>
+        <span class="nav-chip" style="color:#f59e0b;">Gated</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-dormant.html','CC: Dormant','cc-post-dna','7+ days no activity','Jeremy','Most students stop here')">
+        <div class="nav-dot amber"></div>
+        <span class="nav-label">Dormant</span>
+        <span class="nav-chip" style="color:#f59e0b;">7 days</span>
+      </div>
 
-    <div class="nav-section">Career Coach: Not Started</div>
-    <div class="nav-item" onclick="load(this,'templates/career-coach/not-started/cc-nudge-1.html','CC Nudge 1: First conversation','cc-not-started','8 hrs after welcome','Pranav','Did you get started?')">
-      <div class="nav-num">1</div>
-      <span class="nav-label">Nudge 1</span>
-      <span class="nav-chip" style="color:#888;">8 hrs</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/career-coach/not-started/cc-nudge-2.html','CC Nudge 2: What the coach tells you','cc-not-started','+24 hrs','Pranav','What the coach actually tells you')">
-      <div class="nav-num">2</div>
-      <span class="nav-label">Nudge 2</span>
-      <span class="nav-chip" style="color:#888;">+24 hrs</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/career-coach/not-started/cc-nudge-3.html','CC Nudge 3: Testimonial','cc-not-started','+48 hrs','Pranav','What changed when she finally started')">
-      <div class="nav-num">3</div>
-      <span class="nav-label">Nudge 3</span>
-      <span class="nav-chip" style="color:#888;">+48 hrs</span>
-    </div>
-
-    <div class="nav-section">Career Coach: In Progress</div>
-    <div class="nav-item" onclick="load(this,'templates/career-coach/in-progress/cc-profiling-idle-1.html','CC Profiling Idle 1','cc-in-progress','3 days idle in profiling','Pranav','You started. Pick up where you left off.')">
-      <div class="nav-num">1</div>
-      <span class="nav-label">Profiling Idle 1</span>
-      <span class="nav-chip" style="color:#888;">3 days</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/career-coach/in-progress/cc-profiling-idle-2.html','CC Profiling Idle 2','cc-in-progress','+3 days','Pranav','You\'re closer than you think')">
-      <div class="nav-num">2</div>
-      <span class="nav-label">Profiling Idle 2</span>
-      <span class="nav-chip" style="color:#888;">+3 days</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/career-coach/in-progress/cc-profiling-idle-3.html','CC Profiling Idle 3: Testimonial','cc-in-progress','+4 days','Pranav','What Vikram found when he finished')">
-      <div class="nav-num">3</div>
-      <span class="nav-label">Profiling Idle 3</span>
-      <span class="nav-chip" style="color:#888;">+4 days</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/career-coach/in-progress/cc-dna-ready.html','CC: Career Analysis Ready','cc-in-progress','On DNA generation','Pranav','Your career analysis is ready')">
-      <div class="nav-dot green"></div>
-      <span class="nav-label">DNA Ready</span>
-      <span class="nav-chip" style="color:#10b981;">Trigger</span>
-    </div>
-
-    <div class="nav-section">Career Coach: Post DNA</div>
-    <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-dna-confirm-nudge.html','CC: Confirm Your Analysis','cc-post-dna','2 days after DNA, no confirm','Pranav','Your analysis needs your confirmation')">
-      <div class="nav-dot amber"></div>
-      <span class="nav-label">Confirm Nudge</span>
-      <span class="nav-chip" style="color:#f59e0b;">2 days</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-roadmap-delivered.html','CC: Roadmap Delivered','cc-post-dna','On ROADMAP state','Jeremy','You have your roadmap. Here is how to use it.')">
-      <div class="nav-dot purple"></div>
-      <span class="nav-label">Roadmap Delivered</span>
-      <span class="nav-chip" style="color:#7c3aed;">Trigger</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-checkin-1.html','CC Check-in 1: One action','cc-post-dna','Day 3-4','Pranav','One action. This week.')">
-      <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">1</div>
-      <span class="nav-label">Check-in 1</span>
-      <span class="nav-chip" style="color:#7c3aed;">Day 3</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-checkin-2.html','CC Check-in 2: Behavioural insight','cc-post-dna','Day 6-7','Pranav','What students who act do differently')">
-      <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">2</div>
-      <span class="nav-label">Check-in 2</span>
-      <span class="nav-chip" style="color:#7c3aed;">Day 7</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-checkin-3.html','CC Check-in 3: Log progress','cc-post-dna','Day 9-10','Pranav','Have you marked anything complete yet?')">
-      <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">3</div>
-      <span class="nav-label">Check-in 3</span>
-      <span class="nav-chip" style="color:#7c3aed;">Day 10</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-upskill-nudge.html','CC: Upskill Nudge','cc-post-dna','Day 7 after roadmap','Pranav','The coach gets sharper every time you use it')">
-      <div class="nav-dot purple"></div>
-      <span class="nav-label">Upskill Nudge</span>
-      <span class="nav-chip" style="color:#7c3aed;">Day 7</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-coupon-unlock.html','CC: Coupon Unlock','cc-post-dna','Day 9 after roadmap','Jeremy','Log your progress and unlock something')">
-      <div class="nav-dot amber"></div>
-      <span class="nav-label">Coupon Unlock</span>
-      <span class="nav-chip" style="color:#f59e0b;">Gated</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-dormant.html','CC: Dormant','cc-post-dna','7+ days no activity','Jeremy','Most students stop here')">
-      <div class="nav-dot amber"></div>
-      <span class="nav-label">Dormant</span>
-      <span class="nav-chip" style="color:#f59e0b;">7 days</span>
-    </div>
-
-    <div class="nav-section">Career Coach: Handoff</div>
-    <div class="nav-item" onclick="load(this,'templates/career-coach/handoff/cc-to-outreach.html','CC: Handoff to Outreach','cc-handoff','After dormant or nudge-3','Jeremy','You know where you stand. Here is what to do with it.')">
-      <div class="nav-dot green"></div>
-      <span class="nav-label">Handoff to Outreach</span>
-      <span class="nav-chip" style="color:#10b981;">Final</span>
-    </div>
+      <div class="nav-section">Handoff</div>
+      <div class="nav-item" onclick="load(this,'templates/career-coach/handoff/cc-to-outreach.html','CC: Handoff to Outreach','cc-handoff','After dormant or nudge-3','Jeremy','You know where you stand. Here is what to do with it.')">
+        <div class="nav-dot green"></div>
+        <span class="nav-label">Handoff to Outreach</span>
+        <span class="nav-chip" style="color:#10b981;">Final</span>
+      </div>
 
     <div class="nav-section">Career Coach: Returning</div>
     <div class="nav-item" onclick="load(this,'templates/career-coach/returning/cc-returning-1.html','CC Returning 1: Nothing lost','cc-returning','14 days cold','Jeremy','Your analysis is still there')">
@@ -498,7 +549,9 @@
       <span class="nav-chip" style="color:#888;">+5 days</span>
     </div>
 
-  </div>
+    </div><!-- end body-cc -->
+
+  </div><!-- end sidebar-scroll -->
 
   <div class="sidebar-foot">
     <strong>32 templates</strong>
@@ -1074,6 +1127,14 @@
       const d = f.contentDocument || f.contentWindow.document;
       f.style.height = d.documentElement.scrollHeight + 'px';
     } catch(e) { f.style.height = '800px'; }
+  }
+
+  function toggleGroup(which) {
+    const btn = document.getElementById('btn-' + which);
+    const body = document.getElementById('body-' + which);
+    const isOpen = body.classList.contains('open');
+    btn.classList.toggle('open', !isOpen);
+    body.classList.toggle('open', !isOpen);
   }
 
   let lastFlow = 'outreach';
