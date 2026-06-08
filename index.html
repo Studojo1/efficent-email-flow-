@@ -382,11 +382,123 @@
       <span class="nav-chip" style="color:#10b981;">Plain text</span>
     </div>
 
+    <div class="nav-section">Career Coach: Welcome</div>
+    <div class="nav-item" onclick="load(this,'templates/career-coach/cc-welcome.html','CC: Welcome','cc-welcome','Within 1 min of CC signup','Pranav','You asked for an honest look. Good.')">
+      <div class="nav-dot purple"></div>
+      <span class="nav-label">CC Welcome</span>
+      <span class="nav-chip" style="color:#7c3aed;">HTML</span>
+    </div>
+
+    <div class="nav-section">Career Coach: Not Started</div>
+    <div class="nav-item" onclick="load(this,'templates/career-coach/not-started/cc-nudge-1.html','CC Nudge 1: First conversation','cc-not-started','8 hrs after welcome','Pranav','Did you get started?')">
+      <div class="nav-num">1</div>
+      <span class="nav-label">Nudge 1</span>
+      <span class="nav-chip" style="color:#888;">8 hrs</span>
+    </div>
+    <div class="nav-item" onclick="load(this,'templates/career-coach/not-started/cc-nudge-2.html','CC Nudge 2: What the coach tells you','cc-not-started','+24 hrs','Pranav','What the coach actually tells you')">
+      <div class="nav-num">2</div>
+      <span class="nav-label">Nudge 2</span>
+      <span class="nav-chip" style="color:#888;">+24 hrs</span>
+    </div>
+    <div class="nav-item" onclick="load(this,'templates/career-coach/not-started/cc-nudge-3.html','CC Nudge 3: Testimonial','cc-not-started','+48 hrs','Pranav','What changed when she finally started')">
+      <div class="nav-num">3</div>
+      <span class="nav-label">Nudge 3</span>
+      <span class="nav-chip" style="color:#888;">+48 hrs</span>
+    </div>
+
+    <div class="nav-section">Career Coach: In Progress</div>
+    <div class="nav-item" onclick="load(this,'templates/career-coach/in-progress/cc-profiling-idle-1.html','CC Profiling Idle 1','cc-in-progress','3 days idle in profiling','Pranav','You started. Pick up where you left off.')">
+      <div class="nav-num">1</div>
+      <span class="nav-label">Profiling Idle 1</span>
+      <span class="nav-chip" style="color:#888;">3 days</span>
+    </div>
+    <div class="nav-item" onclick="load(this,'templates/career-coach/in-progress/cc-profiling-idle-2.html','CC Profiling Idle 2','cc-in-progress','+3 days','Pranav','You\'re closer than you think')">
+      <div class="nav-num">2</div>
+      <span class="nav-label">Profiling Idle 2</span>
+      <span class="nav-chip" style="color:#888;">+3 days</span>
+    </div>
+    <div class="nav-item" onclick="load(this,'templates/career-coach/in-progress/cc-profiling-idle-3.html','CC Profiling Idle 3: Testimonial','cc-in-progress','+4 days','Pranav','What Vikram found when he finished')">
+      <div class="nav-num">3</div>
+      <span class="nav-label">Profiling Idle 3</span>
+      <span class="nav-chip" style="color:#888;">+4 days</span>
+    </div>
+    <div class="nav-item" onclick="load(this,'templates/career-coach/in-progress/cc-dna-ready.html','CC: Career Analysis Ready','cc-in-progress','On DNA generation','Pranav','Your career analysis is ready')">
+      <div class="nav-dot green"></div>
+      <span class="nav-label">DNA Ready</span>
+      <span class="nav-chip" style="color:#10b981;">Trigger</span>
+    </div>
+
+    <div class="nav-section">Career Coach: Post DNA</div>
+    <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-dna-confirm-nudge.html','CC: Confirm Your Analysis','cc-post-dna','2 days after DNA, no confirm','Pranav','Your analysis needs your confirmation')">
+      <div class="nav-dot amber"></div>
+      <span class="nav-label">Confirm Nudge</span>
+      <span class="nav-chip" style="color:#f59e0b;">2 days</span>
+    </div>
+    <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-roadmap-delivered.html','CC: Roadmap Delivered','cc-post-dna','On ROADMAP state','Jeremy','You have your roadmap. Here is how to use it.')">
+      <div class="nav-dot purple"></div>
+      <span class="nav-label">Roadmap Delivered</span>
+      <span class="nav-chip" style="color:#7c3aed;">Trigger</span>
+    </div>
+    <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-checkin-1.html','CC Check-in 1: One action','cc-post-dna','Day 3-4','Pranav','One action. This week.')">
+      <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">1</div>
+      <span class="nav-label">Check-in 1</span>
+      <span class="nav-chip" style="color:#7c3aed;">Day 3</span>
+    </div>
+    <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-checkin-2.html','CC Check-in 2: Behavioural insight','cc-post-dna','Day 6-7','Pranav','What students who act do differently')">
+      <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">2</div>
+      <span class="nav-label">Check-in 2</span>
+      <span class="nav-chip" style="color:#7c3aed;">Day 7</span>
+    </div>
+    <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-checkin-3.html','CC Check-in 3: Log progress','cc-post-dna','Day 9-10','Pranav','Have you marked anything complete yet?')">
+      <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">3</div>
+      <span class="nav-label">Check-in 3</span>
+      <span class="nav-chip" style="color:#7c3aed;">Day 10</span>
+    </div>
+    <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-upskill-nudge.html','CC: Upskill Nudge','cc-post-dna','Day 7 after roadmap','Pranav','The coach gets sharper every time you use it')">
+      <div class="nav-dot purple"></div>
+      <span class="nav-label">Upskill Nudge</span>
+      <span class="nav-chip" style="color:#7c3aed;">Day 7</span>
+    </div>
+    <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-coupon-unlock.html','CC: Coupon Unlock','cc-post-dna','Day 9 after roadmap','Jeremy','Log your progress and unlock something')">
+      <div class="nav-dot amber"></div>
+      <span class="nav-label">Coupon Unlock</span>
+      <span class="nav-chip" style="color:#f59e0b;">Gated</span>
+    </div>
+    <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-dormant.html','CC: Dormant','cc-post-dna','7+ days no activity','Jeremy','Most students stop here')">
+      <div class="nav-dot amber"></div>
+      <span class="nav-label">Dormant</span>
+      <span class="nav-chip" style="color:#f59e0b;">7 days</span>
+    </div>
+
+    <div class="nav-section">Career Coach: Handoff</div>
+    <div class="nav-item" onclick="load(this,'templates/career-coach/handoff/cc-to-outreach.html','CC: Handoff to Outreach','cc-handoff','After dormant or nudge-3','Jeremy','You know where you stand. Here is what to do with it.')">
+      <div class="nav-dot green"></div>
+      <span class="nav-label">Handoff to Outreach</span>
+      <span class="nav-chip" style="color:#10b981;">Final</span>
+    </div>
+
+    <div class="nav-section">Career Coach: Returning</div>
+    <div class="nav-item" onclick="load(this,'templates/career-coach/returning/cc-returning-1.html','CC Returning 1: Nothing lost','cc-returning','14 days cold','Jeremy','Your analysis is still there')">
+      <div class="nav-num">1</div>
+      <span class="nav-label">Returning 1</span>
+      <span class="nav-chip" style="color:#888;">14 days</span>
+    </div>
+    <div class="nav-item" onclick="load(this,'templates/career-coach/returning/cc-returning-2.html','CC Returning 2: The gap closes fast','cc-returning','+5 days','Jeremy','The gap closes fast when you focus')">
+      <div class="nav-num">2</div>
+      <span class="nav-label">Returning 2</span>
+      <span class="nav-chip" style="color:#888;">+5 days</span>
+    </div>
+    <div class="nav-item" onclick="load(this,'templates/career-coach/returning/cc-returning-3.html','CC Returning 3: Two paths','cc-returning','+5 days','Jeremy','The most direct path from here')">
+      <div class="nav-num">3</div>
+      <span class="nav-label">Returning 3</span>
+      <span class="nav-chip" style="color:#888;">+5 days</span>
+    </div>
+
   </div>
 
   <div class="sidebar-foot">
-    <strong>13 templates</strong>
-    Outreach Dojo · Blueprint only, not wired up
+    <strong>32 templates</strong>
+    Outreach Dojo + Career Coach · Blueprint only, not wired up
   </div>
 </div>
 
@@ -698,10 +810,16 @@
   };
 
   const flowColors = {
-    'welcome':  { label: 'Universal',   color: '#7c3aed', bg: '#f3f0ff' },
-    'not-used': { label: 'Not Used',    color: '#555',    bg: '#f5f4f0' },
-    'used':     { label: 'High Intent', color: '#7c3aed', bg: '#f3f0ff' },
-    'payment':  { label: 'Payment',     color: '#92400e', bg: '#fffbeb' },
+    'welcome':       { label: 'Universal',        color: '#7c3aed', bg: '#f3f0ff' },
+    'not-used':      { label: 'Not Used',          color: '#555',    bg: '#f5f4f0' },
+    'used':          { label: 'High Intent',       color: '#7c3aed', bg: '#f3f0ff' },
+    'payment':       { label: 'Payment',           color: '#92400e', bg: '#fffbeb' },
+    'cc-welcome':    { label: 'CC Welcome',        color: '#7c3aed', bg: '#f3f0ff' },
+    'cc-not-started':{ label: 'CC: Not Started',   color: '#555',    bg: '#f5f4f0' },
+    'cc-in-progress':{ label: 'CC: In Progress',   color: '#7c3aed', bg: '#f3f0ff' },
+    'cc-post-dna':   { label: 'CC: Post DNA',      color: '#7c3aed', bg: '#f3f0ff' },
+    'cc-handoff':    { label: 'CC: Handoff',       color: '#10b981', bg: '#f0fdf4' },
+    'cc-returning':  { label: 'CC: Returning',     color: '#92400e', bg: '#fffbeb' },
   };
 
   function load(el, path, title, flow, delay, sender, subject, isText = false) {
