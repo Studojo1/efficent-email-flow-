@@ -107,7 +107,7 @@
     #main { flex: 1; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
     /* ── FLOW MAP ── */
-    #flow-pane { flex: 1; overflow: auto; padding: 40px 48px 60px; background: #f5f4f0; }
+    #flow-pane-outreach, #flow-pane-cc { flex: 1; overflow: auto; padding: 40px 48px 60px; background: #f5f4f0; }
 
     .flow-header { margin-bottom: 36px; }
     .flow-tag {
@@ -309,9 +309,13 @@
   <div class="sidebar-scroll">
 
     <div class="nav-section">Overview</div>
-    <div class="nav-item active" onclick="showFlow(this)">
-      <div class="nav-dot"></div>
-      <span class="nav-label">Flow Map</span>
+    <div class="nav-item active" id="nav-outreach-flow" onclick="showFlow('outreach', this)">
+      <div class="nav-dot purple"></div>
+      <span class="nav-label">Outreach Dojo Flow</span>
+    </div>
+    <div class="nav-item" id="nav-cc-flow" onclick="showFlow('cc', this)">
+      <div class="nav-dot" style="background:#10b981;"></div>
+      <span class="nav-label">Career Coach Flow</span>
     </div>
 
     <div class="nav-section">Universal</div>
@@ -505,8 +509,8 @@
 <!-- ══════════════ MAIN ══════════════ -->
 <div id="main">
 
-  <!-- FLOW MAP -->
-  <div id="flow-pane">
+  <!-- OUTREACH FLOW MAP -->
+  <div id="flow-pane-outreach" style="display:block;">
     <div class="flow-header">
       <div class="flow-tag">Blueprint: Not Wired Up</div>
       <div class="flow-title clash">Outreach Dojo Email Flow</div>
@@ -731,10 +735,291 @@
     </div>
   </div>
 
+  <!-- CAREER COACH FLOW MAP -->
+  <div id="flow-pane-cc" style="display:none;">
+    <div class="flow-header">
+      <div class="flow-tag">Blueprint: Not Wired Up</div>
+      <div class="flow-title clash">Career Coach Email Flow</div>
+      <div class="flow-sub">Click any node to preview the template. Branches on user behaviour at each stage.</div>
+    </div>
+
+    <div class="wf-canvas">
+
+      <!-- ROW 1: Signup → CC Welcome -->
+      <div class="wf-row">
+        <div class="wf-node" style="cursor:default;">
+          <div class="wf-node-box start" style="min-width:110px;">
+            <div class="wf-node-label">Event</div>
+            <div class="wf-node-title">CC Signup</div>
+            <div class="wf-node-sub">studojo.pro/career-coach</div>
+          </div>
+        </div>
+        <div class="wf-arrow-h" style="width:28px;"></div>
+        <div class="wf-node" onclick="ccNth(0)">
+          <div class="wf-node-box universal">
+            <div class="wf-node-label">CC Welcome</div>
+            <div class="wf-node-title">Welcome Email</div>
+            <div class="wf-node-sub">Signed by Pranav</div>
+          </div>
+          <div class="wf-delay" style="background:#f3f0ff; border-color:#7c3aed; color:#7c3aed;">Within 1 min</div>
+        </div>
+        <div class="wf-arrow-h" style="width:28px;"></div>
+        <div class="wf-diamond-wrap">
+          <div class="wf-diamond">
+            <div class="wf-diamond-inner">Started<br>the<br>Coach?</div>
+          </div>
+        </div>
+        <div style="flex:1;"></div>
+      </div>
+
+      <!-- Drop lines -->
+      <div style="display:flex; height:28px; padding-left:333px;">
+        <div class="wf-vline solid" style="height:100%;"></div>
+        <div style="flex:1;"></div>
+        <div class="wf-vline" style="height:100%; background:#10b981; margin-right:148px;"></div>
+      </div>
+
+      <!-- Branch headers -->
+      <div style="display:flex; align-items:flex-start; padding-left:254px;">
+        <div style="width:158px; display:flex; justify-content:center;">
+          <div class="wf-branch-header" style="background:#f5f4f0; color:#19191a; font-size:10px;">A: Did not start</div>
+        </div>
+        <div style="flex:1;"></div>
+        <div style="width:200px; display:flex; justify-content:center; margin-right:68px;">
+          <div class="wf-branch-header" style="background:#10b981; color:#fff; border-color:#19191a; font-size:10px;">B: Started the coach</div>
+        </div>
+      </div>
+
+      <!-- BRANCHES -->
+      <div class="wf-row" style="align-items:flex-start; gap:24px; margin-top:16px;">
+
+        <!-- BRANCH A: Not started -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:0; min-width:270px;">
+
+          <div class="wf-node" onclick="ccNth(1)" style="width:100%;">
+            <div class="wf-node-box" style="width:100%; text-align:left; display:flex; align-items:center; gap:12px; padding:12px 14px;">
+              <div style="flex-shrink:0; width:24px; height:24px; background:#19191a; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Clash Display',sans-serif; font-size:10px; font-weight:700; color:#fff;">1</div>
+              <div style="flex:1;"><div class="wf-node-title">Nudge 1</div><div class="wf-node-sub">What it feels like</div></div>
+              <div class="wf-delay" style="margin:0;">8 hrs</div>
+            </div>
+          </div>
+          <div class="wf-vline solid" style="height:14px;"></div>
+
+          <div class="wf-node" onclick="ccNth(2)" style="width:100%;">
+            <div class="wf-node-box" style="width:100%; text-align:left; display:flex; align-items:center; gap:12px; padding:12px 14px;">
+              <div style="flex-shrink:0; width:24px; height:24px; background:#19191a; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Clash Display',sans-serif; font-size:10px; font-weight:700; color:#fff;">2</div>
+              <div style="flex:1;"><div class="wf-node-title">Nudge 2</div><div class="wf-node-sub">What the coach tells you</div></div>
+              <div class="wf-delay" style="margin:0;">+24 hrs</div>
+            </div>
+          </div>
+          <div class="wf-vline solid" style="height:14px;"></div>
+
+          <div class="wf-node" onclick="ccNth(3)" style="width:100%;">
+            <div class="wf-node-box" style="width:100%; text-align:left; display:flex; align-items:center; gap:12px; padding:12px 14px;">
+              <div style="flex-shrink:0; width:24px; height:24px; background:#19191a; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Clash Display',sans-serif; font-size:10px; font-weight:700; color:#fff;">3</div>
+              <div style="flex:1;"><div class="wf-node-title">Nudge 3</div><div class="wf-node-sub">Testimonial led</div></div>
+              <div class="wf-delay" style="margin:0;">+48 hrs</div>
+            </div>
+          </div>
+          <div class="wf-vline dashed" style="height:18px;"></div>
+
+          <div class="wf-node" onclick="ccNth(18)" style="width:100%; cursor:pointer;">
+            <div class="wf-node-box green" style="width:100%; text-align:center; padding:12px 14px;">
+              <div class="wf-node-title">Handoff to Outreach</div>
+              <div class="wf-node-sub">Soft version</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- BRANCH B: Started -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:0; flex:1;">
+
+          <!-- Sub-branch: Profiling idle -->
+          <div style="font-family:'Clash Display',sans-serif; font-size:9px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:#555; background:#f5f4f0; border:1.5px solid #ccc; border-radius:100px; padding:3px 12px; margin-bottom:10px;">Idle in Profiling</div>
+
+          <div style="display:flex; align-items:center; gap:0; width:100%;">
+            <div class="wf-node" onclick="ccNth(4)" style="flex:1;">
+              <div class="wf-node-box" style="width:100%;">
+                <div class="wf-node-label">Profiling</div>
+                <div class="wf-node-title">Idle 1</div>
+                <div class="wf-node-sub">Pick up where you left off</div>
+              </div>
+              <div class="wf-delay">3 days</div>
+            </div>
+            <div class="wf-arrow-h" style="width:16px;"></div>
+            <div class="wf-node" onclick="ccNth(5)" style="flex:1;">
+              <div class="wf-node-box" style="width:100%;">
+                <div class="wf-node-label">Profiling</div>
+                <div class="wf-node-title">Idle 2</div>
+                <div class="wf-node-sub">You're partway there</div>
+              </div>
+              <div class="wf-delay">+3 days</div>
+            </div>
+            <div class="wf-arrow-h" style="width:16px;"></div>
+            <div class="wf-node" onclick="ccNth(6)" style="flex:1;">
+              <div class="wf-node-box" style="width:100%;">
+                <div class="wf-node-label">Profiling</div>
+                <div class="wf-node-title">Idle 3</div>
+                <div class="wf-node-sub">Testimonial</div>
+              </div>
+              <div class="wf-delay">+4 days</div>
+            </div>
+          </div>
+
+          <div class="wf-vline" style="height:14px; background:#10b981;"></div>
+
+          <!-- DNA trigger -->
+          <div style="font-family:'Clash Display',sans-serif; font-size:9px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:#065f46; background:#f0fdf4; border:1.5px solid #10b981; border-radius:100px; padding:3px 12px; margin-bottom:10px;">DNA Generated — always triggers email</div>
+          <div class="wf-vline" style="height:10px; background:#10b981;"></div>
+
+          <div style="display:flex; align-items:center; gap:0; width:100%;">
+            <div class="wf-node" onclick="ccNth(7)" style="flex:1;">
+              <div class="wf-node-box green" style="width:100%;">
+                <div class="wf-node-label">Trigger</div>
+                <div class="wf-node-title">DNA Ready</div>
+                <div class="wf-node-sub">Immediate</div>
+              </div>
+              <div class="wf-delay green">Immediate</div>
+            </div>
+            <div class="wf-arrow-h" style="width:20px; background:#10b981;"></div>
+            <div class="wf-node" onclick="ccNth(8)" style="flex:1;">
+              <div class="wf-node-box amber" style="width:100%;">
+                <div class="wf-node-label">Confirm</div>
+                <div class="wf-node-title">Confirm Nudge</div>
+                <div class="wf-node-sub">If not confirmed</div>
+              </div>
+              <div class="wf-delay amber">2 days</div>
+            </div>
+          </div>
+
+          <div class="wf-vline" style="height:14px; background:#10b981;"></div>
+
+          <!-- Roadmap delivered -->
+          <div style="font-family:'Clash Display',sans-serif; font-size:9px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:#7c3aed; background:#f3f0ff; border:1.5px solid #7c3aed; border-radius:100px; padding:3px 12px; margin-bottom:10px;">Roadmap Delivered</div>
+          <div class="wf-vline purple" style="height:10px;"></div>
+
+          <div style="display:flex; align-items:center; gap:0; width:100%;">
+            <div class="wf-node" onclick="ccNth(9)" style="flex:1;">
+              <div class="wf-node-box soft-purple" style="width:100%;">
+                <div class="wf-node-label">Roadmap</div>
+                <div class="wf-node-title">Roadmap Delivered</div>
+                <div class="wf-node-sub">How to use it</div>
+              </div>
+              <div class="wf-delay purple">Trigger</div>
+            </div>
+            <div class="wf-arrow-h purple" style="width:14px;"></div>
+            <div class="wf-node" onclick="ccNth(10)" style="flex:1;">
+              <div class="wf-node-box soft-purple" style="width:100%;">
+                <div class="wf-node-label">Check-in</div>
+                <div class="wf-node-title">Check-in 1</div>
+                <div class="wf-node-sub">One action this week</div>
+              </div>
+              <div class="wf-delay purple">Day 3</div>
+            </div>
+            <div class="wf-arrow-h purple" style="width:14px;"></div>
+            <div class="wf-node" onclick="ccNth(11)" style="flex:1;">
+              <div class="wf-node-box soft-purple" style="width:100%;">
+                <div class="wf-node-label">Check-in</div>
+                <div class="wf-node-title">Check-in 2</div>
+                <div class="wf-node-sub">Behavioural insight</div>
+              </div>
+              <div class="wf-delay purple">Day 7</div>
+            </div>
+            <div class="wf-arrow-h purple" style="width:14px;"></div>
+            <div class="wf-node" onclick="ccNth(12)" style="flex:1;">
+              <div class="wf-node-box soft-purple" style="width:100%;">
+                <div class="wf-node-label">Check-in</div>
+                <div class="wf-node-title">Check-in 3</div>
+                <div class="wf-node-sub">Log a completed action</div>
+              </div>
+              <div class="wf-delay purple">Day 10</div>
+            </div>
+          </div>
+
+          <div class="wf-vline purple" style="height:14px;"></div>
+
+          <div style="display:flex; align-items:center; gap:0; width:100%;">
+            <div class="wf-node" onclick="ccNth(13)" style="flex:1;">
+              <div class="wf-node-box soft-purple" style="width:100%;">
+                <div class="wf-node-label">Upskill</div>
+                <div class="wf-node-title">Upskill Nudge</div>
+                <div class="wf-node-sub">Use coach more</div>
+              </div>
+              <div class="wf-delay purple">Day 7</div>
+            </div>
+            <div class="wf-arrow-h purple" style="width:24px;"></div>
+            <div class="wf-node" onclick="ccNth(14)" style="flex:1;">
+              <div class="wf-node-box amber" style="width:100%;">
+                <div class="wf-node-label">Reward</div>
+                <div class="wf-node-title">Coupon Unlock</div>
+                <div class="wf-node-sub">Log progress to unlock</div>
+              </div>
+              <div class="wf-delay amber">Day 9</div>
+            </div>
+            <div class="wf-arrow-h amber" style="width:24px;"></div>
+            <div class="wf-node" onclick="ccNth(15)" style="flex:1;">
+              <div class="wf-node-box amber" style="width:100%;">
+                <div class="wf-node-label">Dormant</div>
+                <div class="wf-node-title">Dormant</div>
+                <div class="wf-node-sub">Most students stop here</div>
+              </div>
+              <div class="wf-delay amber">7 days idle</div>
+            </div>
+          </div>
+
+          <div class="wf-vline" style="height:14px; background:#10b981;"></div>
+
+          <div class="wf-node" onclick="ccNth(18)" style="width:60%; align-self:center;">
+            <div class="wf-node-box green" style="width:100%; text-align:center;">
+              <div class="wf-node-label">Handoff</div>
+              <div class="wf-node-title">Handoff to Outreach</div>
+              <div class="wf-node-sub">Coach built the map. Outreach opens it.</div>
+            </div>
+          </div>
+
+          <!-- Returning path -->
+          <div style="width:2px; height:20px; background:repeating-linear-gradient(to bottom,#ccc 0,#ccc 4px,transparent 4px,transparent 10px); margin:0 auto;"></div>
+          <div style="font-family:'Clash Display',sans-serif; font-size:9px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:#92400e; background:#fffbeb; border:1.5px solid #f59e0b; border-radius:100px; padding:3px 12px; margin-bottom:8px;">Returning users: 14+ days cold</div>
+          <div style="display:flex; align-items:center; gap:0; width:80%; align-self:center;">
+            <div class="wf-node" onclick="ccNth(16)" style="flex:1;">
+              <div class="wf-node-box amber" style="width:100%;">
+                <div class="wf-node-label">Return</div>
+                <div class="wf-node-title">Returning 1</div>
+                <div class="wf-node-sub">Nothing lost</div>
+              </div>
+              <div class="wf-delay amber">14 days</div>
+            </div>
+            <div class="wf-arrow-h amber" style="width:20px;"></div>
+            <div class="wf-node" onclick="ccNth(17)" style="flex:1;">
+              <div class="wf-node-box amber" style="width:100%;">
+                <div class="wf-node-label">Return</div>
+                <div class="wf-node-title">Returning 2</div>
+                <div class="wf-node-sub">Gap closes fast</div>
+              </div>
+              <div class="wf-delay amber">+5 days</div>
+            </div>
+            <div class="wf-arrow-h amber" style="width:20px;"></div>
+            <div class="wf-node" onclick="ccNth(18)" style="flex:1;">
+              <div class="wf-node-box amber" style="width:100%;">
+                <div class="wf-node-label">Return</div>
+                <div class="wf-node-title">Returning 3</div>
+                <div class="wf-node-sub">Two paths</div>
+              </div>
+              <div class="wf-delay amber">+5 days</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- PREVIEW -->
   <div id="preview-pane">
     <div class="preview-bar">
-      <button class="back-btn" onclick="showFlow(null)">&#8592; Flow Map</button>
+      <button class="back-btn" onclick="showFlow(null, null)">&#8592; Flow Map</button>
       <div style="flex:1; min-width:0;">
         <div id="p-title" class="preview-title clash"></div>
         <div id="p-meta" class="preview-meta"></div>
@@ -791,17 +1076,34 @@
     } catch(e) { f.style.height = '800px'; }
   }
 
-  function showFlow(el) {
+  let lastFlow = 'outreach';
+
+  function showFlow(which, el) {
     navItems.forEach(n => n.classList.remove('active'));
-    if (el) el.classList.add('active');
-    else document.querySelector('.nav-item').classList.add('active');
-    document.getElementById('flow-pane').style.display = 'block';
+    if (el) { el.classList.add('active'); }
+    else {
+      // called from back button — restore the last active flow nav
+      const id = lastFlow === 'cc' ? 'nav-cc-flow' : 'nav-outreach-flow';
+      document.getElementById(id).classList.add('active');
+    }
+    if (which) lastFlow = which;
+    document.getElementById('flow-pane-outreach').style.display = (lastFlow === 'outreach') ? 'block' : 'none';
+    document.getElementById('flow-pane-cc').style.display = (lastFlow === 'cc') ? 'block' : 'none';
     document.getElementById('preview-pane').style.display = 'none';
   }
 
   function clickNth(n) {
     const items = document.querySelectorAll('.nav-item');
     if (items[n]) items[n].click();
+  }
+
+  // CC nav items start at index 14 (after the 2 flow map items + 13 outreach items = 15 total, 0-indexed)
+  // Order in sidebar: 0=outreach-flow, 1=cc-flow, 2=welcome, 3..6=not-used, 7..12=high-intent, 13=payment, 14=coupon, 15=cc-welcome, 16..18=cc-not-started, 19..21=cc-in-progress+dna, 22..=post-dna...
+  const ccNavMap = [15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33];
+  function ccNth(n) {
+    const items = document.querySelectorAll('.nav-item');
+    const idx = ccNavMap[n];
+    if (items[idx]) items[idx].click();
   }
 
   const senderMap = {
@@ -825,7 +1127,8 @@
   function load(el, path, title, flow, delay, sender, subject, isText = false) {
     navItems.forEach(n => n.classList.remove('active'));
     el.classList.add('active');
-    document.getElementById('flow-pane').style.display = 'none';
+    document.getElementById('flow-pane-outreach').style.display = 'none';
+    document.getElementById('flow-pane-cc').style.display = 'none';
     document.getElementById('preview-pane').style.display = 'flex';
 
     document.getElementById('p-title').textContent = title;
