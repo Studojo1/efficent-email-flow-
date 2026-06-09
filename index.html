@@ -551,11 +551,114 @@
 
     </div><!-- end body-cc -->
 
+    <!-- ── RESUME MAKER GROUP ── -->
+    <div class="nav-group-btn" id="btn-resume" onclick="toggleGroup('resume')">
+      <div class="nav-dot" style="background:#10b981;"></div>
+      <span class="group-label">Resume Maker</span>
+      <span class="group-count">6</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="nav-group-body" id="body-resume">
+
+      <div class="nav-section">Strong Resume → Outreach</div>
+      <div class="nav-item" onclick="load(this,'templates/resume-maker/strong/rm-strong-1.html','RM Strong 1: Next move','rm-strong','1 hr after resume ready','Jeremy','Your resume is strong. Here is the next move.')">
+        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">1</div>
+        <span class="nav-label">Strong 1</span>
+        <span class="nav-chip" style="color:#7c3aed;">1 hr</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/resume-maker/strong/rm-strong-2.html','RM Strong 2: Reply rate + proof','rm-strong','+2 days','Jeremy','What students with strong resumes do next')">
+        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">2</div>
+        <span class="nav-label">Strong 2</span>
+        <span class="nav-chip" style="color:#7c3aed;">+2 days</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/resume-maker/strong/rm-strong-3.html','RM Strong 3: How outreach uses it','rm-strong','+3 days','Jeremy','Your resume is ready. Are you using it?')">
+        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">3</div>
+        <span class="nav-label">Strong 3</span>
+        <span class="nav-chip" style="color:#7c3aed;">+3 days</span>
+      </div>
+
+      <div class="nav-section">Weak Resume → Coach</div>
+      <div class="nav-item" onclick="load(this,'templates/resume-maker/weak/rm-weak-1.html','RM Weak 1: Know where you stand','rm-weak','1 hr after resume ready','Pranav','Your resume is a start. Here is what to do next.')">
+        <div class="nav-num">1</div>
+        <span class="nav-label">Weak 1</span>
+        <span class="nav-chip" style="color:#888;">1 hr</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/resume-maker/weak/rm-weak-2.html','RM Weak 2: Wrong roles','rm-weak','+2 days','Pranav','What was actually holding her back')">
+        <div class="nav-num">2</div>
+        <span class="nav-label">Weak 2</span>
+        <span class="nav-chip" style="color:#888;">+2 days</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/resume-maker/weak/rm-weak-3.html','RM Weak 3: Before you apply','rm-weak','+3 days','Pranav','Before you apply, know where you stand')">
+        <div class="nav-num">3</div>
+        <span class="nav-label">Weak 3</span>
+        <span class="nav-chip" style="color:#888;">+3 days</span>
+      </div>
+
+    </div><!-- end body-resume -->
+
+    <!-- ── INTERNSHIP DOJO GROUP ── -->
+    <div class="nav-group-btn" id="btn-internship" onclick="toggleGroup('internship')">
+      <div class="nav-dot amber"></div>
+      <span class="group-label">Internship Dojo</span>
+      <span class="group-count">3</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="nav-group-body" id="body-internship">
+
+      <div class="nav-section">Two-Tool Offer</div>
+      <div class="nav-item" onclick="load(this,'templates/internship-dojo/id-two-tools.html','ID: Two-Tool Offer','id-offer','15+ apps, no results','Jeremy','You have been applying. Here are two tools that change the results.')">
+        <div class="nav-dot purple"></div>
+        <span class="nav-label">Two Tools</span>
+        <span class="nav-chip" style="color:#7c3aed;">Trigger</span>
+      </div>
+
+      <div class="nav-section">Re-engagement (no open)</div>
+      <div class="nav-item" onclick="load(this,'templates/internship-dojo/id-reengage-1.html','ID Re-engage 1: The 2% stat','id-reengage','+3 days, no engagement','Jeremy','The reason your applications are not landing')">
+        <div class="nav-num">1</div>
+        <span class="nav-label">Re-engage 1</span>
+        <span class="nav-chip" style="color:#888;">+3 days</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/internship-dojo/id-reengage-2.html','ID Re-engage 2: Rohan story','id-reengage','+4 days','Jeremy','How Rohan went from silence to three interviews')">
+        <div class="nav-num">2</div>
+        <span class="nav-label">Re-engage 2</span>
+        <span class="nav-chip" style="color:#888;">+4 days</span>
+      </div>
+
+    </div><!-- end body-internship -->
+
+    <!-- ── OLD USER RE-ENGAGEMENT GROUP ── -->
+    <div class="nav-group-btn" id="btn-olduser" onclick="toggleGroup('olduser')">
+      <div class="nav-dot amber"></div>
+      <span class="group-label">Old User Re-engagement</span>
+      <span class="group-count">3</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="nav-group-body" id="body-olduser">
+
+      <div class="nav-section">Dormant 30+ days</div>
+      <div class="nav-item" onclick="load(this,'templates/old-user-reengagement/old-1.html','Old User 1: No guilt','old-user','30 days dormant','Jeremy','The job search has changed since you were last here')">
+        <div class="nav-num">1</div>
+        <span class="nav-label">Re-engage 1</span>
+        <span class="nav-chip" style="color:#888;">30 days</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/old-user-reengagement/old-2.html','Old User 2: Tanvi story','old-user','+7 days','Jeremy','The students who came back')">
+        <div class="nav-num">2</div>
+        <span class="nav-label">Re-engage 2</span>
+        <span class="nav-chip" style="color:#888;">+7 days</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/old-user-reengagement/old-3.html','Old User 3: One step','old-user','+7 days','Jeremy','One step, whenever you are ready')">
+        <div class="nav-num">3</div>
+        <span class="nav-label">Re-engage 3</span>
+        <span class="nav-chip" style="color:#888;">+7 days</span>
+      </div>
+
+    </div><!-- end body-olduser -->
+
   </div><!-- end sidebar-scroll -->
 
   <div class="sidebar-foot">
-    <strong>32 templates</strong>
-    Outreach Dojo + Career Coach · Blueprint only, not wired up
+    <strong>44 templates</strong>
+    5 flows · Blueprint only, not wired up
   </div>
 </div>
 
@@ -1183,6 +1286,11 @@
     'cc-post-dna':   { label: 'CC: Post DNA',      color: '#7c3aed', bg: '#f3f0ff' },
     'cc-handoff':    { label: 'CC: Handoff',       color: '#10b981', bg: '#f0fdf4' },
     'cc-returning':  { label: 'CC: Returning',     color: '#92400e', bg: '#fffbeb' },
+    'rm-strong':     { label: 'Resume: Strong',    color: '#10b981', bg: '#f0fdf4' },
+    'rm-weak':       { label: 'Resume: Weak',      color: '#7c3aed', bg: '#f3f0ff' },
+    'id-offer':      { label: 'Internship: Offer', color: '#7c3aed', bg: '#f3f0ff' },
+    'id-reengage':   { label: 'Internship: Re-eng',color: '#92400e', bg: '#fffbeb' },
+    'old-user':      { label: 'Old User',          color: '#92400e', bg: '#fffbeb' },
   };
 
   function load(el, path, title, flow, delay, sender, subject, isText = false) {
