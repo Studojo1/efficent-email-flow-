@@ -261,6 +261,26 @@
       text-transform: uppercase; margin-bottom: 4px;
     }
 
+    /* Router bar: one input fanning to many lanes (use instead of a diamond for 3+ way splits) */
+    .wf-router {
+      background: #19191a; color: #fff; border: 2px solid #19191a; border-radius: 100px;
+      box-shadow: 3px 3px 0 rgba(25,26,35,1);
+      padding: 10px 22px; margin: 0 auto; width: fit-content; text-align: center;
+      font-family: 'Clash Display', sans-serif; font-size: 12px; font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    .wf-router-sub { font-size: 10px; font-weight: 500; color: #aaa; margin-top: 2px; letter-spacing: 0; }
+
+    /* Responsive segment grid (for multi-way routers like old-users) */
+    .wf-grid {
+      display: grid; gap: 22px; margin-top: 4px;
+      grid-template-columns: repeat(3, minmax(220px, 1fr));
+    }
+    @media (max-width: 1100px) { .wf-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } }
+    @media (max-width: 760px)  { .wf-grid { grid-template-columns: 1fr; } }
+    .wf-lane { display: flex; flex-direction: column; align-items: stretch; }
+    .wf-lane > .wf-down { } /* connectors inside a lane stay centered via margin auto */
+
     /* Phase / section pill inside a branch */
     .wf-phase {
       display: block; width: fit-content; margin: 0 auto;
@@ -1192,27 +1212,30 @@
       </div>
       <div class="wf-down"></div>
 
-      <div class="wf-diamond"><div class="wf-diamond-inner">Deepest<br>engagement?</div></div>
+      <div class="wf-router">
+        Route by deepest engagement
+        <div class="wf-router-sub">one input, five segments. Each user enters exactly one lane.</div>
+      </div>
       <div class="wf-down tall"></div>
 
-      <!-- 5 segment columns, wrap on narrow -->
-      <div style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center;">
+      <!-- 5 segment lanes in a responsive grid. Each lane self-contained, no shared diamond. -->
+      <div class="wf-grid">
 
         <!-- A -->
-        <div style="flex:1; min-width:260px;">
-          <div class="wf-branch-head"><div class="wf-edge-label">Acted (deepest)</div><div class="wf-branch-label" style="background:#f0fdf4;color:#065f46;border-color:#10b981;">A · analysis + check-ins</div></div>
+        <div class="wf-lane">
+          <div class="wf-branch-head"><div class="wf-edge-label">Acted · deepest</div><div class="wf-branch-label" style="background:#f0fdf4;color:#065f46;border-color:#10b981;">A · analysis + check-ins</div></div>
           <div class="wf-down short green"></div>
           <div class="wf-stack">
             <div class="wf-node" onclick="preview('templates/old-users/seg-a-acted/olduser-a1.html','Old A1','old-a','Day 0','Jeremy','Your progress is still here')"><div class="wf-node-box green"><div class="wf-badge">1</div><div class="wf-node-text"><div class="wf-node-title">Re-anchor</div><div class="wf-node-sub">Progress still here</div></div><div class="wf-delay green">Day 0</div></div></div>
             <div class="wf-down green"></div>
             <div class="wf-node" onclick="preview('templates/old-users/seg-a-acted/olduser-a2.html','Old A2','old-a','+7 days','Jeremy','One action restarts the momentum')"><div class="wf-node-box green"><div class="wf-badge">2</div><div class="wf-node-text"><div class="wf-node-title">One action</div><div class="wf-node-sub">Testimonial</div></div><div class="wf-delay green">+7 days</div></div></div>
             <div class="wf-down green"></div>
-            <div class="wf-node" onclick="preview('templates/old-users/seg-a-acted/olduser-a3.html','Old A3','old-a','+10 days','Jeremy','You did the work. Here is how it pays off.')"><div class="wf-node-box green"><div class="wf-badge">→</div><div class="wf-node-text"><div class="wf-node-title">Handoff to Outreach</div></div><div class="wf-delay green">+10 days</div></div></div>
+            <div class="wf-node" onclick="preview('templates/old-users/seg-a-acted/olduser-a3.html','Old A3','old-a','+10 days','Jeremy','You did the work. Here is how it pays off.')"><div class="wf-node-box green"><div class="wf-badge">&rarr;</div><div class="wf-node-text"><div class="wf-node-title">Handoff to Outreach</div></div><div class="wf-delay green">+10 days</div></div></div>
           </div>
         </div>
 
         <!-- B -->
-        <div style="flex:1; min-width:260px;">
+        <div class="wf-lane">
           <div class="wf-branch-head"><div class="wf-edge-label">Got analysis</div><div class="wf-branch-label" style="background:#f3f0ff;color:#7c3aed;">B · never acted</div></div>
           <div class="wf-down short purple"></div>
           <div class="wf-stack">
@@ -1222,12 +1245,12 @@
             <div class="wf-down purple"></div>
             <div class="wf-node" onclick="preview('templates/old-users/seg-b-analysis/olduser-b3.html','Old B3','old-b','+9 days','Pranav','Pick one priority action this week')"><div class="wf-node-box soft-purple"><div class="wf-badge">3</div><div class="wf-node-text"><div class="wf-node-title">One action</div></div><div class="wf-delay purple">+9 days</div></div></div>
             <div class="wf-down green"></div>
-            <div class="wf-node" onclick="preview('templates/old-users/seg-b-analysis/olduser-b4.html','Old B4','old-b','+9 days','Jeremy','You know where you stand. Here is the next step.')"><div class="wf-node-box green"><div class="wf-badge">→</div><div class="wf-node-text"><div class="wf-node-title">Handoff to Outreach</div></div><div class="wf-delay green">+9 days</div></div></div>
+            <div class="wf-node" onclick="preview('templates/old-users/seg-b-analysis/olduser-b4.html','Old B4','old-b','+9 days','Jeremy','You know where you stand. Here is the next step.')"><div class="wf-node-box green"><div class="wf-badge">&rarr;</div><div class="wf-node-text"><div class="wf-node-title">Handoff to Outreach</div></div><div class="wf-delay green">+9 days</div></div></div>
           </div>
         </div>
 
         <!-- C -->
-        <div style="flex:1; min-width:260px;">
+        <div class="wf-lane">
           <div class="wf-branch-head"><div class="wf-edge-label">Started, no analysis</div><div class="wf-branch-label" style="background:#f5f4f0;">C · stuck profiling</div></div>
           <div class="wf-down short"></div>
           <div class="wf-stack">
@@ -1240,7 +1263,7 @@
         </div>
 
         <!-- D -->
-        <div style="flex:1; min-width:260px;">
+        <div class="wf-lane">
           <div class="wf-branch-head"><div class="wf-edge-label">Used another tool</div><div class="wf-branch-label" style="background:#fffbeb;color:#92400e;border-color:#f59e0b;">D · cross-tool</div></div>
           <div class="wf-down short amber"></div>
           <div class="wf-stack">
@@ -1253,7 +1276,7 @@
         </div>
 
         <!-- E -->
-        <div style="flex:1; min-width:260px;">
+        <div class="wf-lane">
           <div class="wf-branch-head"><div class="wf-edge-label">Cold everywhere</div><div class="wf-branch-label" style="background:#f5f4f0;">E · lightest touch</div></div>
           <div class="wf-down short"></div>
           <div class="wf-stack">
