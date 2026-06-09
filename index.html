@@ -653,11 +653,85 @@
 
     </div><!-- end body-internship -->
 
+    <!-- ── OLD USERS GROUP ── -->
+    <div class="nav-group-btn" id="btn-oldusers" onclick="toggleGroup('oldusers')">
+      <div class="nav-dot amber"></div>
+      <span class="group-label">Old Users</span>
+      <span class="group-count">16</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="nav-group-body" id="body-oldusers">
+
+      <div class="nav-item" id="nav-oldusers-flow" onclick="showFlow('oldusers', this)">
+        <div class="nav-dot amber"></div>
+        <span class="nav-label">Flow Map</span>
+      </div>
+
+      <div class="nav-section">A · Acted then vanished</div>
+      <div class="nav-item" onclick="load(this,'templates/old-users/seg-a-acted/olduser-a1.html','Old A1: Progress still here','old-a','Day 0','Jeremy','Your progress is still here')">
+        <div class="nav-num">1</div><span class="nav-label">A1 Re-anchor</span><span class="nav-chip" style="color:#888;">Day 0</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/old-users/seg-a-acted/olduser-a2.html','Old A2: One action','old-a','+7 days','Jeremy','One action restarts the momentum')">
+        <div class="nav-num">2</div><span class="nav-label">A2 One action</span><span class="nav-chip" style="color:#888;">+7 days</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/old-users/seg-a-acted/olduser-a3.html','Old A3: Handoff','old-a','+10 days','Jeremy','You did the work. Here is how it pays off.')">
+        <div class="nav-num">3</div><span class="nav-label">A3 Handoff</span><span class="nav-chip" style="color:#10b981;">Outreach</span>
+      </div>
+
+      <div class="nav-section">B · Analysis, never acted</div>
+      <div class="nav-item" onclick="load(this,'templates/old-users/seg-b-analysis/olduser-b1.html','Old B1: Analysis waiting','old-b','Day 0','Pranav','Your career analysis is still waiting')">
+        <div class="nav-num">1</div><span class="nav-label">B1 Still waiting</span><span class="nav-chip" style="color:#888;">Day 0</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/old-users/seg-b-analysis/olduser-b2.html','Old B2: What changed','old-b','+7 days','Pranav','What acting on the analysis actually changed')">
+        <div class="nav-num">2</div><span class="nav-label">B2 What changed</span><span class="nav-chip" style="color:#888;">+7 days</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/old-users/seg-b-analysis/olduser-b3.html','Old B3: One action','old-b','+9 days','Pranav','Pick one priority action this week')">
+        <div class="nav-num">3</div><span class="nav-label">B3 One action</span><span class="nav-chip" style="color:#888;">+9 days</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/old-users/seg-b-analysis/olduser-b4.html','Old B4: Handoff','old-b','+9 days','Jeremy','You know where you stand. Here is the next step.')">
+        <div class="nav-num">4</div><span class="nav-label">B4 Handoff</span><span class="nav-chip" style="color:#10b981;">Outreach</span>
+      </div>
+
+      <div class="nav-section">C · Stuck in profiling</div>
+      <div class="nav-item" onclick="load(this,'templates/old-users/seg-c-profiling/olduser-c1.html','Old C1: Partway through','old-c','Day 0','Pranav','You were partway through')">
+        <div class="nav-num">1</div><span class="nav-label">C1 Pick up</span><span class="nav-chip" style="color:#888;">Day 0</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/old-users/seg-c-profiling/olduser-c2.html','Old C2: What it gives','old-c','+8 days','Pranav','What the finished analysis gives you')">
+        <div class="nav-num">2</div><span class="nav-label">C2 The payoff</span><span class="nav-chip" style="color:#888;">+8 days</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/old-users/seg-c-profiling/olduser-c3.html','Old C3: Finished after gap','old-c','+10 days','Pranav','He finished after a long gap')">
+        <div class="nav-num">3</div><span class="nav-label">C3 Testimonial</span><span class="nav-chip" style="color:#888;">+10 days</span>
+      </div>
+
+      <div class="nav-section">D · Used another tool</div>
+      <div class="nav-item" onclick="load(this,'templates/old-users/seg-d-crosstool/olduser-d1.html','Old D1: What coach adds','old-d','Day 0','Jeremy','You have used Studojo, but not the coach')">
+        <div class="nav-num">1</div><span class="nav-label">D1 What it adds</span><span class="nav-chip" style="color:#888;">Day 0</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/old-users/seg-d-crosstool/olduser-d2.html','Old D2: Two tools','old-d','+8 days','Jeremy','Two tools that change the results')">
+        <div class="nav-num">2</div><span class="nav-label">D2 Two tools</span><span class="nav-chip" style="color:#888;">+8 days</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/old-users/seg-d-crosstool/olduser-d3.html','Old D3: Rohan story','old-d','+10 days','Jeremy','How Rohan finally got results')">
+        <div class="nav-num">3</div><span class="nav-label">D3 Testimonial</span><span class="nav-chip" style="color:#888;">+10 days</span>
+      </div>
+
+      <div class="nav-section">E · Cold everywhere</div>
+      <div class="nav-item" onclick="load(this,'templates/old-users/seg-e-cold/olduser-e1.html','Old E1: No guilt','old-e','Day 0','Pranav','The job search has changed since you were here')">
+        <div class="nav-num">1</div><span class="nav-label">E1 No guilt</span><span class="nav-chip" style="color:#888;">Day 0</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/old-users/seg-e-cold/olduser-e2.html','Old E2: Came back','old-e','+9 days','Pranav','A student who came back after a long break')">
+        <div class="nav-num">2</div><span class="nav-label">E2 Testimonial</span><span class="nav-chip" style="color:#888;">+9 days</span>
+      </div>
+      <div class="nav-item" onclick="load(this,'templates/old-users/seg-e-cold/olduser-e3.html','Old E3: One step','old-e','+9 days','Pranav','One step, whenever you are ready')">
+        <div class="nav-num">3</div><span class="nav-label">E3 One step</span><span class="nav-chip" style="color:#888;">+9 days</span>
+      </div>
+
+    </div><!-- end body-oldusers -->
+
   </div><!-- end sidebar-scroll -->
 
   <div class="sidebar-foot">
-    <strong>41 templates</strong>
-    4 flows · Blueprint only, not wired up
+    <strong>57 templates</strong>
+    5 flows · Blueprint only, not wired up
   </div>
 </div>
 
@@ -1098,6 +1172,103 @@
     </div>
   </div>
 
+  <!-- OLD USERS FLOW MAP -->
+  <div id="flow-pane-oldusers" style="display:none;">
+    <div class="flow-header">
+      <div class="flow-tag">Blueprint: Not Wired Up</div>
+      <div class="flow-title clash">Old / Dormant User Flow</div>
+      <div class="flow-sub">Reads top to bottom. Dormant 21+ days, routed by deepest engagement. Paying customers suppressed.</div>
+    </div>
+
+    <div class="wf">
+
+      <div class="wf-center">
+        <div class="wf-node" style="cursor:default;">
+          <div class="wf-node-box start" style="min-width:260px;">
+            <div class="wf-badge">z</div>
+            <div class="wf-node-text"><div class="wf-node-title">Dormant 21+ days</div><div class="wf-node-sub">last_seen and created_at both older than 21d</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-down"></div>
+
+      <div class="wf-diamond"><div class="wf-diamond-inner">Deepest<br>engagement?</div></div>
+      <div class="wf-down tall"></div>
+
+      <!-- 5 segment columns, wrap on narrow -->
+      <div style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center;">
+
+        <!-- A -->
+        <div style="flex:1; min-width:260px;">
+          <div class="wf-branch-head"><div class="wf-edge-label">Acted (deepest)</div><div class="wf-branch-label" style="background:#f0fdf4;color:#065f46;border-color:#10b981;">A · analysis + check-ins</div></div>
+          <div class="wf-down short green"></div>
+          <div class="wf-stack">
+            <div class="wf-node" onclick="preview('templates/old-users/seg-a-acted/olduser-a1.html','Old A1','old-a','Day 0','Jeremy','Your progress is still here')"><div class="wf-node-box green"><div class="wf-badge">1</div><div class="wf-node-text"><div class="wf-node-title">Re-anchor</div><div class="wf-node-sub">Progress still here</div></div><div class="wf-delay green">Day 0</div></div></div>
+            <div class="wf-down green"></div>
+            <div class="wf-node" onclick="preview('templates/old-users/seg-a-acted/olduser-a2.html','Old A2','old-a','+7 days','Jeremy','One action restarts the momentum')"><div class="wf-node-box green"><div class="wf-badge">2</div><div class="wf-node-text"><div class="wf-node-title">One action</div><div class="wf-node-sub">Testimonial</div></div><div class="wf-delay green">+7 days</div></div></div>
+            <div class="wf-down green"></div>
+            <div class="wf-node" onclick="preview('templates/old-users/seg-a-acted/olduser-a3.html','Old A3','old-a','+10 days','Jeremy','You did the work. Here is how it pays off.')"><div class="wf-node-box green"><div class="wf-badge">→</div><div class="wf-node-text"><div class="wf-node-title">Handoff to Outreach</div></div><div class="wf-delay green">+10 days</div></div></div>
+          </div>
+        </div>
+
+        <!-- B -->
+        <div style="flex:1; min-width:260px;">
+          <div class="wf-branch-head"><div class="wf-edge-label">Got analysis</div><div class="wf-branch-label" style="background:#f3f0ff;color:#7c3aed;">B · never acted</div></div>
+          <div class="wf-down short purple"></div>
+          <div class="wf-stack">
+            <div class="wf-node" onclick="preview('templates/old-users/seg-b-analysis/olduser-b1.html','Old B1','old-b','Day 0','Pranav','Your career analysis is still waiting')"><div class="wf-node-box soft-purple"><div class="wf-badge">1</div><div class="wf-node-text"><div class="wf-node-title">Still waiting</div></div><div class="wf-delay purple">Day 0</div></div></div>
+            <div class="wf-down purple"></div>
+            <div class="wf-node" onclick="preview('templates/old-users/seg-b-analysis/olduser-b2.html','Old B2','old-b','+7 days','Pranav','What acting on the analysis actually changed')"><div class="wf-node-box soft-purple"><div class="wf-badge">2</div><div class="wf-node-text"><div class="wf-node-title">What changed</div><div class="wf-node-sub">Testimonial</div></div><div class="wf-delay purple">+7 days</div></div></div>
+            <div class="wf-down purple"></div>
+            <div class="wf-node" onclick="preview('templates/old-users/seg-b-analysis/olduser-b3.html','Old B3','old-b','+9 days','Pranav','Pick one priority action this week')"><div class="wf-node-box soft-purple"><div class="wf-badge">3</div><div class="wf-node-text"><div class="wf-node-title">One action</div></div><div class="wf-delay purple">+9 days</div></div></div>
+            <div class="wf-down green"></div>
+            <div class="wf-node" onclick="preview('templates/old-users/seg-b-analysis/olduser-b4.html','Old B4','old-b','+9 days','Jeremy','You know where you stand. Here is the next step.')"><div class="wf-node-box green"><div class="wf-badge">→</div><div class="wf-node-text"><div class="wf-node-title">Handoff to Outreach</div></div><div class="wf-delay green">+9 days</div></div></div>
+          </div>
+        </div>
+
+        <!-- C -->
+        <div style="flex:1; min-width:260px;">
+          <div class="wf-branch-head"><div class="wf-edge-label">Started, no analysis</div><div class="wf-branch-label" style="background:#f5f4f0;">C · stuck profiling</div></div>
+          <div class="wf-down short"></div>
+          <div class="wf-stack">
+            <div class="wf-node" onclick="preview('templates/old-users/seg-c-profiling/olduser-c1.html','Old C1','old-c','Day 0','Pranav','You were partway through')"><div class="wf-node-box"><div class="wf-badge outline">1</div><div class="wf-node-text"><div class="wf-node-title">Pick up</div></div><div class="wf-delay">Day 0</div></div></div>
+            <div class="wf-down"></div>
+            <div class="wf-node" onclick="preview('templates/old-users/seg-c-profiling/olduser-c2.html','Old C2','old-c','+8 days','Pranav','What the finished analysis gives you')"><div class="wf-node-box"><div class="wf-badge outline">2</div><div class="wf-node-text"><div class="wf-node-title">The payoff</div></div><div class="wf-delay">+8 days</div></div></div>
+            <div class="wf-down"></div>
+            <div class="wf-node" onclick="preview('templates/old-users/seg-c-profiling/olduser-c3.html','Old C3','old-c','+10 days','Pranav','He finished after a long gap')"><div class="wf-node-box"><div class="wf-badge outline">3</div><div class="wf-node-text"><div class="wf-node-title">Testimonial</div></div><div class="wf-delay">+10 days</div></div></div>
+          </div>
+        </div>
+
+        <!-- D -->
+        <div style="flex:1; min-width:260px;">
+          <div class="wf-branch-head"><div class="wf-edge-label">Used another tool</div><div class="wf-branch-label" style="background:#fffbeb;color:#92400e;border-color:#f59e0b;">D · cross-tool</div></div>
+          <div class="wf-down short amber"></div>
+          <div class="wf-stack">
+            <div class="wf-node" onclick="preview('templates/old-users/seg-d-crosstool/olduser-d1.html','Old D1','old-d','Day 0','Jeremy','You have used Studojo, but not the coach')"><div class="wf-node-box amber"><div class="wf-badge">1</div><div class="wf-node-text"><div class="wf-node-title">What coach adds</div></div><div class="wf-delay amber">Day 0</div></div></div>
+            <div class="wf-down amber"></div>
+            <div class="wf-node" onclick="preview('templates/old-users/seg-d-crosstool/olduser-d2.html','Old D2','old-d','+8 days','Jeremy','Two tools that change the results')"><div class="wf-node-box amber"><div class="wf-badge">2</div><div class="wf-node-text"><div class="wf-node-title">Two tools</div></div><div class="wf-delay amber">+8 days</div></div></div>
+            <div class="wf-down amber"></div>
+            <div class="wf-node" onclick="preview('templates/old-users/seg-d-crosstool/olduser-d3.html','Old D3','old-d','+10 days','Jeremy','How Rohan finally got results')"><div class="wf-node-box amber"><div class="wf-badge">3</div><div class="wf-node-text"><div class="wf-node-title">Testimonial + pick one</div></div><div class="wf-delay amber">+10 days</div></div></div>
+          </div>
+        </div>
+
+        <!-- E -->
+        <div style="flex:1; min-width:260px;">
+          <div class="wf-branch-head"><div class="wf-edge-label">Cold everywhere</div><div class="wf-branch-label" style="background:#f5f4f0;">E · lightest touch</div></div>
+          <div class="wf-down short"></div>
+          <div class="wf-stack">
+            <div class="wf-node" onclick="preview('templates/old-users/seg-e-cold/olduser-e1.html','Old E1','old-e','Day 0','Pranav','The job search has changed since you were here')"><div class="wf-node-box"><div class="wf-badge outline">1</div><div class="wf-node-text"><div class="wf-node-title">No guilt</div></div><div class="wf-delay">Day 0</div></div></div>
+            <div class="wf-down"></div>
+            <div class="wf-node" onclick="preview('templates/old-users/seg-e-cold/olduser-e2.html','Old E2','old-e','+9 days','Pranav','A student who came back after a long break')"><div class="wf-node-box"><div class="wf-badge outline">2</div><div class="wf-node-text"><div class="wf-node-title">Came back</div><div class="wf-node-sub">Testimonial</div></div><div class="wf-delay">+9 days</div></div></div>
+            <div class="wf-down"></div>
+            <div class="wf-node" onclick="preview('templates/old-users/seg-e-cold/olduser-e3.html','Old E3','old-e','+9 days','Pranav','One step, whenever you are ready')"><div class="wf-node-box"><div class="wf-badge outline">3</div><div class="wf-node-text"><div class="wf-node-title">One step</div></div><div class="wf-delay">+9 days</div></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 
   <!-- PREVIEW -->
   <div id="preview-pane">
@@ -1173,6 +1344,7 @@
     cc: 'nav-cc-flow',
     resume: 'nav-resume-flow',
     internship: 'nav-internship-flow',
+    oldusers: 'nav-oldusers-flow',
   };
 
   function showFlow(which, el) {
@@ -1206,10 +1378,15 @@
     'rm-weak':       { label: 'Resume: Weak',      color: '#7c3aed', bg: '#f3f0ff' },
     'id-offer':      { label: 'Internship: Offer', color: '#7c3aed', bg: '#f3f0ff' },
     'id-reengage':   { label: 'Internship: Re-eng',color: '#92400e', bg: '#fffbeb' },
+    'old-a':         { label: 'Old: Acted',        color: '#10b981', bg: '#f0fdf4' },
+    'old-b':         { label: 'Old: Analysis',     color: '#7c3aed', bg: '#f3f0ff' },
+    'old-c':         { label: 'Old: Profiling',    color: '#555',    bg: '#f5f4f0' },
+    'old-d':         { label: 'Old: Cross-tool',   color: '#92400e', bg: '#fffbeb' },
+    'old-e':         { label: 'Old: Cold',         color: '#92400e', bg: '#fffbeb' },
   };
 
   function hideAllFlowPanes() {
-    ['flow-pane-outreach','flow-pane-cc','flow-pane-resume','flow-pane-internship'].forEach(id => {
+    ['flow-pane-outreach','flow-pane-cc','flow-pane-resume','flow-pane-internship','flow-pane-oldusers'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.style.display = 'none';
     });
