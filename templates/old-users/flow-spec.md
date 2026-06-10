@@ -1,86 +1,106 @@
-# Old / Dormant User Re-engagement Flow Spec
+# Old / Dormant User Re-engagement Flow Spec (tool-neutral)
 
-> For users who signed up weeks or months ago and went quiet. Segmented
-> by how far they got before going cold, routed by deepest engagement.
-> Templates only. Not wired up.
+> For users who signed up weeks or months ago and went quiet. Routed by
+> INTENT STAGE (how close they got to an outcome on any tool), with the
+> CTA pointed at whichever tool they went deepest on. No tool is
+> privileged. Templates only. Not wired up.
+
+---
+
+## Why this is tool-neutral
+
+An old user is a Studojo user, not a Career Coach user. The router does
+not check the coach first. It looks at the user's whole footprint across
+every tool, weights them equally, and decides:
+
+1. **Intent stage** (the message) = the highest outcome they reached on
+   any tool.
+2. **Deepest tool** (the CTA destination) = the tool with the strongest
+   signal, compared on a normalised scale.
+
+Only the dedicated Career Coach flow is coach-centric. This one is not.
 
 ---
 
 ## Detection (for the eventual cron)
 
-A user enters this flow when:
-- `Student.last_seen` is older than ~21 days, AND
-- `Student.created_at` is older than ~21 days.
+Enter when:
+- `Student.last_seen` older than ~21 days, AND
+- `Student.created_at` older than ~21 days.
 
-**Suppress entirely** if:
+Suppress entirely:
 - `Student.has_active_outreach = True` (paying Outreach customer)
 - `Student.email IS NULL`
 
-**Handle gently** (do not hard-sell from scratch) if `Student.discount_intent_email` is set: they were already a warm lead.
+---
+
+## Outcome signals (evaluated equally across all tools)
+
+| Tool | Signal source | Outcome edge |
+|------|---------------|--------------|
+| Outreach | main platform order / payment-page events | hit payment page, started an order |
+| Resume Maker | finished resume + strength score (same scoring as the Resume Maker flow) | a completed resume |
+| Internship Dojo | `fetch_activity_for_email` application count | heavy applying (15+) |
+| Career Coach | CheckIn rows, CareerDNA, message depth | completed roadmap actions |
 
 ---
 
-## Routing: deepest engagement wins
+## Stage = highest outcome reached on any tool
 
-Evaluate coach depth first, richest signal first. Only fall to cross-tool data when coach depth is shallow.
-
-| Order | Signal | Segment |
-|-------|--------|---------|
-| 1 | `CheckIn` rows exist | A acted then vanished |
-| 2 | `CareerDNA` exists, no CheckIn | B analysis, never acted |
-| 3 | Messages, last `Message.state = PROFILING`, no DNA | C stuck in profiling |
-| 4 | No real coach activity BUT `fetch_activity_for_email` shows resume / internship use | D cross-tool |
-| 5 | Cold everywhere | E cold |
-
-Cross-tool data via `main_platform_db.fetch_activity_for_email(email)`:
-`resume_maker.used`, `internship_applications.count`, `career_applications`. Only consulted for segments D and E.
+| Stage | Condition | Message theme |
+|-------|-----------|---------------|
+| **S1 Nearly converted** | Reached a real outcome edge on ANY tool (payment page, completed resume, completed coach actions, heavy applying) | You were nearly there. The hard part is done. Finish it. |
+| **S2 Engaged** | Did meaningful work on some tool but stopped before any outcome | You got real work done, then it stalled. Pick it back up. |
+| **S3 Barely started** | Signed up, minimal activity, no meaningful signal anywhere | No guilt. Here is what Studojo does now. One step. |
 
 ---
 
-## Segment tracks
+## CTA = deepest tool (the tool-neutral routing)
 
-### Segment A acted then vanished (Jeremy)
+Within S1 and S2 the message is stage-appropriate; the closing CTA is
+swapped at send time based on the user's deepest tool:
+
+| Deepest tool signal | CTA block |
+|---------------------|-----------|
+| Outreach (payment / used) | `cta-variants/cta-outreach.html` |
+| Resume Maker, strong resume | `cta-variants/cta-outreach.html` (resume is ready to use) |
+| Resume Maker, weak resume | `cta-variants/cta-coach.html` (find direction first) |
+| Internship Dojo (heavy applying) | `cta-variants/cta-two-tool.html` |
+| Career Coach (analysis / actions) | `cta-variants/cta-coach.html` (re-anchor, then Outreach) |
+| Nothing dominant | `cta-variants/cta-two-tool.html` |
+
+S3 always uses the neutral two-tool CTA (no strong signal to route on).
+
+---
+
+## Stage tracks
+
+### S1 Nearly converted (Jeremy)
 | # | Template | Delay |
 |---|----------|-------|
-| 1 | `seg-a-acted/olduser-a1` | day 0 |
-| 2 | `seg-a-acted/olduser-a2` | +7 days |
-| 3 | `seg-a-acted/olduser-a3` | +10 days (handoff to Outreach) |
+| 1 | `s1-nearly/old-s1-1` | Day 0 |
+| 2 | `s1-nearly/old-s1-2` | +5 days |
+| 3 | `s1-nearly/old-s1-3` | +9 days (CTA swaps by deepest tool) |
 
-### Segment B analysis, never acted (Pranav, Jeremy on handoff)
+### S2 Engaged (Pranav, Jeremy on close)
 | # | Template | Delay | Sender |
 |---|----------|-------|--------|
-| 1 | `seg-b-analysis/olduser-b1` | day 0 | Pranav |
-| 2 | `seg-b-analysis/olduser-b2` | +7 days | Pranav |
-| 3 | `seg-b-analysis/olduser-b3` | +9 days | Pranav |
-| 4 | `seg-b-analysis/olduser-b4` | +9 days (handoff) | Jeremy |
+| 1 | `s2-engaged/old-s2-1` | Day 0 | Pranav |
+| 2 | `s2-engaged/old-s2-2` | +6 days | Pranav |
+| 3 | `s2-engaged/old-s2-3` | +9 days (CTA swaps) | Jeremy |
 
-### Segment C stuck in profiling (Pranav)
+### S3 Barely started (Pranav)
 | # | Template | Delay |
 |---|----------|-------|
-| 1 | `seg-c-profiling/olduser-c1` | day 0 |
-| 2 | `seg-c-profiling/olduser-c2` | +8 days |
-| 3 | `seg-c-profiling/olduser-c3` | +10 days |
-
-### Segment D used another tool, not the coach (Jeremy)
-| # | Template | Delay |
-|---|----------|-------|
-| 1 | `seg-d-crosstool/olduser-d1` | day 0 |
-| 2 | `seg-d-crosstool/olduser-d2` | +8 days |
-| 3 | `seg-d-crosstool/olduser-d3` | +10 days |
-
-### Segment E cold everywhere (Pranav, lightest)
-| # | Template | Delay |
-|---|----------|-------|
-| 1 | `seg-e-cold/olduser-e1` | day 0 |
-| 2 | `seg-e-cold/olduser-e2` | +9 days |
-| 3 | `seg-e-cold/olduser-e3` | +9 days |
+| 1 | `s3-barely/old-s3-1` | Day 0 |
+| 2 | `s3-barely/old-s3-2` | +7 days |
+| 3 | `s3-barely/old-s3-3` | +7 days |
 
 ---
 
 ## Rules
-- 3 to 4 emails per segment, then stop. Medium cadence over ~a month.
-- No em dashes. No "last email" language.
-- Testimonials with metrics in A2, B2, C3, D3, E2.
-- Reference where they left off so it reads personal.
+- 3 emails per stage, then stop. Medium cadence over ~2 weeks.
+- No em dashes. No "last email" language. No "readiness" anywhere.
+- Testimonials with metrics in S1-2, S2-2, S3-2.
 - Reply rate, if cited, ~10%.
 - Variable: `{{first_name}}`.
