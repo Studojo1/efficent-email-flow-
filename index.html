@@ -153,6 +153,7 @@
 
     /* ── WORKFLOW (vertical, top-to-bottom) ── */
     .wf { max-width: 1000px; margin: 0 auto; }
+    .wf.wide { max-width: 1320px; }
 
     /* A single node, centered, with optional delay chip below */
     .wf-node {
@@ -273,13 +274,20 @@
 
     /* Responsive segment grid (for multi-way routers like old-users) */
     .wf-grid {
-      display: grid; gap: 22px; margin-top: 4px;
-      grid-template-columns: repeat(3, minmax(220px, 1fr));
+      display: grid; gap: 16px; margin-top: 4px;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
     }
-    @media (max-width: 1100px) { .wf-grid { grid-template-columns: repeat(2, minmax(220px, 1fr)); } }
-    @media (max-width: 760px)  { .wf-grid { grid-template-columns: 1fr; } }
-    .wf-lane { display: flex; flex-direction: column; align-items: stretch; }
-    .wf-lane > .wf-down { } /* connectors inside a lane stay centered via margin auto */
+    @media (max-width: 1280px) { .wf-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (max-width: 860px)  { .wf-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 600px)  { .wf-grid { grid-template-columns: 1fr; } }
+    .wf-lane { display: flex; flex-direction: column; align-items: stretch; min-width: 0; }
+    /* tighten node boxes inside the grid so 5 fit across */
+    .wf-grid .wf-node-box { min-width: 0; padding: 11px 12px; gap: 8px; }
+    .wf-grid .wf-node-title { font-size: 12px; }
+    .wf-grid .wf-node-sub { font-size: 9px; }
+    .wf-grid .wf-badge { width: 22px; height: 22px; font-size: 10px; }
+    .wf-grid .wf-delay { font-size: 8px; padding: 2px 6px; }
+    .wf-grid .wf-branch-label { font-size: 10px; padding: 6px 12px; }
 
     /* Phase / section pill inside a branch */
     .wf-phase {
@@ -1194,13 +1202,13 @@
 
   <!-- OLD USERS FLOW MAP -->
   <div id="flow-pane-oldusers" style="display:none;">
-    <div class="flow-header">
+    <div class="flow-header" style="max-width:1320px; margin-left:auto; margin-right:auto;">
       <div class="flow-tag">Blueprint: Not Wired Up</div>
       <div class="flow-title clash">Old / Dormant User Flow</div>
       <div class="flow-sub">Reads top to bottom. Dormant 21+ days, routed by deepest engagement. Paying customers suppressed.</div>
     </div>
 
-    <div class="wf">
+    <div class="wf wide">
 
       <div class="wf-center">
         <div class="wf-node" style="cursor:default;">
@@ -1353,12 +1361,24 @@
     } catch(e) { f.style.height = '800px'; }
   }
 
+  const allGroups = ['outreach','cc','resume','internship','oldusers'];
   function toggleGroup(which) {
-    const btn = document.getElementById('btn-' + which);
     const body = document.getElementById('body-' + which);
-    const isOpen = body.classList.contains('open');
-    btn.classList.toggle('open', !isOpen);
-    body.classList.toggle('open', !isOpen);
+    const willOpen = !body.classList.contains('open');
+    // accordion: close every group, then open the clicked one if it was closed
+    allGroups.forEach(g => {
+      const b = document.getElementById('btn-' + g);
+      const bd = document.getElementById('body-' + g);
+      if (!b || !bd) return;
+      b.classList.remove('open');
+      bd.classList.remove('open');
+    });
+    if (willOpen) {
+      document.getElementById('btn-' + which).classList.add('open');
+      body.classList.add('open');
+      // bring the opened group's button to the top of the scroll area
+      document.getElementById('btn-' + which).scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
   }
 
   let lastFlow = 'outreach';
