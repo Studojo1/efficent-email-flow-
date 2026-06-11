@@ -4,18 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Studojo Email Flow Dashboard</title>
+  <!-- Studojo frontend fonts (Fontshare), preconnected like the main site -->
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700,900&display=swap" />
   <style>
-    @import url('https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&display=swap');
+    /* Exact Studojo frontend font stack: Clash Display (headings) + Satoshi (body). */
+    @import url('https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700,900&display=swap');
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Satoshi', sans-serif;
+      font-weight: 500;
       background-color: #f5f4f0;
       color: #19191a;
       height: 100vh;
       overflow: hidden;
       display: flex;
+      -webkit-font-smoothing: antialiased;
     }
 
     .clash { font-family: 'Clash Display', sans-serif; }
@@ -745,7 +751,7 @@
 
   <div class="sidebar-foot">
     <strong>53 templates</strong>
-    5 flows · Blueprint only, not wired up
+    5 flows · wired &amp; scale-safe · new-user priority, old-user spread
   </div>
 </div>
 
@@ -755,7 +761,7 @@
   <!-- OUTREACH FLOW MAP -->
   <div id="flow-pane-outreach" style="display:block;">
     <div class="flow-header">
-      <div class="flow-tag">Blueprint: Not Wired Up</div>
+      <div class="flow-tag">Wired · Ready to Deploy</div>
       <div class="flow-title clash">Outreach Dojo Email Flow</div>
       <div class="flow-sub">Reads top to bottom. Click any node to preview the email.</div>
     </div>
@@ -877,7 +883,7 @@
   <!-- CAREER COACH FLOW MAP -->
   <div id="flow-pane-cc" style="display:none;">
     <div class="flow-header">
-      <div class="flow-tag">Blueprint: Not Wired Up</div>
+      <div class="flow-tag">Wired · Ready to Deploy</div>
       <div class="flow-title clash">Career Coach Email Flow</div>
       <div class="flow-sub">Reads top to bottom. Branches on user behaviour at each stage.</div>
     </div>
@@ -1033,7 +1039,7 @@
   <!-- RESUME MAKER FLOW MAP -->
   <div id="flow-pane-resume" style="display:none;">
     <div class="flow-header">
-      <div class="flow-tag">Blueprint: Not Wired Up</div>
+      <div class="flow-tag">Wired · Ready to Deploy</div>
       <div class="flow-title clash">Resume Maker Email Flow</div>
       <div class="flow-sub">Reads top to bottom. The coach scores the resume, then branches.</div>
     </div>
@@ -1114,7 +1120,7 @@
   <!-- INTERNSHIP DOJO FLOW MAP -->
   <div id="flow-pane-internship" style="display:none;">
     <div class="flow-header">
-      <div class="flow-tag">Blueprint: Not Wired Up</div>
+      <div class="flow-tag">Wired · Ready to Deploy</div>
       <div class="flow-title clash">Internship Dojo Email Flow</div>
       <div class="flow-sub">Reads top to bottom. Triggered by heavy applying with no results.</div>
     </div>
@@ -1189,9 +1195,9 @@
   <!-- OLD USERS FLOW MAP -->
   <div id="flow-pane-oldusers" style="display:none;">
     <div class="flow-header" style="max-width:1100px; margin-left:auto; margin-right:auto;">
-      <div class="flow-tag">Blueprint: Not Wired Up</div>
+      <div class="flow-tag">Wired · Ready to Deploy</div>
       <div class="flow-title clash">Old / Dormant User Flow</div>
-      <div class="flow-sub">Reads top to bottom. Tool-neutral: routed by intent stage, with the CTA pointed at whichever tool the user went deepest on.</div>
+      <div class="flow-sub">Reads top to bottom. Tool-neutral: routed by intent stage, with the CTA pointed at whichever tool the user went deepest on. Sent at low priority: new-user emails always go first; these cascade over days under a per-day cap (s1 before s2 before s3) so they only use leftover sending quota.</div>
     </div>
 
     <div class="wf wide">
