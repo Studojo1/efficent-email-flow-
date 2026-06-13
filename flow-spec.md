@@ -1,108 +1,127 @@
-# Studojo Email Flow Spec — Outreach Dojo (New Flow, Standalone)
+# Studojo Email Flow — Live Spec
 
-> This flow is not wired up. It is a blueprint for future integration.
-> Nothing in this folder touches the existing emailer-service or current email flow.
-
----
-
-## Trigger Variables
-
-| Variable | Description |
-|----------|-------------|
-| `{{first_name}}` | Student's first name |
-| `{{COUPON_CODE}}` | Discount code (set at send time) |
+> **This is the flow as actually wired in `emailer-service` (production).**
+> Source of truth: `internal/handlers/events.go` (routing + sequences),
+> `internal/scheduler/scheduler.go` (drain, catch-up, paid suppression),
+> `internal/email/sender.go` (subjects, senders, rate limit).
+> Supersedes the old "not wired up / parked flows" design draft.
 
 ---
 
-## Flow 0 — Universal Welcome
+## How it runs
 
-**Trigger**: User signs up on studojo.com (any source)
-**Delay**: Within 1 minute of signup
-**Template**: `templates/welcome-new-user.html`
-**Sender**: Pranav (cofounder)
-
-After sending → branch on `signup_source` tag:
-
-| Source tag | Next flow |
-|------------|-----------|
-| `outreach` | Outreach Dojo Flow (below) |
-| `career-coach` | Career Coach Flow (parked) |
-| `internship` | Internship Dojo Flow (parked) |
-| `resume-maker` | Resume Maker Flow (parked) |
-| `ai-risk` | AI Risk Flow (parked) |
-| `reports` | Reports Flow (parked) |
+- **Triggers** arrive as `event.cc.*` events (from the platform + career-coach backend) on `POST /v1/email/events`.
+- An **instant** email may send immediately; **follow-ups** are written to `scheduled_emails` with a `scheduled_at` and drained by the scheduler each minute.
+- **Dedup**: a `UNIQUE (user_id, email_type)` index makes a second send physically impossible.
+- **Preferences**: marketing sends respect `product_emails`; one-click unsubscribe sets it false.
+- **Paid suppression**: a successful payment (`event.payment.success` or `event.cc.paid`) cancels every pending `cc_*` marketing row, and the scheduler also skips `cc_*` for paid users at send time.
+- **Pacing**: one global rate limiter, `EMAIL_RATE_PER_HOUR` (currently **80**, under real ACS capacity). Transactional mail is never throttled.
+- **Senders** rotate across `support` / `welcome` / `promotions` domains; the founder coupon blast is pinned to Jeremy.
 
 ---
 
-## Flow 1 — Outreach Dojo (signup source = `outreach`)
+## Trigger variables
 
-### Branch A — User has NOT used the Outreach tool
-
-**Entry condition**: User signed up via outreach source AND `tool_used` event has NOT fired
-
-| # | Template | Delay | Sender |
-|---|----------|-------|--------|
-| 1 | `templates/outreach/not-used/outreach-nudge-d1.html` | 7 hrs after welcome | Pranav |
-| 2 | `templates/outreach/not-used/outreach-nudge-d2.html` | 24 hrs after d1 | Pranav |
-| 3 | `templates/outreach/not-used/outreach-nudge-d3.html` | 32 hrs after d2 | Pranav |
-| 4 | `templates/outreach/not-used/outreach-nudge-d4.html` | Day 4 (96 hrs after welcome) | Pranav |
-
-**Exit rules:**
-- If `tool_used` event fires at any point → immediately exit Branch A, enter Branch B
-- After d4 with no `tool_used` → trigger entry into **Career Coach Flow** (separate standalone flow; week-1 non-use is the backdoor entry point)
+| Variable | Meaning |
+|----------|---------|
+| `{{.UserName}}` | Student's first name (falls back to "there") |
+| `{{.CouponCode}}` | Discount code, set at send time |
+| `{{.UnsubscribeURL}}` | Signed one-click unsubscribe link |
 
 ---
 
-### Branch B — User HAS used the Outreach tool
+## 1 — Outreach Dojo · NOT used  `event.cc.welcome_new_user`
 
-**Entry condition**: `tool_used` event fires (at any point — during Branch A or directly)
+| Step | Template | Delay | Subject |
+|---|---|---|---|
+| instant | `cc-welcome-new-user` | 0 | You're in the top 3%. Here's how we know. |
+| +7h | `cc-outreach-nudge-d1` | 7h | Did you get a chance to try Outreach Dojo? |
+| +31h | `cc-outreach-nudge-d2` | 31h | What one student got after using Outreach Dojo |
+| +63h | `cc-outreach-nudge-d3` | 63h | Here's exactly how to get started |
+| +96h | `cc-outreach-nudge-d4` | 96h (day 4) | The number that changes everything |
 
-#### Phase 1 — High intent push (0–50 hrs from `tool_used`)
+- **Catch-up**: if a user is 7h+ past signup with no `d1`, the scheduler queues it (covers downtime).
+- **Exit**: `event.cc.outreach_used` cancels every pending `cc_outreach_nudge*` and enters the USED flow.
 
-| # | Template | Delay from `tool_used` | Sender |
-|---|----------|------------------------|--------|
-| 1 | `templates/outreach/used/outreach-used-push1.html` | ~4 hrs | Jeremy |
-| 2 | `templates/outreach/used/outreach-used-push2.html` | ~24 hrs | Jeremy |
-| 3 | `templates/outreach/used/outreach-used-push3.html` | ~50 hrs | Jeremy |
+## 2 — Outreach Dojo · USED  `event.cc.outreach_used`
 
-#### Phase 2 — Conversion gap (50–100 hrs from `tool_used`)
+| Step | Template | Delay from trigger | Subject |
+|---|---|---|---|
+| instant | `cc-outreach-push1` | 0 | You started. Here's what happens next |
+| +24h | `cc-outreach-push2` | 24h | Students who finished this got real replies |
+| +50h | `cc-outreach-push3` | 50h | You're one step away |
+| +60h | `cc-outreach-convert1` | 60h | Here's what you actually get |
+| +75h | `cc-outreach-convert2` | 75h | After you sign up. Here's exactly what happens |
 
-| # | Template | Delay from `tool_used` | Sender |
-|---|----------|------------------------|--------|
-| 4 | `templates/outreach/used/outreach-used-convert1.html` | ~60 hrs | Jeremy |
-| 5 | `templates/outreach/used/outreach-used-convert2.html` | ~75 hrs | Jeremy |
+## 3 — Abandoned checkout  `event.cc.outreach_payment_page` (deferred — nothing sends instantly)
 
-#### Phase 3 — Payment page triggered
+| Step | Template | Delay | Subject |
+|---|---|---|---|
+| +2h | `cc-outreach-payment-page` | 2h buffer | You were right there |
+| +6h | `cc-outreach-coupon` | 6h | Something from me, Jeremy |
 
-**Entry condition**: `payment_page_viewed` event fires (at any point during Branch B)
+- A payment inside the buffer drains these (paid suppression), so a payer never gets "you were right there".
+- `event.cc.outreach_coupon` can also fire standalone to send the founder coupon immediately.
 
-When `payment_page_viewed` fires:
-1. **Pause** current Phase 1 or Phase 2 sequence
-2. Send `templates/outreach/used/outreach-payment-page.html` immediately — Jeremy
-3. Wait a few hours
-4. Send `templates/outreach/used/outreach-used-coupon.txt` — Jeremy (plain text, no HTML)
+## 4 — Career Coach · not started  `event.cc.welcome`
 
-**Global exit rule**: If `payment_completed` event fires at any point → stop all emails immediately.
+| Step | Template | Delay | Subject |
+|---|---|---|---|
+| instant | `cc-welcome` | 0 | You asked for an honest look. Good. |
+| +8h | `cc-nudge-1` | 8h | Did you get started? |
+| +32h | `cc-nudge-2` | 32h | What the coach actually tells you |
+| +56h | `cc-nudge-3` | 56h | What changed when she finally started |
 
----
+## 5 — Post-DNA  `event.cc.dna_ready`
 
-## Events to Track (for future integration)
+| Step | Template | Delay | Subject |
+|---|---|---|---|
+| instant | `cc-dna-ready` | 0 | Your career analysis is ready |
+| +2d | `cc-dna-confirm-nudge` | 2d | Your analysis needs your confirmation |
+| +4d | `cc-checkin-1` | 4d | One action. This week. |
+| +7d | `cc-checkin-2` | 7d | What students who act do differently |
+| +10d | `cc-checkin-3` | 10d | Have you marked anything complete yet? |
 
-| Event | When it fires |
-|-------|---------------|
-| `signup` | User creates account |
-| `tool_used` | User interacts with the Outreach Dojo tool |
-| `payment_page_viewed` | User lands on the payment/checkout page |
-| `payment_completed` | User successfully pays |
+## 6 — Roadmap  `event.cc.roadmap_delivered`
 
----
+| Step | Template | Delay | Subject |
+|---|---|---|---|
+| instant | `cc-roadmap-delivered` | 0 | You have your roadmap. Here is how to use it. |
+| +7d | `cc-upskill-nudge` | 7d | The coach gets sharper every time you use it |
+| +9d | `cc-coupon-unlock` | 9d | Log your progress and unlock something |
+| +11d | `cc-dormant` | 11d | Most students stop here |
+| +14d | `cc-to-outreach` | 14d | You know where you stand. Here is what to do with it. |
 
-## Parked Flows (build later)
+## 7 — Resume Maker  `event.cc.resume_strong` / `event.cc.resume_weak`
 
-- Career Coach Flow — own complete standalone flow; also backdoor entry after outreach week-1 non-use
-- Internship Dojo Flow
-- Resume Maker Flow
-- AI Risk Flow
-- Reports Flow
-- "Used outreach but switched to another tool" flow
-- Returning / old user re-engagement flows
+**Strong** → `cc-rm-strong-1` (instant) · `cc-rm-strong-2` (+2d) · `cc-rm-strong-3` (+3d)
+**Weak** → `cc-rm-weak-1` (instant) · `cc-rm-weak-2` (+2d) · `cc-rm-weak-3` (+3d)
+
+## 8 — Internship Dojo  `event.cc.id_two_tools`
+
+`cc-id-two-tools` (instant) · `cc-id-reengage-1` (+3d) · `cc-id-reengage-2` (+7d)
+
+## 9 — Old / dormant users  `event.cc.old_s1` / `s2` / `s3` (spread-scheduled)
+
+Big dormant batches cascade under a per-day cap (`EMAIL_OLDUSER_PER_DAY`, default 100) so new-user mail is never starved. First email lands at the next free slot; the rest chain off it.
+
+- **S1**: `cc-old-s1-1` (slot) · `cc-old-s1-2` (+5d) · `cc-old-s1-3` (+9d)
+- **S2**: `cc-old-s2-1` (slot) · `cc-old-s2-2` (+6d) · `cc-old-s2-3` (+9d)
+- **S3**: `cc-old-s3-1` (slot) · `cc-old-s3-2` (+7d) · `cc-old-s3-3` (+14d)
+- CTA blocks `cc-old-cta-outreach` / `-coach` / `-two-tool` are swapped into the S1/S2 closers.
+
+## Coach-backend driven (not orchestrated here)
+
+`cc-returning-1..3` and `cc-profiling-idle-1..3` templates exist and are sent by the **career-coach backend cron** via `POST /v1/email/send-template`, not by the emailer's event sequences.
+
+## Transactional (never throttled, not marketing)
+
+`welcome` · `payment-thankyou` · `forgot-password` · `password-changed` · `resume-optimized` · `internship-applied` · `contact-form` · `leads-ready` · `checkin-reminder`
+
+## One-shot / ops
+
+`cc-cart-goat` — founder abandoned-cart blast (GOAT10, 10% off), fired manually via `event.cc.cart_goat`. Pinned to the Jeremy sender.
+
+## Global exit rule
+
+`event.payment.success` / `event.cc.paid` → cancel all pending `cc_*` marketing for that user.

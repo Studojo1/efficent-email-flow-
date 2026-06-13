@@ -3,1460 +3,235 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Studojo Email Flow Dashboard</title>
-  <!-- Studojo frontend fonts (Fontshare), preconnected like the main site -->
+  <title>Studojo Email Flow — Live Blueprint</title>
   <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
   <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700,900&display=swap" />
   <style>
-    /* Exact Studojo frontend font stack: Clash Display (headings) + Satoshi (body). */
-    @import url('https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700,900&display=swap');
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Satoshi', sans-serif;
-      font-weight: 500;
-      background-color: #f5f4f0;
-      color: #19191a;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      -webkit-font-smoothing: antialiased;
+    :root{
+      --purple:#7c3aed; --purple-soft:#f3f0ff; --ink:#171717; --muted:#6b6b6b;
+      --line:#e7e5e4; --bg:#faf9f7; --card:#ffffff;
+      --green:#16a34a; --amber:#d97706; --blue:#2563eb; --rose:#e11d48;
     }
-
-    .clash { font-family: 'Clash Display', sans-serif; }
-
-    /* ── SIDEBAR ── */
-    #sidebar {
-      width: 260px;
-      flex-shrink: 0;
-      height: 100vh;
-      background: #fff;
-      border-right: 2px solid #19191a;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .sidebar-logo {
-      padding: 20px 20px 16px;
-      border-bottom: 2px solid #19191a;
-      flex-shrink: 0;
-    }
-    .sidebar-logo-name {
-      font-family: 'Clash Display', sans-serif;
-      font-size: 20px; font-weight: 800; letter-spacing: -0.5px;
-    }
-    .sidebar-logo-sub { font-size: 11px; color: #999; margin-top: 3px; font-weight: 500; letter-spacing: 0.2px; }
-
-    .sidebar-scroll { flex: 1; overflow-y: auto; padding-bottom: 12px; }
-    .sidebar-scroll::-webkit-scrollbar { width: 3px; }
-    .sidebar-scroll::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 2px; }
-
-    /* Accordion group button */
-    .nav-group-btn {
-      display: flex; align-items: center; gap: 10px;
-      padding: 11px 14px; margin: 6px 8px 2px;
-      border-radius: 12px; cursor: pointer;
-      font-family: 'Clash Display', sans-serif;
-      font-size: 13px; font-weight: 700; color: #19191a;
-      border: 2px solid #19191a;
-      background: #fff;
-      box-shadow: 3px 3px 0 rgba(25,26,35,1);
-      transition: transform 0.1s, box-shadow 0.1s;
-      user-select: none;
-    }
-    .nav-group-btn:hover { transform: translate(1px,1px); box-shadow: 2px 2px 0 rgba(25,26,35,1); }
-    .nav-group-btn.open { background: #19191a; color: #fff; }
-    .nav-group-btn.open:hover { transform: translate(1px,1px); box-shadow: 2px 2px 0 rgba(25,26,35,1); }
-    .nav-group-btn .group-label { flex: 1; }
-    .nav-group-btn .group-count {
-      font-size: 10px; font-weight: 700; padding: 2px 8px;
-      border-radius: 100px; background: #f5f4f0; color: #888;
-      border: 1.5px solid #ddd;
-    }
-    .nav-group-btn.open .group-count { background: rgba(255,255,255,0.15); color: #fff; border-color: rgba(255,255,255,0.3); }
-    .nav-group-btn .chevron { font-size: 10px; opacity: 0.6; transition: transform 0.2s; }
-    .nav-group-btn.open .chevron { transform: rotate(180deg); }
-
-    /* Accordion body */
-    .nav-group-body { overflow: hidden; max-height: 0; transition: max-height 0.25s ease; }
-    .nav-group-body.open { max-height: 2000px; }
-
-    /* Sub-section label inside accordion */
-    .nav-section {
-      font-family: 'Clash Display', sans-serif;
-      font-size: 9px; font-weight: 700; letter-spacing: 2px;
-      text-transform: uppercase; color: #bbb;
-      padding: 12px 16px 4px;
-    }
-
-    .nav-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 8px 12px; margin: 1px 8px;
-      border-radius: 10px; cursor: pointer;
-      font-size: 13px; font-weight: 500; color: #555;
-      border: 2px solid transparent;
-      transition: all 0.1s;
-    }
-    .nav-item:hover { background: #f3f0ff; color: #7c3aed; border-color: #7c3aed; }
-    .nav-item.active {
-      background: #7c3aed; color: #fff;
-      border-color: #19191a;
-      box-shadow: 2px 2px 0 rgba(25,26,35,1);
-      font-weight: 700;
-    }
-    .nav-item.active:hover { transform: translate(1px,1px); box-shadow: 1px 1px 0 rgba(25,26,35,1); }
-
-    .nav-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: #19191a; flex-shrink: 0;
-    }
-    .nav-dot.purple { background: #7c3aed; }
-    .nav-dot.amber  { background: #f59e0b; }
-    .nav-dot.green  { background: #10b981; }
-    .nav-item.active .nav-dot { background: #fff; }
-
-    .nav-num {
-      width: 18px; height: 18px; border-radius: 50%;
-      background: #e5e5e5; color: #555;
-      font-family: 'Clash Display', sans-serif;
-      font-size: 10px; font-weight: 700;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .nav-item.active .nav-num { background: rgba(255,255,255,0.25); color: #fff; }
-
-    .nav-label { flex: 1; }
-    .nav-chip {
-      font-size: 9px; font-weight: 700; padding: 2px 7px;
-      border-radius: 100px; border: 1.5px solid currentColor;
-      white-space: nowrap; opacity: 0.85;
-    }
-
-    .sidebar-foot {
-      border-top: 2px solid #19191a; padding: 14px 16px;
-      font-size: 11px; color: #999; flex-shrink: 0;
-    }
-    .sidebar-foot strong { display: block; color: #19191a; font-size: 12px; margin-bottom: 2px; font-weight: 700; }
-
-    /* ── MAIN ── */
-    #main { flex: 1; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-
-    /* ── FLOW MAP ── */
-    #flow-pane-outreach, #flow-pane-cc { flex: 1; overflow: auto; padding: 40px 48px 60px; background: #f5f4f0; }
-
-    .flow-header { margin-bottom: 36px; }
-    .flow-tag {
-      display: inline-flex; align-items: center;
-      font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
-      padding: 4px 12px; border-radius: 100px;
-      border: 2px solid #19191a; background: #fff; color: #19191a;
-      margin-bottom: 14px;
-    }
-    .flow-title { font-family: 'Clash Display', sans-serif; font-size: 34px; font-weight: 800; line-height: 1.1; margin-bottom: 8px; }
-    .flow-sub { font-size: 13px; color: #888; }
-
-    /* ── WORKFLOW (vertical, top-to-bottom) ── */
-    .wf { max-width: 1000px; margin: 0 auto; }
-    .wf.wide { max-width: 1320px; }
-
-    /* A single node, centered, with optional delay chip below */
-    .wf-node {
-      display: inline-flex; flex-direction: column; align-items: stretch;
-      cursor: pointer; vertical-align: top;
-    }
-    .wf-node-box {
-      background: #fff; border: 2px solid #19191a; border-radius: 12px;
-      padding: 12px 16px; box-shadow: 3px 3px 0 rgba(25,26,35,1);
-      min-width: 150px; text-align: left;
-      transition: transform 0.1s, box-shadow 0.1s;
-      display: flex; align-items: center; gap: 11px;
-    }
-    .wf-node:hover .wf-node-box {
-      transform: translate(1px,1px); box-shadow: 2px 2px 0 rgba(25,26,35,1);
-      border-color: #7c3aed;
-    }
-    .wf-node-box.start     { background: #19191a; color: #fff; border-color: #19191a; }
-    .wf-node-box.universal { background: #7c3aed; color: #fff; border-color: #19191a; }
-    .wf-node-box.soft-purple { background: #f3f0ff; border-color: #7c3aed; }
-    .wf-node-box.amber   { background: #fffbeb; border-color: #f59e0b; }
-    .wf-node-box.green   { background: #f0fdf4; border-color: #10b981; }
-    .wf-node-box.ghost   { background: #fff; border: 2px dashed #ccc; box-shadow: none; cursor: default; }
-    .wf-node-box.ghost:hover { transform: none; box-shadow: none; border-color: #ccc; }
-
-    /* node index badge */
-    .wf-badge {
-      flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Clash Display', sans-serif; font-size: 11px; font-weight: 700;
-      background: #19191a; color: #fff;
-    }
-    .wf-node-box.universal .wf-badge { background: #fff; color: #7c3aed; }
-    .wf-node-box.soft-purple .wf-badge { background: #7c3aed; color: #fff; }
-    .wf-node-box.amber .wf-badge { background: #f59e0b; color: #fff; }
-    .wf-node-box.green .wf-badge { background: #10b981; color: #fff; }
-    .wf-badge.outline { background: #fff; color: #19191a; border: 2px solid #19191a; }
-
-    .wf-node-text { flex: 1; min-width: 0; }
-    .wf-node-title { font-family: 'Clash Display', sans-serif; font-size: 13px; font-weight: 700; line-height: 1.25; }
-    .wf-node-sub { font-size: 10px; color: #888; margin-top: 2px; line-height: 1.3; }
-    .wf-node-box.universal .wf-node-sub { color: #e0d4ff; }
-    .wf-node-box.start .wf-node-sub { color: #888; }
-    .wf-node-box.soft-purple .wf-node-sub { color: #7c3aed; }
-
-    .wf-delay {
-      font-size: 9px; font-weight: 700; white-space: nowrap;
-      padding: 2px 8px; border-radius: 100px; flex-shrink: 0;
-      border: 1.5px solid #ddd; background: #f5f4f0; color: #888;
-    }
-    .wf-delay.purple { background: #f3f0ff; border-color: #7c3aed; color: #7c3aed; }
-    .wf-delay.amber  { background: #fffbeb; border-color: #f59e0b; color: #92400e; }
-    .wf-delay.green  { background: #f0fdf4; border-color: #10b981; color: #065f46; }
-
-    /* Vertical connector with a downward arrowhead, always centered */
-    .wf-down {
-      width: 0; height: 26px; margin: 0 auto;
-      border-left: 2px solid #19191a; position: relative;
-    }
-    .wf-down::after {
-      content: ''; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%);
-      border-left: 5px solid transparent; border-right: 5px solid transparent;
-      border-top: 7px solid #19191a;
-    }
-    .wf-down.purple { border-color: #7c3aed; }
-    .wf-down.purple::after { border-top-color: #7c3aed; }
-    .wf-down.amber { border-color: #f59e0b; }
-    .wf-down.amber::after { border-top-color: #f59e0b; }
-    .wf-down.green { border-color: #10b981; }
-    .wf-down.green::after { border-top-color: #10b981; }
-    .wf-down.dashed { border-left-style: dashed; }
-    .wf-down.tall { height: 34px; }
-    .wf-down.short { height: 16px; }
-
-    /* A centered single node row */
-    .wf-center { display: flex; justify-content: center; }
-
-    /* Decision diamond */
-    .wf-diamond {
-      width: 92px; height: 92px; margin: 0 auto; background: #19191a;
-      transform: rotate(45deg); border-radius: 8px;
-      border: 2px solid #19191a; box-shadow: 3px 3px 0 rgba(25,26,35,1);
-      display: flex; align-items: center; justify-content: center;
-    }
-    .wf-diamond-inner {
-      transform: rotate(-45deg); text-align: center;
-      font-family: 'Clash Display', sans-serif;
-      font-size: 10px; font-weight: 700; line-height: 1.3; color: #fff;
-    }
-
-    /* Two-column branch container */
-    .wf-branches { display: flex; gap: 28px; align-items: flex-start; }
-    .wf-branch { flex: 1; min-width: 0; }
-
-    /* Branch header pill with YES/NO label */
-    .wf-branch-head {
-      display: flex; flex-direction: column; align-items: center; margin-bottom: 6px;
-    }
-    .wf-branch-label {
-      font-family: 'Clash Display', sans-serif; font-size: 11px; font-weight: 700;
-      padding: 7px 16px; border-radius: 100px; border: 2px solid #19191a;
-      box-shadow: 2px 2px 0 rgba(25,26,35,1); white-space: nowrap; text-align: center;
-    }
-    .wf-edge-label {
-      font-size: 10px; font-weight: 700; color: #888; letter-spacing: 0.5px;
-      text-transform: uppercase; margin-bottom: 4px;
-    }
-
-    /* Router bar: one input fanning to many lanes (use instead of a diamond for 3+ way splits) */
-    .wf-router {
-      background: #19191a; color: #fff; border: 2px solid #19191a; border-radius: 100px;
-      box-shadow: 3px 3px 0 rgba(25,26,35,1);
-      padding: 10px 22px; margin: 0 auto; width: fit-content; text-align: center;
-      font-family: 'Clash Display', sans-serif; font-size: 12px; font-weight: 700;
-      letter-spacing: 0.3px;
-    }
-    .wf-router-sub { font-size: 10px; font-weight: 500; color: #aaa; margin-top: 2px; letter-spacing: 0; }
-
-    /* Responsive segment grid (for multi-way routers like old-users) */
-    .wf-grid {
-      display: grid; gap: 16px; margin-top: 4px;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-    }
-    @media (max-width: 1280px) { .wf-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-    @media (max-width: 860px)  { .wf-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-    @media (max-width: 600px)  { .wf-grid { grid-template-columns: 1fr; } }
-    .wf-lane { display: flex; flex-direction: column; align-items: stretch; min-width: 0; }
-    /* tighten node boxes inside the grid so 5 fit across */
-    .wf-grid .wf-node-box { min-width: 0; padding: 11px 12px; gap: 8px; }
-    .wf-grid .wf-node-title { font-size: 12px; }
-    .wf-grid .wf-node-sub { font-size: 9px; }
-    .wf-grid .wf-badge { width: 22px; height: 22px; font-size: 10px; }
-    .wf-grid .wf-delay { font-size: 8px; padding: 2px 6px; }
-    .wf-grid .wf-branch-label { font-size: 10px; padding: 6px 12px; }
-
-    /* Phase / section pill inside a branch */
-    .wf-phase {
-      display: block; width: fit-content; margin: 0 auto;
-      font-family: 'Clash Display', sans-serif; font-size: 9px; font-weight: 700;
-      letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 14px;
-      border-radius: 100px; white-space: nowrap; text-align: center;
-    }
-    .wf-phase.purple { background: #7c3aed; color: #fff; border: 1.5px solid #19191a; }
-    .wf-phase.amber  { background: #fffbeb; color: #92400e; border: 1.5px solid #f59e0b; }
-    .wf-phase.green  { background: #f0fdf4; color: #065f46; border: 1.5px solid #10b981; }
-    .wf-phase.gray   { background: #f5f4f0; color: #777; border: 1.5px solid #ccc; }
-
-    /* Stack: each child separated by a connector via margin */
-    .wf-stack > .wf-node, .wf-stack > .wf-center { display: flex; justify-content: center; }
-    .wf-stack > .wf-node { width: 100%; }
-    .wf-stack > .wf-node > .wf-node-box { width: 100%; }
-
-    /* ── PREVIEW ── */
-    #preview-pane { flex: 1; display: none; flex-direction: column; height: 100vh; overflow: hidden; }
-
-    .preview-bar {
-      background: #fff; border-bottom: 2px solid #19191a;
-      padding: 12px 20px; display: flex; align-items: center; gap: 14px; flex-shrink: 0;
-    }
-    .back-btn {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-family: 'Clash Display', sans-serif; font-weight: 700; font-size: 12px;
-      padding: 7px 14px; border-radius: 10px;
-      border: 2px solid #19191a; background: #fff; color: #19191a;
-      box-shadow: 2px 2px 0 rgba(25,26,35,1); cursor: pointer;
-      transition: all 0.1s;
-    }
-    .back-btn:hover { transform: translate(1px,1px); box-shadow: 1px 1px 0 rgba(25,26,35,1); }
-
-    .preview-title { font-family: 'Clash Display', sans-serif; font-size: 15px; font-weight: 700; }
-    .preview-meta  { font-size: 11px; color: #999; margin-top: 2px; }
-
-    .ptag {
-      font-size: 9px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
-      padding: 3px 10px; border-radius: 100px; border: 1.5px solid currentColor;
-    }
-
-    /* Email client chrome */
-    .email-client-wrap {
-      flex: 1; overflow-y: auto; background: #f5f4f0;
-      padding: 32px; display: flex; justify-content: center;
-    }
-    .email-client {
-      width: 600px; flex-shrink: 0;
-      background: #fff; border: 2px solid #19191a; border-radius: 14px;
-      box-shadow: 4px 4px 0 rgba(25,26,35,1); overflow: hidden;
-    }
-    .email-chrome {
-      background: #fafafa; border-bottom: 1px solid #e5e5e5; padding: 14px 20px;
-    }
-    .email-chrome-row {
-      display: flex; gap: 10px; font-size: 12px; margin-bottom: 6px; color: #555;
-    }
-    .email-chrome-row:last-child { margin-bottom: 0; }
-    .email-chrome-label { font-weight: 700; color: #19191a; width: 52px; flex-shrink: 0; }
-    .email-subject-row {
-      border-top: 1px solid #e5e5e5; padding: 13px 20px;
-      font-size: 14px; font-weight: 700; color: #19191a; background: #fff;
-    }
-    #preview-frame {
-      width: 600px; display: block; border: none; background: #fff; min-height: 400px;
-    }
-
-    /* Plain text */
-    .txt-client-wrap {
-      flex: 1; overflow-y: auto; background: #f5f4f0;
-      padding: 32px; display: flex; justify-content: center;
-    }
-    .txt-client {
-      width: 600px; flex-shrink: 0;
-      background: #fff; border: 2px solid #19191a; border-radius: 14px;
-      box-shadow: 4px 4px 0 rgba(25,26,35,1); overflow: hidden;
-    }
-    .txt-body {
-      font-family: 'Courier New', monospace; font-size: 13px;
-      line-height: 1.9; color: #333; padding: 28px 32px; white-space: pre-wrap;
-    }
+    body{ font-family:'Satoshi',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--bg); color:var(--ink); line-height:1.5; }
+    h1,h2,h3,.brand{ font-family:'Clash Display',sans-serif; letter-spacing:-.02em; }
+    a{ color:inherit; }
+    /* Header */
+    header{ background:var(--purple); color:#fff; padding:28px 40px 24px; }
+    .brand{ font-size:24px; font-weight:700; }
+    header p{ color:#e9e3ff; font-size:14px; margin-top:6px; max-width:760px; }
+    .meta{ margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; }
+    .meta span{ background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.25); padding:4px 10px; border-radius:999px; font-size:12px; font-weight:600; }
+    /* Sticky nav */
+    nav{ position:sticky; top:0; z-index:10; background:rgba(255,255,255,.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); padding:10px 40px; display:flex; gap:6px; flex-wrap:wrap; }
+    nav a{ font-size:12.5px; font-weight:600; color:var(--muted); text-decoration:none; padding:5px 11px; border-radius:999px; border:1px solid transparent; white-space:nowrap; }
+    nav a:hover{ color:var(--purple); background:var(--purple-soft); }
+    /* Rules strip */
+    .rules{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px; padding:24px 40px; }
+    .rule{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 16px; }
+    .rule b{ display:block; font-size:13px; margin-bottom:3px; }
+    .rule small{ color:var(--muted); font-size:12.5px; }
+    /* Flow section */
+    main{ padding:8px 40px 80px; max-width:1500px; }
+    .flow{ margin-top:30px; scroll-margin-top:64px; }
+    .flow-head{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:4px; }
+    .flow-num{ width:30px; height:30px; flex:0 0 auto; border-radius:9px; background:var(--purple); color:#fff; font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center; }
+    .flow h2{ font-size:20px; font-weight:600; }
+    .trigger{ font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px; background:#111; color:#7CFFB2; padding:4px 9px; border-radius:7px; }
+    .kind{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; padding:3px 8px; border-radius:999px; }
+    .kind.instant{ background:#dcfce7; color:var(--green); }
+    .kind.deferred{ background:#fef3c7; color:var(--amber); }
+    .kind.spread{ background:#dbeafe; color:var(--blue); }
+    .kind.coach{ background:#ede9fe; color:var(--purple); }
+    .kind.tx{ background:#f1f5f9; color:#475569; }
+    .note{ font-size:13px; color:var(--muted); margin:6px 0 14px; }
+    .note code{ font-family:ui-monospace,monospace; font-size:12px; background:#fff; border:1px solid var(--line); padding:1px 5px; border-radius:5px; }
+    .exit{ font-size:12.5px; color:var(--rose); font-weight:600; margin-top:10px; display:flex; align-items:center; gap:6px; }
+    /* Sequence of cards */
+    .seq{ display:flex; align-items:stretch; gap:0; overflow-x:auto; padding:4px 2px 10px; }
+    .card{ flex:0 0 218px; background:var(--card); border:1px solid var(--line); border-radius:13px; padding:13px 14px; position:relative; }
+    .card.first{ border-color:var(--purple); box-shadow:0 0 0 1px var(--purple); }
+    .arrow{ flex:0 0 30px; align-self:center; text-align:center; color:#cbcbcb; font-size:18px; }
+    .pill{ display:inline-block; font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px; background:var(--purple-soft); color:var(--purple); margin-bottom:8px; }
+    .pill.zero{ background:#dcfce7; color:var(--green); }
+    .subject{ font-size:13.5px; font-weight:600; line-height:1.35; }
+    .tmpl{ margin-top:8px; font-family:ui-monospace,monospace; font-size:11px; color:var(--muted); word-break:break-all; }
+    .twolane{ display:flex; flex-direction:column; gap:14px; }
+    .lane-label{ font-size:12px; font-weight:700; color:var(--muted); margin-bottom:6px; }
+    footer{ padding:30px 40px; border-top:1px solid var(--line); color:var(--muted); font-size:12.5px; }
+    @media(max-width:640px){ header,nav,.rules,main,footer{ padding-left:18px; padding-right:18px; } }
   </style>
 </head>
 <body>
-
-<!-- ══════════════ SIDEBAR ══════════════ -->
-<div id="sidebar">
-  <div class="sidebar-logo">
-    <div class="sidebar-logo-name clash">Studojo</div>
-    <div class="sidebar-logo-sub">Email Flows · Blueprint</div>
-  </div>
-
-  <div class="sidebar-scroll">
-
-    <!-- ── OUTREACH DOJO GROUP ── -->
-    <div class="nav-group-btn open" id="btn-outreach" onclick="toggleGroup('outreach')">
-      <div class="nav-dot purple" style="background:#7c3aed;"></div>
-      <span class="group-label">Outreach Dojo</span>
-      <span class="group-count">13</span>
-      <span class="chevron">▼</span>
+  <header>
+    <div class="brand">Studojo · Email Flow</div>
+    <p>The live blueprint of every automated email — exactly as wired in <b>emailer-service</b> today. Each card is one email: when it fires and which template renders. Source of truth: <code style="color:#fff">events.go</code> · <code style="color:#fff">scheduler.go</code>.</p>
+    <div class="meta">
+      <span id="updated">Updated —</span>
+      <span>9 sequences · 50+ templates</span>
+      <span>dedup + opt-out + paid-suppression enforced</span>
+      <span>rate-limited 80/hr</span>
     </div>
-    <div class="nav-group-body open" id="body-outreach">
-
-      <div class="nav-item" id="nav-outreach-flow" onclick="showFlow('outreach', this)">
-        <div class="nav-dot purple"></div>
-        <span class="nav-label">Flow Map</span>
-      </div>
-
-      <div class="nav-section">Universal</div>
-      <div class="nav-item" onclick="load(this,'templates/welcome-new-user.html','Welcome: New User','welcome','Within 1 min of signup','Pranav','You\'re in the top 3%. Here\'s how we know.')">
-        <div class="nav-dot purple"></div>
-        <span class="nav-label">Welcome</span>
-        <span class="nav-chip" style="color:#7c3aed;">HTML</span>
-      </div>
-
-      <div class="nav-section">Not Used</div>
-      <div class="nav-item" onclick="load(this,'templates/outreach/not-used/outreach-nudge-d1.html','Nudge D1: Did you try it?','not-used','7 hrs after welcome','Pranav','Did you get a chance to try Outreach Dojo?')">
-        <div class="nav-num">1</div>
-        <span class="nav-label">Nudge D1</span>
-        <span class="nav-chip" style="color:#888;">7 hrs</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/outreach/not-used/outreach-nudge-d2.html','Nudge D2: Testimonial','not-used','+24 hrs after D1','Pranav','What one student got after using Outreach Dojo')">
-        <div class="nav-num">2</div>
-        <span class="nav-label">Nudge D2</span>
-        <span class="nav-chip" style="color:#888;">+24 hrs</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/outreach/not-used/outreach-nudge-d3.html','Nudge D3: How to start','not-used','+32 hrs after D2','Pranav','Here\'s exactly how to get started')">
-        <div class="nav-num">3</div>
-        <span class="nav-label">Nudge D3</span>
-        <span class="nav-chip" style="color:#888;">+32 hrs</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/outreach/not-used/outreach-nudge-d4.html','Nudge D4: End metric','not-used','Day 4','Pranav','The number that changes everything')">
-        <div class="nav-num">4</div>
-        <span class="nav-label">Nudge D4</span>
-        <span class="nav-chip" style="color:#888;">Day 4</span>
-      </div>
-
-      <div class="nav-section">High Intent</div>
-      <div class="nav-item" onclick="load(this,'templates/outreach/used/outreach-used-push1.html','Push 1: Momentum','used','~4 hrs after tool use','Jeremy','You started. Here\'s what happens next')">
-        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">1</div>
-        <span class="nav-label">Push 1</span>
-        <span class="nav-chip" style="color:#7c3aed;">~4 hrs</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/outreach/used/outreach-used-push2.html','Push 2: Social Proof','used','~24 hrs','Jeremy','Students who finished this got real replies')">
-        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">2</div>
-        <span class="nav-label">Push 2</span>
-        <span class="nav-chip" style="color:#7c3aed;">~24 hrs</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/outreach/used/outreach-used-push3.html','Push 3: Final','used','~50 hrs','Jeremy','You are one step from being on the right side of that')">
-        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">3</div>
-        <span class="nav-label">Push 3</span>
-        <span class="nav-chip" style="color:#7c3aed;">~50 hrs</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/outreach/used/outreach-used-convert1.html','Convert 1: Objection Handling','used','~60 hrs','Jeremy','Here\'s what you actually get')">
-        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">4</div>
-        <span class="nav-label">Convert 1</span>
-        <span class="nav-chip" style="color:#7c3aed;">~60 hrs</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/outreach/used/outreach-used-convert2.html','Convert 2: Post-purchase','used','~75 hrs','Jeremy','After you sign up. Here\'s exactly what happens')">
-        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">5</div>
-        <span class="nav-label">Convert 2</span>
-        <span class="nav-chip" style="color:#7c3aed;">~75 hrs</span>
-      </div>
-
-      <div class="nav-section">Payment</div>
-      <div class="nav-item" onclick="load(this,'templates/outreach/used/outreach-payment-page.html','Payment Page: Abandoned checkout','payment','On payment_page_viewed event','Jeremy','You were right there')">
-        <div class="nav-dot amber"></div>
-        <span class="nav-label">Payment Page</span>
-        <span class="nav-chip" style="color:#f59e0b;">Trigger</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/outreach/used/outreach-used-coupon.txt','Coupon: Founder Note','payment','A few hrs after payment page','Jeremy','Something from me, Jeremy',true)">
-        <div class="nav-dot green"></div>
-        <span class="nav-label">Coupon Code</span>
-        <span class="nav-chip" style="color:#10b981;">Plain text</span>
-      </div>
-
-    </div>
-
-    <!-- ── CAREER COACH GROUP ── -->
-    <div class="nav-group-btn" id="btn-cc" onclick="toggleGroup('cc')">
-      <div class="nav-dot" style="background:#10b981;"></div>
-      <span class="group-label">Career Coach</span>
-      <span class="group-count">19</span>
-      <span class="chevron">▼</span>
-    </div>
-    <div class="nav-group-body" id="body-cc">
-
-      <div class="nav-item" id="nav-cc-flow" onclick="showFlow('cc', this)">
-        <div class="nav-dot" style="background:#10b981;"></div>
-        <span class="nav-label">Flow Map</span>
-      </div>
-
-      <div class="nav-section">Welcome</div>
-      <div class="nav-item" onclick="load(this,'templates/career-coach/cc-welcome.html','CC: Welcome','cc-welcome','Within 1 min of CC signup','Pranav','You asked for an honest look. Good.')">
-        <div class="nav-dot purple"></div>
-        <span class="nav-label">CC Welcome</span>
-        <span class="nav-chip" style="color:#7c3aed;">HTML</span>
-      </div>
-
-      <div class="nav-section">Not Started</div>
-      <div class="nav-item" onclick="load(this,'templates/career-coach/not-started/cc-nudge-1.html','CC Nudge 1: First conversation','cc-not-started','8 hrs after welcome','Pranav','Did you get started?')">
-        <div class="nav-num">1</div>
-        <span class="nav-label">Nudge 1</span>
-        <span class="nav-chip" style="color:#888;">8 hrs</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/career-coach/not-started/cc-nudge-2.html','CC Nudge 2: What the coach tells you','cc-not-started','+24 hrs','Pranav','What the coach actually tells you')">
-        <div class="nav-num">2</div>
-        <span class="nav-label">Nudge 2</span>
-        <span class="nav-chip" style="color:#888;">+24 hrs</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/career-coach/not-started/cc-nudge-3.html','CC Nudge 3: Testimonial','cc-not-started','+48 hrs','Pranav','What changed when she finally started')">
-        <div class="nav-num">3</div>
-        <span class="nav-label">Nudge 3</span>
-        <span class="nav-chip" style="color:#888;">+48 hrs</span>
-      </div>
-
-      <div class="nav-section">In Progress</div>
-      <div class="nav-item" onclick="load(this,'templates/career-coach/in-progress/cc-profiling-idle-1.html','CC Profiling Idle 1','cc-in-progress','3 days idle in profiling','Pranav','You started. Pick up where you left off.')">
-        <div class="nav-num">1</div>
-        <span class="nav-label">Profiling Idle 1</span>
-        <span class="nav-chip" style="color:#888;">3 days</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/career-coach/in-progress/cc-profiling-idle-2.html','CC Profiling Idle 2','cc-in-progress','+3 days','Pranav','You\'re closer than you think')">
-        <div class="nav-num">2</div>
-        <span class="nav-label">Profiling Idle 2</span>
-        <span class="nav-chip" style="color:#888;">+3 days</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/career-coach/in-progress/cc-profiling-idle-3.html','CC Profiling Idle 3: Testimonial','cc-in-progress','+4 days','Pranav','What Vikram found when he finished')">
-        <div class="nav-num">3</div>
-        <span class="nav-label">Profiling Idle 3</span>
-        <span class="nav-chip" style="color:#888;">+4 days</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/career-coach/in-progress/cc-dna-ready.html','CC: Career Analysis Ready','cc-in-progress','On DNA generation','Pranav','Your career analysis is ready')">
-        <div class="nav-dot green"></div>
-        <span class="nav-label">DNA Ready</span>
-        <span class="nav-chip" style="color:#10b981;">Trigger</span>
-      </div>
-
-      <div class="nav-section">Post DNA</div>
-      <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-dna-confirm-nudge.html','CC: Confirm Your Analysis','cc-post-dna','2 days after DNA, no confirm','Pranav','Your analysis needs your confirmation')">
-        <div class="nav-dot amber"></div>
-        <span class="nav-label">Confirm Nudge</span>
-        <span class="nav-chip" style="color:#f59e0b;">2 days</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-roadmap-delivered.html','CC: Roadmap Delivered','cc-post-dna','On ROADMAP state','Jeremy','You have your roadmap. Here is how to use it.')">
-        <div class="nav-dot purple"></div>
-        <span class="nav-label">Roadmap Delivered</span>
-        <span class="nav-chip" style="color:#7c3aed;">Trigger</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-checkin-1.html','CC Check-in 1: One action','cc-post-dna','Day 3','Pranav','One action. This week.')">
-        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">1</div>
-        <span class="nav-label">Check-in 1</span>
-        <span class="nav-chip" style="color:#7c3aed;">Day 3</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-checkin-2.html','CC Check-in 2: Behavioural insight','cc-post-dna','Day 7','Pranav','What students who act do differently')">
-        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">2</div>
-        <span class="nav-label">Check-in 2</span>
-        <span class="nav-chip" style="color:#7c3aed;">Day 7</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-checkin-3.html','CC Check-in 3: Log progress','cc-post-dna','Day 10','Pranav','Have you marked anything complete yet?')">
-        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">3</div>
-        <span class="nav-label">Check-in 3</span>
-        <span class="nav-chip" style="color:#7c3aed;">Day 10</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-upskill-nudge.html','CC: Upskill Nudge','cc-post-dna','Day 7 after roadmap','Pranav','The coach gets sharper every time you use it')">
-        <div class="nav-dot purple"></div>
-        <span class="nav-label">Upskill Nudge</span>
-        <span class="nav-chip" style="color:#7c3aed;">Day 7</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-coupon-unlock.html','CC: Coupon Unlock','cc-post-dna','Day 9 after roadmap','Jeremy','Log your progress and unlock something')">
-        <div class="nav-dot amber"></div>
-        <span class="nav-label">Coupon Unlock</span>
-        <span class="nav-chip" style="color:#f59e0b;">Gated</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/career-coach/post-dna/cc-dormant.html','CC: Dormant','cc-post-dna','7+ days no activity','Jeremy','Most students stop here')">
-        <div class="nav-dot amber"></div>
-        <span class="nav-label">Dormant</span>
-        <span class="nav-chip" style="color:#f59e0b;">7 days</span>
-      </div>
-
-      <div class="nav-section">Handoff</div>
-      <div class="nav-item" onclick="load(this,'templates/career-coach/handoff/cc-to-outreach.html','CC: Handoff to Outreach','cc-handoff','After dormant or nudge-3','Jeremy','You know where you stand. Here is what to do with it.')">
-        <div class="nav-dot green"></div>
-        <span class="nav-label">Handoff to Outreach</span>
-        <span class="nav-chip" style="color:#10b981;">Final</span>
-      </div>
-
-    <div class="nav-section">Career Coach: Returning</div>
-    <div class="nav-item" onclick="load(this,'templates/career-coach/returning/cc-returning-1.html','CC Returning 1: Nothing lost','cc-returning','14 days cold','Jeremy','Your analysis is still there')">
-      <div class="nav-num">1</div>
-      <span class="nav-label">Returning 1</span>
-      <span class="nav-chip" style="color:#888;">14 days</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/career-coach/returning/cc-returning-2.html','CC Returning 2: The gap closes fast','cc-returning','+5 days','Jeremy','The gap closes fast when you focus')">
-      <div class="nav-num">2</div>
-      <span class="nav-label">Returning 2</span>
-      <span class="nav-chip" style="color:#888;">+5 days</span>
-    </div>
-    <div class="nav-item" onclick="load(this,'templates/career-coach/returning/cc-returning-3.html','CC Returning 3: Two paths','cc-returning','+5 days','Jeremy','The most direct path from here')">
-      <div class="nav-num">3</div>
-      <span class="nav-label">Returning 3</span>
-      <span class="nav-chip" style="color:#888;">+5 days</span>
-    </div>
-
-    </div><!-- end body-cc -->
-
-    <!-- ── RESUME MAKER GROUP ── -->
-    <div class="nav-group-btn" id="btn-resume" onclick="toggleGroup('resume')">
-      <div class="nav-dot" style="background:#10b981;"></div>
-      <span class="group-label">Resume Maker</span>
-      <span class="group-count">6</span>
-      <span class="chevron">▼</span>
-    </div>
-    <div class="nav-group-body" id="body-resume">
-
-      <div class="nav-item" id="nav-resume-flow" onclick="showFlow('resume', this)">
-        <div class="nav-dot" style="background:#10b981;"></div>
-        <span class="nav-label">Flow Map</span>
-      </div>
-
-      <div class="nav-section">Strong Resume → Outreach</div>
-      <div class="nav-item" onclick="load(this,'templates/resume-maker/strong/rm-strong-1.html','RM Strong 1: Next move','rm-strong','1 hr after resume ready','Jeremy','Your resume is strong. Here is the next move.')">
-        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">1</div>
-        <span class="nav-label">Strong 1</span>
-        <span class="nav-chip" style="color:#7c3aed;">1 hr</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/resume-maker/strong/rm-strong-2.html','RM Strong 2: Reply rate + proof','rm-strong','+2 days','Jeremy','What students with strong resumes do next')">
-        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">2</div>
-        <span class="nav-label">Strong 2</span>
-        <span class="nav-chip" style="color:#7c3aed;">+2 days</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/resume-maker/strong/rm-strong-3.html','RM Strong 3: How outreach uses it','rm-strong','+3 days','Jeremy','Your resume is ready. Are you using it?')">
-        <div class="nav-num" style="background:#f3f0ff; color:#7c3aed;">3</div>
-        <span class="nav-label">Strong 3</span>
-        <span class="nav-chip" style="color:#7c3aed;">+3 days</span>
-      </div>
-
-      <div class="nav-section">Weak Resume → Coach</div>
-      <div class="nav-item" onclick="load(this,'templates/resume-maker/weak/rm-weak-1.html','RM Weak 1: Know where you stand','rm-weak','1 hr after resume ready','Pranav','Your resume is a start. Here is what to do next.')">
-        <div class="nav-num">1</div>
-        <span class="nav-label">Weak 1</span>
-        <span class="nav-chip" style="color:#888;">1 hr</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/resume-maker/weak/rm-weak-2.html','RM Weak 2: Wrong roles','rm-weak','+2 days','Pranav','What was actually holding her back')">
-        <div class="nav-num">2</div>
-        <span class="nav-label">Weak 2</span>
-        <span class="nav-chip" style="color:#888;">+2 days</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/resume-maker/weak/rm-weak-3.html','RM Weak 3: Before you apply','rm-weak','+3 days','Pranav','Before you apply, know where you stand')">
-        <div class="nav-num">3</div>
-        <span class="nav-label">Weak 3</span>
-        <span class="nav-chip" style="color:#888;">+3 days</span>
-      </div>
-
-    </div><!-- end body-resume -->
-
-    <!-- ── INTERNSHIP DOJO GROUP ── -->
-    <div class="nav-group-btn" id="btn-internship" onclick="toggleGroup('internship')">
-      <div class="nav-dot amber"></div>
-      <span class="group-label">Internship Dojo</span>
-      <span class="group-count">3</span>
-      <span class="chevron">▼</span>
-    </div>
-    <div class="nav-group-body" id="body-internship">
-
-      <div class="nav-item" id="nav-internship-flow" onclick="showFlow('internship', this)">
-        <div class="nav-dot amber"></div>
-        <span class="nav-label">Flow Map</span>
-      </div>
-
-      <div class="nav-section">Two-Tool Offer</div>
-      <div class="nav-item" onclick="load(this,'templates/internship-dojo/id-two-tools.html','ID: Two-Tool Offer','id-offer','15+ apps, no results','Jeremy','You have been applying. Here are two tools that change the results.')">
-        <div class="nav-dot purple"></div>
-        <span class="nav-label">Two Tools</span>
-        <span class="nav-chip" style="color:#7c3aed;">Trigger</span>
-      </div>
-
-      <div class="nav-section">Re-engagement (no open)</div>
-      <div class="nav-item" onclick="load(this,'templates/internship-dojo/id-reengage-1.html','ID Re-engage 1: The 2% stat','id-reengage','+3 days, no engagement','Jeremy','The reason your applications are not landing')">
-        <div class="nav-num">1</div>
-        <span class="nav-label">Re-engage 1</span>
-        <span class="nav-chip" style="color:#888;">+3 days</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/internship-dojo/id-reengage-2.html','ID Re-engage 2: Rohan story','id-reengage','+4 days','Jeremy','How Rohan went from silence to three interviews')">
-        <div class="nav-num">2</div>
-        <span class="nav-label">Re-engage 2</span>
-        <span class="nav-chip" style="color:#888;">+4 days</span>
-      </div>
-
-    </div><!-- end body-internship -->
-
-    <!-- ── OLD USERS GROUP ── -->
-    <div class="nav-group-btn" id="btn-oldusers" onclick="toggleGroup('oldusers')">
-      <div class="nav-dot amber"></div>
-      <span class="group-label">Old Users</span>
-      <span class="group-count">12</span>
-      <span class="chevron">▼</span>
-    </div>
-    <div class="nav-group-body" id="body-oldusers">
-
-      <div class="nav-item" id="nav-oldusers-flow" onclick="showFlow('oldusers', this)">
-        <div class="nav-dot amber"></div>
-        <span class="nav-label">Flow Map</span>
-      </div>
-
-      <div class="nav-section">S1 · Nearly converted</div>
-      <div class="nav-item" onclick="load(this,'templates/old-users/s1-nearly/old-s1-1.html','S1-1: You were nearly there','old-s1','Day 0','Jeremy','You were nearly there')">
-        <div class="nav-num" style="background:#f0fdf4; color:#065f46;">1</div><span class="nav-label">Nearly there</span><span class="nav-chip" style="color:#888;">Day 0</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/old-users/s1-nearly/old-s1-2.html','S1-2: What finishing looks like','old-s1','+5 days','Jeremy','What finishing actually looks like')">
-        <div class="nav-num" style="background:#f0fdf4; color:#065f46;">2</div><span class="nav-label">Finishing it</span><span class="nav-chip" style="color:#888;">+5 days</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/old-users/s1-nearly/old-s1-3.html','S1-3: The close','old-s1','+9 days','Jeremy','The last step is the easy one')">
-        <div class="nav-num" style="background:#f0fdf4; color:#065f46;">3</div><span class="nav-label">The close</span><span class="nav-chip" style="color:#10b981;">CTA swap</span>
-      </div>
-
-      <div class="nav-section">S2 · Engaged</div>
-      <div class="nav-item" onclick="load(this,'templates/old-users/s2-engaged/old-s2-1.html','S2-1: Real work, then stalled','old-s2','Day 0','Pranav','You got real work done, then it stalled')">
-        <div class="nav-num">1</div><span class="nav-label">Stalled</span><span class="nav-chip" style="color:#888;">Day 0</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/old-users/s2-engaged/old-s2-2.html','S2-2: What restarting takes','old-s2','+6 days','Pranav','What picking back up actually takes')">
-        <div class="nav-num">2</div><span class="nav-label">Restarting</span><span class="nav-chip" style="color:#888;">+6 days</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/old-users/s2-engaged/old-s2-3.html','S2-3: One step','old-s2','+9 days','Jeremy','The one step to restart')">
-        <div class="nav-num">3</div><span class="nav-label">One step</span><span class="nav-chip" style="color:#10b981;">CTA swap</span>
-      </div>
-
-      <div class="nav-section">S3 · Barely started</div>
-      <div class="nav-item" onclick="load(this,'templates/old-users/s3-barely/old-s3-1.html','S3-1: What Studojo does now','old-s3','Day 0','Pranav','What Studojo can do for you now')">
-        <div class="nav-num">1</div><span class="nav-label">No guilt</span><span class="nav-chip" style="color:#888;">Day 0</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/old-users/s3-barely/old-s3-2.html','S3-2: Came back','old-s3','+7 days','Pranav','A student who came back and started fresh')">
-        <div class="nav-num">2</div><span class="nav-label">Came back</span><span class="nav-chip" style="color:#888;">+7 days</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/old-users/s3-barely/old-s3-3.html','S3-3: One step','old-s3','+7 days','Pranav','One step, whenever you are ready')">
-        <div class="nav-num">3</div><span class="nav-label">One step</span><span class="nav-chip" style="color:#888;">+7 days</span>
-      </div>
-
-      <div class="nav-section">CTA variants (routing)</div>
-      <div class="nav-item" onclick="load(this,'templates/old-users/cta-variants/cta-outreach.html','CTA: Outreach','old-cta','Deepest = Outreach / strong resume','','Reach hiring managers now')">
-        <div class="nav-dot green"></div><span class="nav-label">CTA: Outreach</span><span class="nav-chip" style="color:#10b981;">Block</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/old-users/cta-variants/cta-coach.html','CTA: Coach','old-cta','Deepest = weak resume / coach','','Talk to your career coach')">
-        <div class="nav-dot purple"></div><span class="nav-label">CTA: Coach</span><span class="nav-chip" style="color:#7c3aed;">Block</span>
-      </div>
-      <div class="nav-item" onclick="load(this,'templates/old-users/cta-variants/cta-two-tool.html','CTA: Two-tool','old-cta','Deepest = internship / none','','Pick the move that fits')">
-        <div class="nav-dot amber"></div><span class="nav-label">CTA: Two-tool</span><span class="nav-chip" style="color:#f59e0b;">Block</span>
-      </div>
-
-    </div><!-- end body-oldusers -->
-
-  </div><!-- end sidebar-scroll -->
-
-  <div class="sidebar-foot">
-    <strong>53 templates</strong>
-    5 flows · wired &amp; scale-safe · new-user priority, old-user spread
-  </div>
-</div>
-
-<!-- ══════════════ MAIN ══════════════ -->
-<div id="main">
-
-  <!-- OUTREACH FLOW MAP -->
-  <div id="flow-pane-outreach" style="display:block;">
-    <div class="flow-header">
-      <div class="flow-tag">Wired · Ready to Deploy</div>
-      <div class="flow-title clash">Outreach Dojo Email Flow</div>
-      <div class="flow-sub">Reads top to bottom. Click any node to preview the email.</div>
-    </div>
-
-    <div class="wf">
-
-      <!-- Trigger -->
-      <div class="wf-center">
-        <div class="wf-node" style="cursor:default;">
-          <div class="wf-node-box start" style="min-width:200px;">
-            <div class="wf-badge">›</div>
-            <div class="wf-node-text"><div class="wf-node-title">User signs up</div><div class="wf-node-sub">studojo.com</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="wf-down"></div>
-
-      <!-- Welcome -->
-      <div class="wf-center">
-        <div class="wf-node" onclick="preview('templates/welcome-new-user.html','Welcome: New User','welcome','Within 1 min of signup','Pranav','You are in the top 3%. Here is how we know.')">
-          <div class="wf-node-box universal" style="min-width:280px;">
-            <div class="wf-badge">★</div>
-            <div class="wf-node-text"><div class="wf-node-title">Welcome email</div><div class="wf-node-sub">Universal · signed by Pranav</div></div>
-            <div class="wf-delay" style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3);color:#fff;">t = 0</div>
-          </div>
-        </div>
-      </div>
-      <div class="wf-down"></div>
-
-      <!-- Decision -->
-      <div class="wf-diamond"><div class="wf-diamond-inner">Used the<br>outreach<br>tool?</div></div>
-      <div class="wf-down tall"></div>
-
-      <!-- Branches -->
-      <div class="wf-branches">
-
-        <!-- Branch A: not used -->
-        <div class="wf-branch">
-          <div class="wf-branch-head">
-            <div class="wf-edge-label">No</div>
-            <div class="wf-branch-label" style="background:#f5f4f0;">Branch A · did not use</div>
-          </div>
-          <div class="wf-down short"></div>
-          <div class="wf-stack">
-            <div class="wf-node" onclick="preview('templates/outreach/not-used/outreach-nudge-d1.html','Nudge D1','not-used','7 hrs after welcome','Pranav','Did you get a chance to try Outreach Dojo?')">
-              <div class="wf-node-box"><div class="wf-badge outline">1</div><div class="wf-node-text"><div class="wf-node-title">Nudge D1</div><div class="wf-node-sub">Did you try it?</div></div><div class="wf-delay">7 hrs</div></div>
-            </div>
-            <div class="wf-down"></div>
-            <div class="wf-node" onclick="preview('templates/outreach/not-used/outreach-nudge-d2.html','Nudge D2','not-used','+24 hrs','Pranav','What one student got after using Outreach Dojo')">
-              <div class="wf-node-box"><div class="wf-badge outline">2</div><div class="wf-node-text"><div class="wf-node-title">Nudge D2</div><div class="wf-node-sub">Student testimonial</div></div><div class="wf-delay">+24 hrs</div></div>
-            </div>
-            <div class="wf-down"></div>
-            <div class="wf-node" onclick="preview('templates/outreach/not-used/outreach-nudge-d3.html','Nudge D3','not-used','+32 hrs','Pranav','Here is exactly how to get started')">
-              <div class="wf-node-box"><div class="wf-badge outline">3</div><div class="wf-node-text"><div class="wf-node-title">Nudge D3</div><div class="wf-node-sub">3-step walkthrough</div></div><div class="wf-delay">+32 hrs</div></div>
-            </div>
-            <div class="wf-down"></div>
-            <div class="wf-node" onclick="preview('templates/outreach/not-used/outreach-nudge-d4.html','Nudge D4','not-used','Day 4','Pranav','The number that changes everything')">
-              <div class="wf-node-box"><div class="wf-badge outline">4</div><div class="wf-node-text"><div class="wf-node-title">Nudge D4</div><div class="wf-node-sub">Reply rate comparison</div></div><div class="wf-delay">Day 4</div></div>
-            </div>
-            <div class="wf-down dashed"></div>
-            <div class="wf-node" style="cursor:default;">
-              <div class="wf-node-box ghost"><div class="wf-node-text"><div class="wf-node-title" style="color:#999;">→ Career Coach flow</div><div class="wf-node-sub">If still no use after week 1</div></div></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Branch B: used -->
-        <div class="wf-branch">
-          <div class="wf-branch-head">
-            <div class="wf-edge-label">Yes</div>
-            <div class="wf-branch-label" style="background:#7c3aed;color:#fff;">Branch B · used the tool</div>
-          </div>
-          <div class="wf-down short purple"></div>
-          <div class="wf-phase purple">Phase 1 · push (0 to 50 hrs)</div>
-          <div class="wf-down short purple"></div>
-          <div class="wf-stack">
-            <div class="wf-node" onclick="preview('templates/outreach/used/outreach-used-push1.html','Push 1','used','~4 hrs after tool use','Jeremy','You started. Here is what happens next')">
-              <div class="wf-node-box soft-purple"><div class="wf-badge">1</div><div class="wf-node-text"><div class="wf-node-title">Push 1</div><div class="wf-node-sub">Momentum</div></div><div class="wf-delay purple">~4 hrs</div></div>
-            </div>
-            <div class="wf-down purple"></div>
-            <div class="wf-node" onclick="preview('templates/outreach/used/outreach-used-push2.html','Push 2','used','~24 hrs','Jeremy','Students who finished this got real replies')">
-              <div class="wf-node-box soft-purple"><div class="wf-badge">2</div><div class="wf-node-text"><div class="wf-node-title">Push 2</div><div class="wf-node-sub">Social proof</div></div><div class="wf-delay purple">~24 hrs</div></div>
-            </div>
-            <div class="wf-down purple"></div>
-            <div class="wf-node" onclick="preview('templates/outreach/used/outreach-used-push3.html','Push 3','used','~50 hrs','Jeremy','You are one step away')">
-              <div class="wf-node-box soft-purple"><div class="wf-badge">3</div><div class="wf-node-text"><div class="wf-node-title">Push 3</div><div class="wf-node-sub">Final nudge</div></div><div class="wf-delay purple">~50 hrs</div></div>
-            </div>
-          </div>
-          <div class="wf-down purple"></div>
-          <div class="wf-phase purple">Phase 2 · convert (50 to 100 hrs)</div>
-          <div class="wf-down short purple"></div>
-          <div class="wf-stack">
-            <div class="wf-node" onclick="preview('templates/outreach/used/outreach-used-convert1.html','Convert 1','used','~60 hrs','Jeremy','Here is what you actually get')">
-              <div class="wf-node-box soft-purple"><div class="wf-badge">4</div><div class="wf-node-text"><div class="wf-node-title">Convert 1</div><div class="wf-node-sub">Objection handling</div></div><div class="wf-delay purple">~60 hrs</div></div>
-            </div>
-            <div class="wf-down purple"></div>
-            <div class="wf-node" onclick="preview('templates/outreach/used/outreach-used-convert2.html','Convert 2','used','~75 hrs','Jeremy','After you sign up. Here is exactly what happens')">
-              <div class="wf-node-box soft-purple"><div class="wf-badge">5</div><div class="wf-node-text"><div class="wf-node-title">Convert 2</div><div class="wf-node-sub">Post-purchase walkthrough</div></div><div class="wf-delay purple">~75 hrs</div></div>
-            </div>
-          </div>
-          <div class="wf-down amber"></div>
-          <div class="wf-phase amber">Payment page trigger · fires any time</div>
-          <div class="wf-down short amber"></div>
-          <div class="wf-stack">
-            <div class="wf-node" onclick="preview('templates/outreach/used/outreach-payment-page.html','Payment Page','payment','On payment_page_viewed','Jeremy','You were right there')">
-              <div class="wf-node-box amber"><div class="wf-badge">$</div><div class="wf-node-text"><div class="wf-node-title">Payment page</div><div class="wf-node-sub">Abandoned checkout</div></div><div class="wf-delay amber">Instant</div></div>
-            </div>
-            <div class="wf-down amber"></div>
-            <div class="wf-node" onclick="preview('templates/outreach/used/outreach-used-coupon.txt','Coupon Code','payment','A few hrs later','Jeremy','Something from me, Jeremy',true)">
-              <div class="wf-node-box green"><div class="wf-badge">%</div><div class="wf-node-text"><div class="wf-node-title">Coupon code</div><div class="wf-node-sub">Plain text · from Jeremy</div></div><div class="wf-delay green">+few hrs</div></div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- CAREER COACH FLOW MAP -->
-  <div id="flow-pane-cc" style="display:none;">
-    <div class="flow-header">
-      <div class="flow-tag">Wired · Ready to Deploy</div>
-      <div class="flow-title clash">Career Coach Email Flow</div>
-      <div class="flow-sub">Reads top to bottom. Branches on user behaviour at each stage.</div>
-    </div>
-
-    <div class="wf">
-
-      <div class="wf-center">
-        <div class="wf-node" style="cursor:default;">
-          <div class="wf-node-box start" style="min-width:220px;">
-            <div class="wf-badge">›</div>
-            <div class="wf-node-text"><div class="wf-node-title">Signs up for Career Coach</div><div class="wf-node-sub">studojo.pro/career-coach</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="wf-down"></div>
-
-      <div class="wf-center">
-        <div class="wf-node" onclick="preview('templates/career-coach/cc-welcome.html','CC Welcome','cc-welcome','Within 1 min','Pranav','You asked for an honest look. Good.')">
-          <div class="wf-node-box universal" style="min-width:280px;">
-            <div class="wf-badge">★</div>
-            <div class="wf-node-text"><div class="wf-node-title">CC Welcome</div><div class="wf-node-sub">Signed by Pranav</div></div>
-            <div class="wf-delay" style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3);color:#fff;">t = 0</div>
-          </div>
-        </div>
-      </div>
-      <div class="wf-down"></div>
-
-      <div class="wf-diamond"><div class="wf-diamond-inner">Started<br>the<br>coach?</div></div>
-      <div class="wf-down tall"></div>
-
-      <div class="wf-branches">
-
-        <!-- Branch A: not started -->
-        <div class="wf-branch">
-          <div class="wf-branch-head">
-            <div class="wf-edge-label">No</div>
-            <div class="wf-branch-label" style="background:#f5f4f0;">A · did not start</div>
-          </div>
-          <div class="wf-down short"></div>
-          <div class="wf-stack">
-            <div class="wf-node" onclick="preview('templates/career-coach/not-started/cc-nudge-1.html','CC Nudge 1','cc-not-started','8 hrs after welcome','Pranav','Did you get started?')">
-              <div class="wf-node-box"><div class="wf-badge outline">1</div><div class="wf-node-text"><div class="wf-node-title">Nudge 1</div><div class="wf-node-sub">What it feels like</div></div><div class="wf-delay">8 hrs</div></div>
-            </div>
-            <div class="wf-down"></div>
-            <div class="wf-node" onclick="preview('templates/career-coach/not-started/cc-nudge-2.html','CC Nudge 2','cc-not-started','+24 hrs','Pranav','What the coach actually tells you')">
-              <div class="wf-node-box"><div class="wf-badge outline">2</div><div class="wf-node-text"><div class="wf-node-title">Nudge 2</div><div class="wf-node-sub">What the coach tells you</div></div><div class="wf-delay">+24 hrs</div></div>
-            </div>
-            <div class="wf-down"></div>
-            <div class="wf-node" onclick="preview('templates/career-coach/not-started/cc-nudge-3.html','CC Nudge 3','cc-not-started','+48 hrs','Pranav','What changed when she finally started')">
-              <div class="wf-node-box"><div class="wf-badge outline">3</div><div class="wf-node-text"><div class="wf-node-title">Nudge 3</div><div class="wf-node-sub">Testimonial</div></div><div class="wf-delay">+48 hrs</div></div>
-            </div>
-            <div class="wf-down dashed"></div>
-            <div class="wf-node" onclick="preview('templates/career-coach/handoff/cc-to-outreach.html','CC Handoff','cc-handoff','After no-use','Jeremy','You know where you stand. Here is what to do with it.')">
-              <div class="wf-node-box green"><div class="wf-badge">→</div><div class="wf-node-text"><div class="wf-node-title">Handoff to Outreach</div><div class="wf-node-sub">Soft version</div></div></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Branch B: started -->
-        <div class="wf-branch">
-          <div class="wf-branch-head">
-            <div class="wf-edge-label">Yes</div>
-            <div class="wf-branch-label" style="background:#10b981;color:#fff;border-color:#19191a;">B · started the coach</div>
-          </div>
-          <div class="wf-down short"></div>
-          <div class="wf-phase gray">Idle in profiling</div>
-          <div class="wf-down short"></div>
-          <div class="wf-stack">
-            <div class="wf-node" onclick="preview('templates/career-coach/in-progress/cc-profiling-idle-1.html','CC Profiling Idle 1','cc-in-progress','3 days idle','Pranav','You started. Pick up where you left off.')">
-              <div class="wf-node-box"><div class="wf-badge outline">1</div><div class="wf-node-text"><div class="wf-node-title">Profiling idle 1</div><div class="wf-node-sub">Pick up where you left off</div></div><div class="wf-delay">3 days</div></div>
-            </div>
-            <div class="wf-down"></div>
-            <div class="wf-node" onclick="preview('templates/career-coach/in-progress/cc-profiling-idle-2.html','CC Profiling Idle 2','cc-in-progress','+3 days','Pranav','You are closer than you think')">
-              <div class="wf-node-box"><div class="wf-badge outline">2</div><div class="wf-node-text"><div class="wf-node-title">Profiling idle 2</div><div class="wf-node-sub">You are partway there</div></div><div class="wf-delay">+3 days</div></div>
-            </div>
-            <div class="wf-down"></div>
-            <div class="wf-node" onclick="preview('templates/career-coach/in-progress/cc-profiling-idle-3.html','CC Profiling Idle 3','cc-in-progress','+4 days','Pranav','What Vikram found when he finished')">
-              <div class="wf-node-box"><div class="wf-badge outline">3</div><div class="wf-node-text"><div class="wf-node-title">Profiling idle 3</div><div class="wf-node-sub">Testimonial</div></div><div class="wf-delay">+4 days</div></div>
-            </div>
-          </div>
-          <div class="wf-down green"></div>
-          <div class="wf-phase green">DNA generated · always triggers</div>
-          <div class="wf-down short green"></div>
-          <div class="wf-stack">
-            <div class="wf-node" onclick="preview('templates/career-coach/in-progress/cc-dna-ready.html','CC DNA Ready','cc-in-progress','On DNA generation','Pranav','Your career analysis is ready')">
-              <div class="wf-node-box green"><div class="wf-badge">✓</div><div class="wf-node-text"><div class="wf-node-title">DNA ready</div><div class="wf-node-sub">Analysis generated</div></div><div class="wf-delay green">Instant</div></div>
-            </div>
-            <div class="wf-down"></div>
-            <div class="wf-node" onclick="preview('templates/career-coach/post-dna/cc-dna-confirm-nudge.html','CC Confirm Nudge','cc-post-dna','2 days, no confirm','Pranav','Your analysis needs your confirmation')">
-              <div class="wf-node-box amber"><div class="wf-badge">!</div><div class="wf-node-text"><div class="wf-node-title">Confirm nudge</div><div class="wf-node-sub">If not confirmed</div></div><div class="wf-delay amber">2 days</div></div>
-            </div>
-          </div>
-          <div class="wf-down purple"></div>
-          <div class="wf-phase purple">Roadmap delivered</div>
-          <div class="wf-down short purple"></div>
-          <div class="wf-stack">
-            <div class="wf-node" onclick="preview('templates/career-coach/post-dna/cc-roadmap-delivered.html','CC Roadmap Delivered','cc-post-dna','On ROADMAP state','Jeremy','You have your roadmap. Here is how to use it.')">
-              <div class="wf-node-box soft-purple"><div class="wf-badge">★</div><div class="wf-node-text"><div class="wf-node-title">Roadmap delivered</div><div class="wf-node-sub">How to use it</div></div><div class="wf-delay purple">Trigger</div></div>
-            </div>
-            <div class="wf-down purple"></div>
-            <div class="wf-node" onclick="preview('templates/career-coach/post-dna/cc-checkin-1.html','CC Check-in 1','cc-post-dna','Day 3','Pranav','One action. This week.')">
-              <div class="wf-node-box soft-purple"><div class="wf-badge">1</div><div class="wf-node-text"><div class="wf-node-title">Check-in 1</div><div class="wf-node-sub">One action this week</div></div><div class="wf-delay purple">Day 3</div></div>
-            </div>
-            <div class="wf-down purple"></div>
-            <div class="wf-node" onclick="preview('templates/career-coach/post-dna/cc-checkin-2.html','CC Check-in 2','cc-post-dna','Day 7','Pranav','What students who act do differently')">
-              <div class="wf-node-box soft-purple"><div class="wf-badge">2</div><div class="wf-node-text"><div class="wf-node-title">Check-in 2</div><div class="wf-node-sub">Behavioural insight</div></div><div class="wf-delay purple">Day 7</div></div>
-            </div>
-            <div class="wf-down purple"></div>
-            <div class="wf-node" onclick="preview('templates/career-coach/post-dna/cc-checkin-3.html','CC Check-in 3','cc-post-dna','Day 10','Pranav','Have you marked anything complete yet?')">
-              <div class="wf-node-box soft-purple"><div class="wf-badge">3</div><div class="wf-node-text"><div class="wf-node-title">Check-in 3</div><div class="wf-node-sub">Log a completed action</div></div><div class="wf-delay purple">Day 10</div></div>
-            </div>
-            <div class="wf-down purple"></div>
-            <div class="wf-node" onclick="preview('templates/career-coach/post-dna/cc-upskill-nudge.html','CC Upskill Nudge','cc-post-dna','Day 7 after roadmap','Pranav','The coach gets sharper every time you use it')">
-              <div class="wf-node-box soft-purple"><div class="wf-badge">+</div><div class="wf-node-text"><div class="wf-node-title">Upskill nudge</div><div class="wf-node-sub">Use the coach more</div></div><div class="wf-delay purple">Day 7</div></div>
-            </div>
-            <div class="wf-down amber"></div>
-            <div class="wf-node" onclick="preview('templates/career-coach/post-dna/cc-coupon-unlock.html','CC Coupon Unlock','cc-post-dna','Day 9 after roadmap','Jeremy','Log your progress and unlock something')">
-              <div class="wf-node-box amber"><div class="wf-badge">%</div><div class="wf-node-text"><div class="wf-node-title">Coupon unlock</div><div class="wf-node-sub">Log progress to unlock</div></div><div class="wf-delay amber">Day 9</div></div>
-            </div>
-            <div class="wf-down amber"></div>
-            <div class="wf-node" onclick="preview('templates/career-coach/post-dna/cc-dormant.html','CC Dormant','cc-post-dna','7+ days idle','Jeremy','Most students stop here')">
-              <div class="wf-node-box amber"><div class="wf-badge">z</div><div class="wf-node-text"><div class="wf-node-title">Dormant</div><div class="wf-node-sub">Quiet urgency</div></div><div class="wf-delay amber">7 days</div></div>
-            </div>
-          </div>
-          <div class="wf-down green"></div>
-          <div class="wf-stack">
-            <div class="wf-node" onclick="preview('templates/career-coach/handoff/cc-to-outreach.html','CC Handoff to Outreach','cc-handoff','After dormant','Jeremy','You know where you stand. Here is what to do with it.')">
-              <div class="wf-node-box green"><div class="wf-badge">→</div><div class="wf-node-text"><div class="wf-node-title">Handoff to Outreach</div><div class="wf-node-sub">Coach built the map. Outreach opens it.</div></div></div>
-            </div>
-          </div>
-          <div class="wf-down dashed amber"></div>
-          <div class="wf-phase amber">Returning · 14+ days cold</div>
-          <div class="wf-down short amber"></div>
-          <div class="wf-stack">
-            <div class="wf-node" onclick="preview('templates/career-coach/returning/cc-returning-1.html','CC Returning 1','cc-returning','14 days cold','Jeremy','Your analysis is still there')">
-              <div class="wf-node-box amber"><div class="wf-badge">1</div><div class="wf-node-text"><div class="wf-node-title">Returning 1</div><div class="wf-node-sub">Nothing lost</div></div><div class="wf-delay amber">14 days</div></div>
-            </div>
-            <div class="wf-down amber"></div>
-            <div class="wf-node" onclick="preview('templates/career-coach/returning/cc-returning-2.html','CC Returning 2','cc-returning','+5 days','Jeremy','The gap closes fast when you focus')">
-              <div class="wf-node-box amber"><div class="wf-badge">2</div><div class="wf-node-text"><div class="wf-node-title">Returning 2</div><div class="wf-node-sub">Gap closes fast</div></div><div class="wf-delay amber">+5 days</div></div>
-            </div>
-            <div class="wf-down amber"></div>
-            <div class="wf-node" onclick="preview('templates/career-coach/returning/cc-returning-3.html','CC Returning 3','cc-returning','+5 days','Jeremy','The most direct path from here')">
-              <div class="wf-node-box amber"><div class="wf-badge">3</div><div class="wf-node-text"><div class="wf-node-title">Returning 3</div><div class="wf-node-sub">Two paths</div></div><div class="wf-delay amber">+5 days</div></div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- RESUME MAKER FLOW MAP -->
-  <div id="flow-pane-resume" style="display:none;">
-    <div class="flow-header">
-      <div class="flow-tag">Wired · Ready to Deploy</div>
-      <div class="flow-title clash">Resume Maker Email Flow</div>
-      <div class="flow-sub">Reads top to bottom. The coach scores the resume, then branches.</div>
-    </div>
-
-    <div class="wf">
-
-      <div class="wf-center">
-        <div class="wf-node" style="cursor:default;">
-          <div class="wf-node-box start" style="min-width:240px;">
-            <div class="wf-badge">›</div>
-            <div class="wf-node-text"><div class="wf-node-title">Resume completed</div><div class="wf-node-sub">mark-resume-ready fires</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="wf-down"></div>
-
-      <div class="wf-diamond"><div class="wf-diamond-inner">Resume<br>strength?</div></div>
-      <div class="wf-down tall"></div>
-
-      <div class="wf-branches">
-
-        <!-- Strong -->
-        <div class="wf-branch">
-          <div class="wf-branch-head">
-            <div class="wf-edge-label">Score 55+</div>
-            <div class="wf-branch-label" style="background:#f0fdf4;color:#065f46;border-color:#10b981;">Strong · to Outreach</div>
-          </div>
-          <div class="wf-down short green"></div>
-          <div class="wf-stack">
-            <div class="wf-node" onclick="preview('templates/resume-maker/strong/rm-strong-1.html','RM Strong 1','rm-strong','1 hr after ready','Jeremy','Your resume is strong. Here is the next move.')">
-              <div class="wf-node-box soft-purple"><div class="wf-badge">1</div><div class="wf-node-text"><div class="wf-node-title">Strong 1</div><div class="wf-node-sub">Here is the next move</div></div><div class="wf-delay purple">1 hr</div></div>
-            </div>
-            <div class="wf-down purple"></div>
-            <div class="wf-node" onclick="preview('templates/resume-maker/strong/rm-strong-2.html','RM Strong 2','rm-strong','+2 days','Jeremy','What students with strong resumes do next')">
-              <div class="wf-node-box soft-purple"><div class="wf-badge">2</div><div class="wf-node-text"><div class="wf-node-title">Strong 2</div><div class="wf-node-sub">Reply rate + proof</div></div><div class="wf-delay purple">+2 days</div></div>
-            </div>
-            <div class="wf-down purple"></div>
-            <div class="wf-node" onclick="preview('templates/resume-maker/strong/rm-strong-3.html','RM Strong 3','rm-strong','+3 days','Jeremy','Your resume is ready. Are you using it?')">
-              <div class="wf-node-box soft-purple"><div class="wf-badge">3</div><div class="wf-node-text"><div class="wf-node-title">Strong 3</div><div class="wf-node-sub">How outreach uses it</div></div><div class="wf-delay purple">+3 days</div></div>
-            </div>
-            <div class="wf-down dashed"></div>
-            <div class="wf-node" style="cursor:default;">
-              <div class="wf-node-box ghost"><div class="wf-node-text"><div class="wf-node-title" style="color:#999;">→ Outreach Dojo flow</div><div class="wf-node-sub">If they start the tool</div></div></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Weak -->
-        <div class="wf-branch">
-          <div class="wf-branch-head">
-            <div class="wf-edge-label">Below 55</div>
-            <div class="wf-branch-label" style="background:#f3f0ff;color:#7c3aed;">Weak · to Coach</div>
-          </div>
-          <div class="wf-down short purple"></div>
-          <div class="wf-stack">
-            <div class="wf-node" onclick="preview('templates/resume-maker/weak/rm-weak-1.html','RM Weak 1','rm-weak','1 hr after ready','Pranav','Your resume is a start. Here is what to do next.')">
-              <div class="wf-node-box"><div class="wf-badge outline">1</div><div class="wf-node-text"><div class="wf-node-title">Weak 1</div><div class="wf-node-sub">Know where you stand</div></div><div class="wf-delay">1 hr</div></div>
-            </div>
-            <div class="wf-down"></div>
-            <div class="wf-node" onclick="preview('templates/resume-maker/weak/rm-weak-2.html','RM Weak 2','rm-weak','+2 days','Pranav','What was actually holding her back')">
-              <div class="wf-node-box"><div class="wf-badge outline">2</div><div class="wf-node-text"><div class="wf-node-title">Weak 2</div><div class="wf-node-sub">Wrong roles story</div></div><div class="wf-delay">+2 days</div></div>
-            </div>
-            <div class="wf-down"></div>
-            <div class="wf-node" onclick="preview('templates/resume-maker/weak/rm-weak-3.html','RM Weak 3','rm-weak','+3 days','Pranav','Before you apply, know where you stand')">
-              <div class="wf-node-box"><div class="wf-badge outline">3</div><div class="wf-node-text"><div class="wf-node-title">Weak 3</div><div class="wf-node-sub">What the coach gives you</div></div><div class="wf-delay">+3 days</div></div>
-            </div>
-            <div class="wf-down dashed"></div>
-            <div class="wf-node" style="cursor:default;">
-              <div class="wf-node-box ghost"><div class="wf-node-text"><div class="wf-node-title" style="color:#999;">→ Career Coach flow</div><div class="wf-node-sub">If they start the coach</div></div></div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- INTERNSHIP DOJO FLOW MAP -->
-  <div id="flow-pane-internship" style="display:none;">
-    <div class="flow-header">
-      <div class="flow-tag">Wired · Ready to Deploy</div>
-      <div class="flow-title clash">Internship Dojo Email Flow</div>
-      <div class="flow-sub">Reads top to bottom. Triggered by heavy applying with no results.</div>
-    </div>
-
-    <div class="wf">
-
-      <div class="wf-center">
-        <div class="wf-node" style="cursor:default;">
-          <div class="wf-node-box start" style="min-width:280px;">
-            <div class="wf-badge">›</div>
-            <div class="wf-node-text"><div class="wf-node-title">15+ applications, no replies</div><div class="wf-node-sub">over a 2 week window</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="wf-down"></div>
-
-      <div class="wf-center">
-        <div class="wf-node" onclick="preview('templates/internship-dojo/id-two-tools.html','ID Two-Tool Offer','id-offer','On threshold hit','Jeremy','You have been applying. Here are two tools that change the results.')">
-          <div class="wf-node-box universal" style="min-width:300px;">
-            <div class="wf-badge">★</div>
-            <div class="wf-node-text"><div class="wf-node-title">Two-tool offer</div><div class="wf-node-sub">Outreach or Career Coach</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="wf-down tall"></div>
-
-      <div class="wf-diamond"><div class="wf-diamond-inner">Clicked<br>a tool?</div></div>
-      <div class="wf-down tall"></div>
-
-      <div class="wf-branches">
-
-        <!-- Clicked -->
-        <div class="wf-branch">
-          <div class="wf-branch-head">
-            <div class="wf-edge-label">Yes</div>
-            <div class="wf-branch-label" style="background:#f0fdf4;color:#065f46;border-color:#10b981;">Clicked a tool</div>
-          </div>
-          <div class="wf-down short green"></div>
-          <div class="wf-stack">
-            <div class="wf-node" style="cursor:default;">
-              <div class="wf-node-box ghost"><div class="wf-node-text"><div class="wf-node-title" style="color:#999;">→ Outreach Dojo flow</div><div class="wf-node-sub">If they pick Outreach</div></div></div>
-            </div>
-            <div class="wf-down dashed"></div>
-            <div class="wf-node" style="cursor:default;">
-              <div class="wf-node-box ghost"><div class="wf-node-text"><div class="wf-node-title" style="color:#999;">→ Career Coach flow</div><div class="wf-node-sub">If they pick the Coach</div></div></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- No engagement -->
-        <div class="wf-branch">
-          <div class="wf-branch-head">
-            <div class="wf-edge-label">No open / no click</div>
-            <div class="wf-branch-label" style="background:#fffbeb;color:#92400e;border-color:#f59e0b;">Re-engagement</div>
-          </div>
-          <div class="wf-down short amber"></div>
-          <div class="wf-stack">
-            <div class="wf-node" onclick="preview('templates/internship-dojo/id-reengage-1.html','ID Re-engage 1','id-reengage','+3 days','Jeremy','The reason your applications are not landing')">
-              <div class="wf-node-box amber"><div class="wf-badge">1</div><div class="wf-node-text"><div class="wf-node-title">Re-engage 1</div><div class="wf-node-sub">The 2% stat</div></div><div class="wf-delay amber">+3 days</div></div>
-            </div>
-            <div class="wf-down amber"></div>
-            <div class="wf-node" onclick="preview('templates/internship-dojo/id-reengage-2.html','ID Re-engage 2','id-reengage','+4 days','Jeremy','How Rohan went from silence to three interviews')">
-              <div class="wf-node-box amber"><div class="wf-badge">2</div><div class="wf-node-text"><div class="wf-node-title">Re-engage 2</div><div class="wf-node-sub">Rohan story</div></div><div class="wf-delay amber">+4 days</div></div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- OLD USERS FLOW MAP -->
-  <div id="flow-pane-oldusers" style="display:none;">
-    <div class="flow-header" style="max-width:1100px; margin-left:auto; margin-right:auto;">
-      <div class="flow-tag">Wired · Ready to Deploy</div>
-      <div class="flow-title clash">Old / Dormant User Flow</div>
-      <div class="flow-sub">Reads top to bottom. Tool-neutral: routed by intent stage, with the CTA pointed at whichever tool the user went deepest on. Sent at low priority: new-user emails always go first; these cascade over days under a per-day cap (s1 before s2 before s3) so they only use leftover sending quota.</div>
-    </div>
-
-    <div class="wf wide">
-
-      <div class="wf-center">
-        <div class="wf-node" style="cursor:default;">
-          <div class="wf-node-box start" style="min-width:260px;">
-            <div class="wf-badge">z</div>
-            <div class="wf-node-text"><div class="wf-node-title">Dormant 21+ days</div><div class="wf-node-sub">last_seen and created_at both older than 21d · paying customers suppressed</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="wf-down"></div>
-
-      <div class="wf-router">
-        Route by intent stage
-        <div class="wf-router-sub">how close they got to an outcome on ANY tool, weighted equally. No tool checked first.</div>
-      </div>
-      <div class="wf-down tall"></div>
-
-      <!-- 3 stage lanes -->
-      <div class="wf-grid" style="grid-template-columns:repeat(3, minmax(0,1fr)); max-width:980px; margin:4px auto 0;">
-
-        <!-- S1 -->
-        <div class="wf-lane">
-          <div class="wf-branch-head"><div class="wf-edge-label">Hit an outcome edge</div><div class="wf-branch-label" style="background:#f0fdf4;color:#065f46;border-color:#10b981;">S1 · nearly converted</div></div>
-          <div class="wf-down short green"></div>
-          <div class="wf-stack">
-            <div class="wf-node" onclick="preview('templates/old-users/s1-nearly/old-s1-1.html','S1-1','old-s1','Day 0','Jeremy','You were nearly there')"><div class="wf-node-box green"><div class="wf-badge">1</div><div class="wf-node-text"><div class="wf-node-title">Nearly there</div><div class="wf-node-sub">Hard part is done</div></div><div class="wf-delay green">Day 0</div></div></div>
-            <div class="wf-down green"></div>
-            <div class="wf-node" onclick="preview('templates/old-users/s1-nearly/old-s1-2.html','S1-2','old-s1','+5 days','Jeremy','What finishing actually looks like')"><div class="wf-node-box green"><div class="wf-badge">2</div><div class="wf-node-text"><div class="wf-node-title">Finishing it</div><div class="wf-node-sub">Testimonial</div></div><div class="wf-delay green">+5 days</div></div></div>
-            <div class="wf-down green"></div>
-            <div class="wf-node" onclick="preview('templates/old-users/s1-nearly/old-s1-3.html','S1-3','old-s1','+9 days','Jeremy','The last step is the easy one')"><div class="wf-node-box green"><div class="wf-badge">3</div><div class="wf-node-text"><div class="wf-node-title">The close</div><div class="wf-node-sub">CTA swaps by deepest tool</div></div><div class="wf-delay green">+9 days</div></div></div>
-          </div>
-        </div>
-
-        <!-- S2 -->
-        <div class="wf-lane">
-          <div class="wf-branch-head"><div class="wf-edge-label">Real work, no outcome</div><div class="wf-branch-label" style="background:#f3f0ff;color:#7c3aed;">S2 · engaged</div></div>
-          <div class="wf-down short purple"></div>
-          <div class="wf-stack">
-            <div class="wf-node" onclick="preview('templates/old-users/s2-engaged/old-s2-1.html','S2-1','old-s2','Day 0','Pranav','You got real work done, then it stalled')"><div class="wf-node-box soft-purple"><div class="wf-badge">1</div><div class="wf-node-text"><div class="wf-node-title">Stalled</div><div class="wf-node-sub">All still saved</div></div><div class="wf-delay purple">Day 0</div></div></div>
-            <div class="wf-down purple"></div>
-            <div class="wf-node" onclick="preview('templates/old-users/s2-engaged/old-s2-2.html','S2-2','old-s2','+6 days','Pranav','What picking back up actually takes')"><div class="wf-node-box soft-purple"><div class="wf-badge">2</div><div class="wf-node-text"><div class="wf-node-title">Restarting</div><div class="wf-node-sub">Testimonial</div></div><div class="wf-delay purple">+6 days</div></div></div>
-            <div class="wf-down purple"></div>
-            <div class="wf-node" onclick="preview('templates/old-users/s2-engaged/old-s2-3.html','S2-3','old-s2','+9 days','Jeremy','The one step to restart')"><div class="wf-node-box soft-purple"><div class="wf-badge">3</div><div class="wf-node-text"><div class="wf-node-title">One step</div><div class="wf-node-sub">CTA swaps by deepest tool</div></div><div class="wf-delay purple">+9 days</div></div></div>
-          </div>
-        </div>
-
-        <!-- S3 -->
-        <div class="wf-lane">
-          <div class="wf-branch-head"><div class="wf-edge-label">Barely any signal</div><div class="wf-branch-label" style="background:#f5f4f0;">S3 · barely started</div></div>
-          <div class="wf-down short"></div>
-          <div class="wf-stack">
-            <div class="wf-node" onclick="preview('templates/old-users/s3-barely/old-s3-1.html','S3-1','old-s3','Day 0','Pranav','What Studojo can do for you now')"><div class="wf-node-box"><div class="wf-badge outline">1</div><div class="wf-node-text"><div class="wf-node-title">No guilt</div><div class="wf-node-sub">What we do now</div></div><div class="wf-delay">Day 0</div></div></div>
-            <div class="wf-down"></div>
-            <div class="wf-node" onclick="preview('templates/old-users/s3-barely/old-s3-2.html','S3-2','old-s3','+7 days','Pranav','A student who came back and started fresh')"><div class="wf-node-box"><div class="wf-badge outline">2</div><div class="wf-node-text"><div class="wf-node-title">Came back</div><div class="wf-node-sub">Testimonial</div></div><div class="wf-delay">+7 days</div></div></div>
-            <div class="wf-down"></div>
-            <div class="wf-node" onclick="preview('templates/old-users/s3-barely/old-s3-3.html','S3-3','old-s3','+7 days','Pranav','One step, whenever you are ready')"><div class="wf-node-box"><div class="wf-badge outline">3</div><div class="wf-node-text"><div class="wf-node-title">One step</div><div class="wf-node-sub">Two-tool choice</div></div><div class="wf-delay">+7 days</div></div></div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- CTA routing note -->
-      <div style="max-width:980px; margin:34px auto 0; border:2px solid #19191a; border-radius:14px; background:#fff; box-shadow:3px 3px 0 rgba(25,26,35,1); padding:18px 22px;">
-        <div style="font-family:'Clash Display',sans-serif; font-size:12px; font-weight:700; letter-spacing:0.5px; margin-bottom:10px;">CTA swap (the tool-neutral routing) · applies to S1 and S2 closing emails</div>
-        <div style="display:flex; flex-wrap:wrap; gap:8px;">
-          <div class="wf-node" onclick="preview('templates/old-users/cta-variants/cta-outreach.html','CTA: Outreach','old-cta','Deepest = Outreach / strong resume','','Reach hiring managers now')" style="flex:1; min-width:220px;"><div class="wf-node-box green" style="width:100%;"><div class="wf-badge">&rarr;</div><div class="wf-node-text"><div class="wf-node-title">Outreach</div><div class="wf-node-sub">Deepest = Outreach or strong resume</div></div></div></div>
-          <div class="wf-node" onclick="preview('templates/old-users/cta-variants/cta-coach.html','CTA: Coach','old-cta','Deepest = weak resume / coach','','Talk to your career coach')" style="flex:1; min-width:220px;"><div class="wf-node-box soft-purple" style="width:100%;"><div class="wf-badge">&rarr;</div><div class="wf-node-text"><div class="wf-node-title">Career Coach</div><div class="wf-node-sub">Deepest = weak resume or coach</div></div></div></div>
-          <div class="wf-node" onclick="preview('templates/old-users/cta-variants/cta-two-tool.html','CTA: Two-tool','old-cta','Deepest = internship / none','','Pick the move that fits')" style="flex:1; min-width:220px;"><div class="wf-node-box amber" style="width:100%;"><div class="wf-badge">&rarr;</div><div class="wf-node-text"><div class="wf-node-title">Two-tool choice</div><div class="wf-node-sub">Deepest = internship or none</div></div></div></div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-
-  <!-- PREVIEW -->
-  <div id="preview-pane">
-    <div class="preview-bar">
-      <button class="back-btn" onclick="showFlow(null, null)">&#8592; Flow Map</button>
-      <div style="flex:1; min-width:0;">
-        <div id="p-title" class="preview-title clash"></div>
-        <div id="p-meta" class="preview-meta"></div>
-      </div>
-      <div id="p-tags" style="display:flex; gap:6px; flex-shrink:0;"></div>
-    </div>
-
-    <div id="p-email" class="email-client-wrap">
-      <div style="display:flex; flex-direction:column;">
-        <div class="email-client">
-          <div class="email-chrome">
-            <div class="email-chrome-row">
-              <span class="email-chrome-label">From</span>
-              <span class="email-chrome-val" id="p-from"></span>
-            </div>
-            <div class="email-chrome-row">
-              <span class="email-chrome-label">To</span>
-              <span class="email-chrome-val">&#123;&#123;first_name&#125;&#125; &lt;student@email.com&gt;</span>
-            </div>
-          </div>
-          <div class="email-subject-row" id="p-subject"></div>
-          <iframe id="preview-frame" src="" onload="resizeIframe(this)" scrolling="no"></iframe>
-        </div>
-      </div>
-    </div>
-
-    <div id="p-txt" class="txt-client-wrap" style="display:none;">
-      <div class="txt-client">
-        <div class="email-chrome">
-          <div class="email-chrome-row">
-            <span class="email-chrome-label">From</span>
-            <span class="email-chrome-val" id="p-from-txt"></span>
-          </div>
-          <div class="email-chrome-row">
-            <span class="email-chrome-label">To</span>
-            <span class="email-chrome-val">&#123;&#123;first_name&#125;&#125; &lt;student@email.com&gt;</span>
-          </div>
-        </div>
-        <div class="email-subject-row" id="p-subject-txt"></div>
-        <div class="txt-body" id="p-txt-body"></div>
-      </div>
-    </div>
-  </div>
-
-</div>
+  </header>
+
+  <nav id="nav"></nav>
+
+  <section class="rules">
+    <div class="rule"><b>Triggers</b><small><code>event.cc.*</code> hits <code>POST /v1/email/events</code> from the platform + coach backend.</small></div>
+    <div class="rule"><b>Instant vs scheduled</b><small>An instant email sends now; follow-ups are queued in <code>scheduled_emails</code> and drained each minute.</small></div>
+    <div class="rule"><b>Never twice</b><small><code>UNIQUE(user_id, email_type)</code> makes a duplicate send physically impossible.</small></div>
+    <div class="rule"><b>Opt-out respected</b><small>Marketing checks <code>product_emails</code>; one-click unsubscribe flips it off.</small></div>
+    <div class="rule"><b>Paid suppression</b><small>A payment cancels every pending <code>cc_*</code> marketing row and is skipped at send.</small></div>
+    <div class="rule"><b>Pacing</b><small>One global limiter at <b>80/hr</b> (under ACS capacity). Transactional mail is never throttled.</small></div>
+  </section>
+
+  <main id="main"></main>
+
+  <footer>
+    Generated from the emailer-service source. Edit the flow in code, not here — this page mirrors it.
+  </footer>
 
 <script>
-  const navItems = document.querySelectorAll('.nav-item');
+const FLOWS = [
+  { id:'outreach-not', num:1, title:'Outreach Dojo · NOT used', trigger:'event.cc.welcome_new_user', kind:['instant'],
+    note:'New signup who has not used the outreach tool yet.',
+    exit:'event.cc.outreach_used → cancels every pending cc_outreach_nudge* and enters the USED flow.',
+    steps:[
+      {t:'instant', subject:"You're in the top 3%. Here's how we know.", tmpl:'cc-welcome-new-user'},
+      {t:'+7h', subject:'Did you get a chance to try Outreach Dojo?', tmpl:'cc-outreach-nudge-d1', extra:'catch-up requeues this if missed'},
+      {t:'+31h', subject:'What one student got after using Outreach Dojo', tmpl:'cc-outreach-nudge-d2'},
+      {t:'+63h', subject:"Here's exactly how to get started", tmpl:'cc-outreach-nudge-d3'},
+      {t:'+96h', subject:'The number that changes everything', tmpl:'cc-outreach-nudge-d4'},
+    ]},
+  { id:'outreach-used', num:2, title:'Outreach Dojo · USED', trigger:'event.cc.outreach_used', kind:['instant'],
+    note:'Fires when the student actually uses the outreach tool (high intent).',
+    steps:[
+      {t:'instant', subject:"You started. Here's what happens next", tmpl:'cc-outreach-push1'},
+      {t:'+24h', subject:'Students who finished this got real replies', tmpl:'cc-outreach-push2'},
+      {t:'+50h', subject:"You're one step away", tmpl:'cc-outreach-push3'},
+      {t:'+60h', subject:"Here's what you actually get", tmpl:'cc-outreach-convert1'},
+      {t:'+75h', subject:'After you sign up. Here is exactly what happens', tmpl:'cc-outreach-convert2'},
+    ]},
+  { id:'abandoned', num:3, title:'Abandoned checkout', trigger:'event.cc.outreach_payment_page', kind:['deferred'],
+    note:'Deferred — nothing sends instantly. The buffer lets a fast payer slip through with no nudge.',
+    exit:'Payment inside the buffer drains these (paid suppression).',
+    steps:[
+      {t:'+2h', subject:'You were right there', tmpl:'cc-outreach-payment-page'},
+      {t:'+6h', subject:'Something from me, Jeremy  (coupon)', tmpl:'cc-outreach-coupon'},
+    ]},
+  { id:'cc-welcome', num:4, title:'Career Coach · not started', trigger:'event.cc.welcome', kind:['instant'],
+    steps:[
+      {t:'instant', subject:'You asked for an honest look. Good.', tmpl:'cc-welcome'},
+      {t:'+8h', subject:'Did you get started?', tmpl:'cc-nudge-1'},
+      {t:'+32h', subject:'What the coach actually tells you', tmpl:'cc-nudge-2'},
+      {t:'+56h', subject:'What changed when she finally started', tmpl:'cc-nudge-3'},
+    ]},
+  { id:'dna', num:5, title:'Post-DNA', trigger:'event.cc.dna_ready', kind:['instant'],
+    note:'Analysis delivered, then nudge to confirm and act.',
+    steps:[
+      {t:'instant', subject:'Your career analysis is ready', tmpl:'cc-dna-ready'},
+      {t:'+2d', subject:'Your analysis needs your confirmation', tmpl:'cc-dna-confirm-nudge'},
+      {t:'+4d', subject:'One action. This week.', tmpl:'cc-checkin-1'},
+      {t:'+7d', subject:'What students who act do differently', tmpl:'cc-checkin-2'},
+      {t:'+10d', subject:'Have you marked anything complete yet?', tmpl:'cc-checkin-3'},
+    ]},
+  { id:'roadmap', num:6, title:'Roadmap', trigger:'event.cc.roadmap_delivered', kind:['instant'],
+    steps:[
+      {t:'instant', subject:'You have your roadmap. Here is how to use it.', tmpl:'cc-roadmap-delivered'},
+      {t:'+7d', subject:'The coach gets sharper every time you use it', tmpl:'cc-upskill-nudge'},
+      {t:'+9d', subject:'Log your progress and unlock something  (coupon)', tmpl:'cc-coupon-unlock'},
+      {t:'+11d', subject:'Most students stop here', tmpl:'cc-dormant'},
+      {t:'+14d', subject:'You know where you stand. Here is what to do with it.', tmpl:'cc-to-outreach'},
+    ]},
+  { id:'resume', num:7, title:'Resume Maker', trigger:'event.cc.resume_strong / event.cc.resume_weak', kind:['instant'],
+    lanes:[
+      { label:'Strong resume → outreach lean', steps:[
+        {t:'instant', subject:'Your resume is strong. Here is the next move.', tmpl:'cc-rm-strong-1'},
+        {t:'+2d', subject:'What students with strong resumes do next', tmpl:'cc-rm-strong-2'},
+        {t:'+3d', subject:'Your resume is ready. Are you using it?', tmpl:'cc-rm-strong-3'}]},
+      { label:'Weak resume → coach lean', steps:[
+        {t:'instant', subject:'Your resume is a start. Here is what to do next.', tmpl:'cc-rm-weak-1'},
+        {t:'+2d', subject:'What was actually holding her back', tmpl:'cc-rm-weak-2'},
+        {t:'+3d', subject:'Before you apply, know where you stand', tmpl:'cc-rm-weak-3'}]},
+    ]},
+  { id:'internship', num:8, title:'Internship Dojo', trigger:'event.cc.id_two_tools', kind:['instant'],
+    steps:[
+      {t:'instant', subject:'You have been applying. Here are two tools that change the results.', tmpl:'cc-id-two-tools'},
+      {t:'+3d', subject:'The reason your applications are not landing', tmpl:'cc-id-reengage-1'},
+      {t:'+7d', subject:'How Rohan went from silence to three interviews', tmpl:'cc-id-reengage-2'},
+    ]},
+  { id:'old', num:9, title:'Old / dormant users', trigger:'event.cc.old_s1 / s2 / s3', kind:['spread'],
+    note:'Spread-scheduled under a per-day cap (EMAIL_OLDUSER_PER_DAY, default 100) so a big dormant batch never starves new-user mail. First email lands at the next free slot; the rest chain off it. CTA blocks cc-old-cta-outreach / -coach / -two-tool are swapped into the S1/S2 closers.',
+    lanes:[
+      { label:'S1 — nearly finished', steps:[
+        {t:'slot', subject:'You were nearly there', tmpl:'cc-old-s1-1'},
+        {t:'+5d', subject:'What finishing actually looks like', tmpl:'cc-old-s1-2'},
+        {t:'+9d', subject:'The last step is the easy one', tmpl:'cc-old-s1-3'}]},
+      { label:'S2 — stalled mid-way', steps:[
+        {t:'slot', subject:'You got real work done, then it stalled', tmpl:'cc-old-s2-1'},
+        {t:'+6d', subject:'What picking back up actually takes', tmpl:'cc-old-s2-2'},
+        {t:'+9d', subject:'The one step to restart', tmpl:'cc-old-s2-3'}]},
+      { label:'S3 — cold / fresh start', steps:[
+        {t:'slot', subject:'What Studojo can do for you now', tmpl:'cc-old-s3-1'},
+        {t:'+7d', subject:'A student who came back and started fresh', tmpl:'cc-old-s3-2'},
+        {t:'+14d', subject:'One step, whenever you are ready', tmpl:'cc-old-s3-3'}]},
+    ]},
+  { id:'coach', num:'★', title:'Coach-backend driven (not orchestrated here)', trigger:'POST /v1/email/send-template', kind:['coach'],
+    note:'These templates exist but are sent directly by the career-coach backend cron, not by the emailer event sequences.',
+    lanes:[
+      { label:'Returning · 14+ days cold', steps:[
+        {t:'cron', subject:'Your analysis is still there', tmpl:'cc-returning-1'},
+        {t:'cron', subject:'The gap closes fast when you focus', tmpl:'cc-returning-2'},
+        {t:'cron', subject:'The most direct path from here', tmpl:'cc-returning-3'}]},
+      { label:'Profiling idle', steps:[
+        {t:'cron', subject:'You started. Pick up where you left off.', tmpl:'cc-profiling-idle-1'},
+        {t:'cron', subject:"You're closer than you think", tmpl:'cc-profiling-idle-2'},
+        {t:'cron', subject:'What Vikram found when he finished', tmpl:'cc-profiling-idle-3'}]},
+    ]},
+  { id:'oneshot', num:'1×', title:'One-shot / ops blast', trigger:'event.cc.cart_goat', kind:['instant'],
+    note:'Manual founder abandoned-cart blast, pinned to the Jeremy sender. Fired by ops, not automated.',
+    steps:[
+      {t:'manual', subject:'A code from me, GOAT10  (10% off)', tmpl:'cc-cart-goat'},
+    ]},
+  { id:'tx', num:'TX', title:'Transactional (never throttled)', trigger:'various', kind:['tx'],
+    note:'Triggered by real user actions; not marketing, not rate-limited, not subject to opt-out.',
+    flat:['welcome','payment-thankyou','forgot-password','password-changed','resume-optimized','internship-applied','contact-form','leads-ready','checkin-reminder'] },
+];
 
-  function resizeIframe(f) {
-    try {
-      const d = f.contentDocument || f.contentWindow.document;
-      f.style.height = d.documentElement.scrollHeight + 'px';
-    } catch(e) { f.style.height = '800px'; }
-  }
-
-  const allGroups = ['outreach','cc','resume','internship','oldusers'];
-  function toggleGroup(which) {
-    const body = document.getElementById('body-' + which);
-    const willOpen = !body.classList.contains('open');
-    // accordion: close every group, then open the clicked one if it was closed
-    allGroups.forEach(g => {
-      const b = document.getElementById('btn-' + g);
-      const bd = document.getElementById('body-' + g);
-      if (!b || !bd) return;
-      b.classList.remove('open');
-      bd.classList.remove('open');
-    });
-    if (willOpen) {
-      document.getElementById('btn-' + which).classList.add('open');
-      body.classList.add('open');
-      // bring the opened group's button to the top of the scroll area
-      document.getElementById('btn-' + which).scrollIntoView({ block: 'start', behavior: 'smooth' });
-    }
-  }
-
-  let lastFlow = 'outreach';
-  const flowNavId = {
-    outreach: 'nav-outreach-flow',
-    cc: 'nav-cc-flow',
-    resume: 'nav-resume-flow',
-    internship: 'nav-internship-flow',
-    oldusers: 'nav-oldusers-flow',
-  };
-
-  function showFlow(which, el) {
-    navItems.forEach(n => n.classList.remove('active'));
-    if (which) lastFlow = which;
-    const navEl = el || document.getElementById(flowNavId[lastFlow]);
-    if (navEl) navEl.classList.add('active');
-    hideAllFlowPanes();
-    const pane = document.getElementById('flow-pane-' + lastFlow);
-    if (pane) pane.style.display = 'block';
-    document.getElementById('preview-pane').style.display = 'none';
-  }
-
-  const senderMap = {
-    'Pranav': 'Pranav &lt;pranav@studojo.com&gt;',
-    'Jeremy': 'Jeremy &lt;jeremy@studojo.com&gt;',
-  };
-
-  const flowColors = {
-    'welcome':       { label: 'Universal',        color: '#7c3aed', bg: '#f3f0ff' },
-    'not-used':      { label: 'Not Used',          color: '#555',    bg: '#f5f4f0' },
-    'used':          { label: 'High Intent',       color: '#7c3aed', bg: '#f3f0ff' },
-    'payment':       { label: 'Payment',           color: '#92400e', bg: '#fffbeb' },
-    'cc-welcome':    { label: 'CC Welcome',        color: '#7c3aed', bg: '#f3f0ff' },
-    'cc-not-started':{ label: 'CC: Not Started',   color: '#555',    bg: '#f5f4f0' },
-    'cc-in-progress':{ label: 'CC: In Progress',   color: '#7c3aed', bg: '#f3f0ff' },
-    'cc-post-dna':   { label: 'CC: Post DNA',      color: '#7c3aed', bg: '#f3f0ff' },
-    'cc-handoff':    { label: 'CC: Handoff',       color: '#10b981', bg: '#f0fdf4' },
-    'cc-returning':  { label: 'CC: Returning',     color: '#92400e', bg: '#fffbeb' },
-    'rm-strong':     { label: 'Resume: Strong',    color: '#10b981', bg: '#f0fdf4' },
-    'rm-weak':       { label: 'Resume: Weak',      color: '#7c3aed', bg: '#f3f0ff' },
-    'id-offer':      { label: 'Internship: Offer', color: '#7c3aed', bg: '#f3f0ff' },
-    'id-reengage':   { label: 'Internship: Re-eng',color: '#92400e', bg: '#fffbeb' },
-    'old-s1':        { label: 'Old: Nearly',       color: '#10b981', bg: '#f0fdf4' },
-    'old-s2':        { label: 'Old: Engaged',      color: '#7c3aed', bg: '#f3f0ff' },
-    'old-s3':        { label: 'Old: Barely',       color: '#555',    bg: '#f5f4f0' },
-    'old-cta':       { label: 'Old: CTA Variant',  color: '#92400e', bg: '#fffbeb' },
-  };
-
-  function hideAllFlowPanes() {
-    ['flow-pane-outreach','flow-pane-cc','flow-pane-resume','flow-pane-internship','flow-pane-oldusers'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.style.display = 'none';
-    });
-  }
-
-  // Called from sidebar items (has an element to highlight)
-  function load(el, path, title, flow, delay, sender, subject, isText = false) {
-    navItems.forEach(n => n.classList.remove('active'));
-    if (el) el.classList.add('active');
-    preview(path, title, flow, delay, sender, subject, isText);
-  }
-
-  // Called from flow-map nodes (no element) and by load()
-  function preview(path, title, flow, delay, sender, subject, isText = false) {
-    hideAllFlowPanes();
-    document.getElementById('preview-pane').style.display = 'flex';
-
-    document.getElementById('p-title').textContent = title;
-    document.getElementById('p-meta').textContent =
-      (delay ? 'Delay: ' + delay : '') + (sender ? '   Sender: ' + sender : '');
-
-    const fc = flowColors[flow] || {};
-    document.getElementById('p-tags').innerHTML = `
-      <span class="ptag" style="color:${fc.color};border-color:${fc.color};background:${fc.bg};">${fc.label || flow}</span>
-      <span class="ptag" style="color:#777;border-color:#ccc;background:#f5f4f0;">${isText ? 'Plain Text' : 'HTML'}</span>
-    `;
-
-    const fromStr = senderMap[sender] || (sender + ' &lt;hello@studojo.com&gt;');
-    const subjectStr = subject || title;
-
-    if (isText) {
-      document.getElementById('p-email').style.display = 'none';
-      document.getElementById('p-txt').style.display = 'flex';
-      document.getElementById('p-from-txt').innerHTML = fromStr;
-      document.getElementById('p-subject-txt').textContent = subjectStr;
-      fetch(path).then(r => r.text()).then(t => {
-        const lines = t.split('\n');
-        const body = lines[0].startsWith('Subject:') ? lines.slice(2).join('\n') : t;
-        document.getElementById('p-txt-body').textContent = body;
-      }).catch(() => {
-        document.getElementById('p-txt-body').textContent = 'Could not load file.';
-      });
-    } else {
-      document.getElementById('p-txt').style.display = 'none';
-      document.getElementById('p-email').style.display = 'flex';
-      document.getElementById('p-from').innerHTML = fromStr;
-      document.getElementById('p-subject').textContent = subjectStr;
-      const f = document.getElementById('preview-frame');
-      f.style.height = '400px';
-      f.src = path;
-    }
-  }
+function cardHTML(s, first){
+  const zero = (s.t==='instant'||s.t==='slot'||s.t==='manual'||s.t==='cron');
+  return `<div class="card${first?' first':''}">
+    <span class="pill ${zero?'zero':''}">${s.t}</span>
+    <div class="subject">${s.subject}</div>
+    <div class="tmpl">${s.tmpl}</div>
+    ${s.extra?`<div class="tmpl" style="color:var(--purple)">↻ ${s.extra}</div>`:''}
+  </div>`;
+}
+function seqHTML(steps){
+  return `<div class="seq">` + steps.map((s,i)=> (i?'<div class="arrow">→</div>':'') + cardHTML(s, i===0)).join('') + `</div>`;
+}
+const main = document.getElementById('main'), nav = document.getElementById('nav');
+FLOWS.forEach(f=>{
+  const kinds = (f.kind||[]).map(k=>`<span class="kind ${k}">${k}</span>`).join('');
+  let body='';
+  if(f.flat){ body = `<div class="seq">` + f.flat.map(t=>`<div class="card" style="flex-basis:170px"><div class="tmpl" style="color:var(--ink);font-size:12.5px">${t}</div></div>`).join('') + `</div>`; }
+  else if(f.lanes){ body = `<div class="twolane">` + f.lanes.map(l=>`<div><div class="lane-label">${l.label}</div>${seqHTML(l.steps)}</div>`).join('') + `</div>`; }
+  else { body = seqHTML(f.steps); }
+  main.insertAdjacentHTML('beforeend', `
+    <section class="flow" id="f-${f.id}">
+      <div class="flow-head">
+        <div class="flow-num">${f.num}</div>
+        <h2>${f.title}</h2>
+        ${kinds}
+        <span class="trigger">${f.trigger}</span>
+      </div>
+      ${f.note?`<div class="note">${f.note}</div>`:''}
+      ${body}
+      ${f.exit?`<div class="exit">✕ EXIT &nbsp;${f.exit}</div>`:''}
+    </section>`);
+  nav.insertAdjacentHTML('beforeend', `<a href="#f-${f.id}">${typeof f.num==='number'?f.num+'. ':''}${f.title.replace(' · ',' ')}</a>`);
+});
+document.getElementById('updated').textContent = 'Updated ' + new Date().toISOString().slice(0,10);
 </script>
-
 </body>
 </html>
